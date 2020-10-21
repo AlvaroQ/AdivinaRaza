@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Adivina Perro</string>
+    <string name="game_screen_title">Adivina la raza</string>
+    <string name="resultado_screen_title">Resultado final</string>
+    <string name="back">Volver</string>
+    <string name="dog_game_image">Imagen de la raza de perro</string>
+    <string name="calification">Calificación</string>
+    <string name="note_image">Imagen de diploma</string>
+    <string name="imagen_de_universidad_canina">Imagen de universidad canina</string>
+    <string name="nota_result_text_fail">Estimado amante perruno, este documento le certifica que ha suspendido el test canino.</string>
+    <string name="nota_result_text_success">Estimado amante perruno, este documento le certifica que ha aprobado el test canino.</string>
+    <string name="stamp_result">sello de calificación</string>
+    <string name="signature">firma</string>
+    <string name="game_title">Título del juego</string>
 </resources>

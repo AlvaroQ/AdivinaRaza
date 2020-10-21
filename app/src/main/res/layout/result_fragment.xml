@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.result.ResultFragment">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calification"
+        app:fontFamily="@font/cutout"
+        android:textAppearance="@style/Regular.TextColor.ToolbatTitle"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/height_status_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textPoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="0"
+        android:textAppearance="@style/Regular.TextColor.VeryVeryLarge"
+        app:fontFamily="@font/cutout"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutDiploma"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_top_calification"
+        app:layout_constraintWidth_percent="0.95"
+        app:layout_constraintHeight_percent="0.35"
+        app:layout_constraintTop_toBottomOf="@+id/textPoints"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <ImageView
+            android:id="@+id/imageDiploma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/diploma_marco"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/note_image" />
+
+        <ImageView
+            android:id="@+id/imageUniversity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintHeight_percent="0.25"
+            android:layout_marginTop="18dp"
+            android:src="@drawable/diploma_university"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/imagen_de_universidad_canina" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nota_result_text_fail"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/margin_text_result"
+            android:layout_marginEnd="@dimen/margin_text_result"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageSignature"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.15"
+            android:alpha="0.6"
+            android:layout_marginBottom="@dimen/margin_button_signature"
+            android:src="@drawable/diploma_firma"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/signature" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageResult"
+        android:layout_width="140dp"
+        android:layout_height="80dp"
+        android:src="@drawable/diploma_fail"
+        android:layout_marginTop="@dimen/margin_button_stamp"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDiploma"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/stamp_result"  />
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_start"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
