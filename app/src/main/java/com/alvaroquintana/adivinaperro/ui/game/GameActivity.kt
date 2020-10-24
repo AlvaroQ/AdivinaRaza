@@ -6,6 +6,7 @@ import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.base.BaseActivity
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.ui.select.SelectActivity
+import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import kotlinx.android.synthetic.main.app_bar_layout.*
 
 
@@ -21,7 +22,7 @@ class GameActivity : BaseActivity() {
                 .commitNow()
         }
 
-        btnBack.setOnClickListener {
+        btnBack.setSafeOnClickListener {
             startActivity<SelectActivity> {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             }

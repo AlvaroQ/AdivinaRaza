@@ -61,7 +61,7 @@ fun glideLoadBase64(context: Context, imageBytes: String?, where: ImageView) {
         .into(where)
 }
 
-fun glideLoadGif(context: Context, where: ImageView) {
+fun glideLoadingGif(context: Context, where: ImageView) {
 
     Glide.with(context)
         .asGif()

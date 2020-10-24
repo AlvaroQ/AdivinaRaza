@@ -1,4 +1,4 @@
-package com.alvaroquintana.components
+package com.alvaroquintana.adivinaperro.components
 
 import android.content.Context
 import android.util.AttributeSet

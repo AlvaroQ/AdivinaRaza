@@ -12,4 +12,5 @@
     <string name="stamp_result">sello de calificación</string>
     <string name="signature">firma</string>
     <string name="game_title">Título del juego</string>
+    <string name="loading_image">imagen de cargando</string>
 </resources>

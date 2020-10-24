@@ -1,12 +1,16 @@
 package com.alvaroquintana.adivinaperro.application
 
 import android.app.Application
-import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.ui.game.GameFragment
 import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
 import com.alvaroquintana.adivinaperro.ui.result.ResultFragment
+import com.alvaroquintana.adivinaperro.ui.result.ResultViewModel
 import com.alvaroquintana.adivinaperro.ui.select.SelectFragment
 import com.alvaroquintana.adivinaperro.ui.select.SelectViewModel
+import com.alvaroquintana.data.datasource.DataBaseSource
+import com.alvaroquintana.adivinaperro.datasource.DataBaseBaseSourceImpl
+import com.alvaroquintana.data.repository.BreedByIdRepository
+import com.alvaroquintana.usecases.GetBreedById
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
@@ -31,10 +35,11 @@ fun Application.initDI() {
 
 private val appModule = module {
     single<CoroutineDispatcher> { Dispatchers.Main }
+    factory<DataBaseSource> { DataBaseBaseSourceImpl() }
 }
 
 val dataModule = module {
-
+    factory { BreedByIdRepository(get()) }
 }
 
 private val scopesModule = module {
@@ -42,10 +47,11 @@ private val scopesModule = module {
         viewModel { SelectViewModel() }
     }
     scope(named<GameFragment>()) {
-        viewModel { GameViewModel() }
+        viewModel { GameViewModel(get()) }
+        scoped { GetBreedById(get()) }
     }
     scope(named<ResultFragment>()) {
-        viewModel { GameViewModel() }
+        viewModel { ResultViewModel() }
     }
 
 }

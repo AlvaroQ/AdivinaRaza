@@ -11,6 +11,7 @@ import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.SelectFragmentBinding
 import androidx.lifecycle.Observer
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
+import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
@@ -27,7 +28,7 @@ class SelectFragment : Fragment() {
         val root = binding.root
 
         val btnSubmit: Button = root.findViewById(R.id.btnStart)
-        btnSubmit.setOnClickListener {
+        btnSubmit.setSafeOnClickListener {
             selectViewModel.navigateToGame()
         }
         return root
