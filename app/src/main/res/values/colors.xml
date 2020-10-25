@@ -6,6 +6,10 @@
     <color name="colorAccent">#FFC107</color>
     <color name="transparent">#00000000</color>
 
+
+    <color name="responseCorrect">#6600FF0B</color>
+    <color name="responseFail">#66FF0000</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="textColor">#612F1F</color>

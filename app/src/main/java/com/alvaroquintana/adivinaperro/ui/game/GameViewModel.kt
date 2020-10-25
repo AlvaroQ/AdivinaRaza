@@ -3,14 +3,14 @@ package com.alvaroquintana.adivinaperro.ui.game
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetBreedById
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlin.random.Random
 
 class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() {
     private var randomBreeds = mutableListOf<Int>()
+    private lateinit var dog: Dog
 
     private val _question = MutableLiveData<String>()
     val question: LiveData<String> = _question
@@ -25,17 +25,18 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
     val navigation: LiveData<Navigation> = _navigation
 
     init {
-        generateGame()
+        generateNewStage()
     }
 
-    fun generateGame() {
+    fun generateNewStage() {
         launch {
             _progress.value = UiModel.Loading(true)
 
             /** Generate question */
             val numRandomMain = generateRandomWithExcusion(0, TOTAL_BREED, *randomBreeds.toIntArray())
             randomBreeds.add(numRandomMain)
-            val dog: Dog = getBreed(numRandomMain)
+
+            dog = getBreed(numRandomMain)
 
             /** Generate responses */
             val numRandomMainPosition = generateRandomWithExcusion(0, 3)
@@ -69,8 +70,12 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
         return getBreedById.invoke(id)
     }
 
-    fun navigateToGame() {
-        _navigation.value = Navigation.Game
+    fun navigateToResult() {
+        _navigation.value = Navigation.Result
+    }
+
+    fun getNameBreedCorrect() : String? {
+        return dog.name
     }
 
     private fun generateRandomWithExcusion(start: Int, end: Int, vararg exclude: Int): Int {
@@ -83,14 +88,9 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()
-        object StartGame : UiModel()
     }
 
     sealed class Navigation {
-        object Game : Navigation()
-    }
-
-    companion object {
-        const val TOTAL_BREED = 319
+        object Result : Navigation()
     }
 }

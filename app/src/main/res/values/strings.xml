@@ -7,7 +7,7 @@
     <string name="calification">Calificación</string>
     <string name="note_image">Imagen de diploma</string>
     <string name="imagen_de_universidad_canina">Imagen de universidad canina</string>
-    <string name="nota_result_text_fail">Estimado amante perruno, este documento le certifica que ha suspendido el test canino.</string>
+    <string name="nota_result_text_fail">Estimado amante perruno, este documento le certifica que no ha superado el test canino.</string>
     <string name="nota_result_text_success">Estimado amante perruno, este documento le certifica que ha aprobado el test canino.</string>
     <string name="stamp_result">sello de calificación</string>
     <string name="signature">firma</string>

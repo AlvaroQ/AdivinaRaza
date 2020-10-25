@@ -1,5 +1,6 @@
 package com.alvaroquintana.adivinaperro.datasource
 
+import com.alvaroquintana.adivinaperro.utils.Constants.PATH_REFERENCE
 import com.alvaroquintana.data.datasource.DataBaseSource
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.adivinaperro.utils.log
@@ -13,10 +14,6 @@ import kotlin.coroutines.resume
 
 class DataBaseBaseSourceImpl : DataBaseSource {
 
-    companion object {
-        const val PATH_REFERENCE = "dog/breeds/"
-    }
-
     override suspend fun getBreedById(id: Int): Dog {
         return suspendCancellableCoroutine { continuation ->
             FirebaseDatabase.getInstance().getReference(PATH_REFERENCE + id)
@@ -24,12 +21,10 @@ class DataBaseBaseSourceImpl : DataBaseSource {
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         log("Data Base SUCESS", "SUCCESS")
-                        val value = dataSnapshot.getValue(Dog::class.java) as Dog
-                        continuation.resume(value)
+                        continuation.resume(dataSnapshot.getValue(Dog::class.java) as Dog)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        // Failed to read value
                         log("Data Base FAILED", "Failed to read value.", error.toException())
                         continuation.resume(Dog())
                     }

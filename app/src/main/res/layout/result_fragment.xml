@@ -30,6 +30,20 @@
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/textTitle"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/ratingBarStyle"
+        android:numStars="5"
+        android:stepSize="1"
+        tools:rating="2"
+        android:isIndicator="true"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 
@@ -38,21 +52,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_top_calification"
+        android:background="@drawable/diploma_marco"
         app:layout_constraintWidth_percent="0.95"
         app:layout_constraintHeight_percent="0.35"
-        app:layout_constraintTop_toBottomOf="@+id/textPoints"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
-
-        <ImageView
-            android:id="@+id/imageDiploma"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/diploma_marco"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/note_image" />
 
         <ImageView
             android:id="@+id/imageUniversity"
@@ -60,7 +65,7 @@
             android:layout_height="0dp"
             app:layout_constraintWidth_percent="0.3"
             app:layout_constraintHeight_percent="0.25"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="25dp"
             android:src="@drawable/diploma_university"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,10 +73,12 @@
             android:contentDescription="@string/imagen_de_universidad_canina" />
 
         <TextView
+            android:id="@+id/textDiploma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nota_result_text_fail"
             android:gravity="center"
+            android:layout_marginTop="30dp"
             android:layout_marginStart="@dimen/margin_text_result"
             android:layout_marginEnd="@dimen/margin_text_result"
             app:layout_constraintTop_toTopOf="parent"
@@ -79,28 +86,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageSignature"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintWidth_percent="0.2"
-            app:layout_constraintHeight_percent="0.15"
-            android:alpha="0.6"
-            android:layout_marginBottom="@dimen/margin_button_signature"
-            android:src="@drawable/diploma_firma"
-            android:scaleType="fitCenter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="@string/signature" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/imageResult"
         android:layout_width="140dp"
         android:layout_height="80dp"
-        android:src="@drawable/diploma_fail"
+        tools:src="@drawable/diploma_fail"
         android:layout_marginTop="@dimen/margin_button_stamp"
         app:layout_constraintTop_toBottomOf="@+id/layoutDiploma"
         app:layout_constraintStart_toStartOf="parent"
