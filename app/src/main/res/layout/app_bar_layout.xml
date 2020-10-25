@@ -39,6 +39,16 @@
                 tools:text="@string/game_screen_title"
                 app:fontFamily="@font/cutout"
                 android:textAppearance="@style/Regular.TextColor.ToolbatTitle" />
+            <ImageView
+                android:id="@+id/imageShare"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="@dimen/padding_back"
+                android:src="@drawable/icon_share"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/share"
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 </com.google.android.material.appbar.AppBarLayout>

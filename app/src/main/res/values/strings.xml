@@ -13,4 +13,9 @@
     <string name="signature">firma</string>
     <string name="game_title">Título del juego</string>
     <string name="loading_image">imagen de cargando</string>
+    <string name="telon">Telon</string>
+    <string name="share">Compartir</string>
+    <string name="share_message">\nMe ha gustado esta aplicación.\n\n</string>
+    <string name="choose_one">Elige una:</string>
+    <string name="other_apps">Otras aplicaciones</string>
 </resources>
