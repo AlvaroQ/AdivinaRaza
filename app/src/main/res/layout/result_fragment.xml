@@ -85,25 +85,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageResult"
-        android:layout_width="140dp"
-        android:layout_height="80dp"
-        tools:src="@drawable/diploma_fail"
-        android:layout_marginTop="@dimen/margin_button_stamp"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDiploma"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/stamp_result"  />
+        <ImageView
+            android:id="@+id/imageResult"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            tools:src="@drawable/diploma_fail"
+            android:layout_marginTop="@dimen/margin_button_stamp"
+            android:layout_marginEnd="@dimen/margin_button_stamp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/stamp_result"  />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btnReturn"
         android:layout_width="140dp"
         android:layout_height="50dp"
         android:background="@drawable/button_start"
-        android:layout_marginBottom="120dp"
+        android:layout_marginTop="180dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -114,20 +115,31 @@
         android:text="@string/other_apps"
         android:textAppearance="@style/Regular.TextColor.VeryVeryLarge"
         app:fontFamily="@font/cutout"
-        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerviewOtherApps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewOtherApps"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_app" />
 
 
+    <ImageView
+        android:id="@+id/imagenLoading"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        tools:src="@drawable/animated_dog"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/loading_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

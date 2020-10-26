@@ -1,7 +1,10 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
 import android.animation.ObjectAnimator
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +15,15 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.ResultFragmentBinding
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
+import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
+import com.alvaroquintana.domain.App
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
@@ -30,9 +36,11 @@ class ResultFragment : Fragment() {
         fun newInstance() = ResultFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = ResultFragmentBinding.inflate(inflater)
         val root = binding.root
 
@@ -62,6 +70,25 @@ class ResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         resultViewModel.navigation.observe(viewLifecycleOwner, Observer(::navigate))
+        resultViewModel.progress.observe(viewLifecycleOwner, Observer(::updateProgress))
+        resultViewModel.list.observe(viewLifecycleOwner, Observer(::fillAppList))
+    }
+
+    private fun fillAppList(appList: MutableList<App>) {
+        binding.recyclerviewOtherApps.adapter = AppListAdapter(
+            activity as ResultActivity,
+            appList,
+            resultViewModel::onAppClicked
+        )
+    }
+
+    private fun updateProgress(model: ResultViewModel.UiModel?) {
+        if (model is ResultViewModel.UiModel.Loading && model.show) {
+            glideLoadingGif(activity as ResultActivity, binding.imagenLoading)
+            binding.imagenLoading.visibility = View.VISIBLE
+        } else {
+            binding.imagenLoading.visibility = View.GONE
+        }
     }
 
     private fun navigate(navigation: ResultViewModel.Navigation?) {
@@ -69,6 +96,17 @@ class ResultFragment : Fragment() {
             ResultViewModel.Navigation.Game -> {
                 activity?.startActivity<GameActivity> {}
             }
+            is ResultViewModel.Navigation.Open -> {
+                openAppOnPlayStore(navigation.url)
+            }
+        }
+    }
+
+    private fun openAppOnPlayStore(appPackageName: String) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (notFoundException: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
         }
     }
 }

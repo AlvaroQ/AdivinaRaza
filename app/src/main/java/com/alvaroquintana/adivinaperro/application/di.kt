@@ -9,8 +9,10 @@ import com.alvaroquintana.adivinaperro.ui.select.SelectFragment
 import com.alvaroquintana.adivinaperro.ui.select.SelectViewModel
 import com.alvaroquintana.data.datasource.DataBaseSource
 import com.alvaroquintana.adivinaperro.datasource.DataBaseBaseSourceImpl
+import com.alvaroquintana.data.repository.AppsRecommendedRepository
 import com.alvaroquintana.data.repository.BreedByIdRepository
 import com.alvaroquintana.usecases.GetBreedById
+import com.alvaroquintana.usecases.GetAppsRecommended
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
@@ -40,6 +42,7 @@ private val appModule = module {
 
 val dataModule = module {
     factory { BreedByIdRepository(get()) }
+    factory { AppsRecommendedRepository(get()) }
 }
 
 private val scopesModule = module {
@@ -51,7 +54,8 @@ private val scopesModule = module {
         scoped { GetBreedById(get()) }
     }
     scope(named<ResultFragment>()) {
-        viewModel { ResultViewModel() }
+        viewModel { ResultViewModel(get()) }
+        scoped { GetAppsRecommended(get()) }
     }
 
 }

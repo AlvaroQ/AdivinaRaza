@@ -24,6 +24,7 @@ import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 import java.util.concurrent.TimeUnit
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
+import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_STAGE
 import com.alvaroquintana.domain.Dog
 
 
@@ -284,7 +285,7 @@ class GameFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(TimeUnit.SECONDS.toMillis(2))
             withContext(Dispatchers.Main) {
-                if(stage < 6) gameViewModel.generateNewStage()
+                if(stage < TOTAL_STAGE) gameViewModel.generateNewStage()
                 else gameViewModel.navigateToResult()
             }
         }

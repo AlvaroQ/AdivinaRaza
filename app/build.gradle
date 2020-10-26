@@ -17,19 +17,27 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        config {
+            keyAlias ADIVINAPERRO_RELEASE_KEY_ALIAS
+            keyPassword ADIVINAPERRO_RELEASE_KEY_PASSWORD
+            storeFile file(ADIVINAPERRO_RELEASE_STORE_FILE)
+            storePassword ADIVINAPERRO_RELEASE_STORE_PASSWORD
+        }
+    }
     buildTypes {
         debug {
             jniDebuggable true
             testCoverageEnabled true
             debuggable true
-            signingConfig signingConfigs.debug
             minifyEnabled false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {

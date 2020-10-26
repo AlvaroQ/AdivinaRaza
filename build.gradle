@@ -14,8 +14,8 @@ buildscript {
             'compileSdk'            : 30,
             'minSdk'                : 23,
             'targetSdk'             : 30,
-            'name'                  : '4.0.0',
-            'code'                  : 400,
+            'name'                  : '2.0.0',
+            'code'                  : 12,
             'buildtoolsVersion'     : '30.0.2',
     ]
     ext.libsversions = [
@@ -59,7 +59,7 @@ buildscript {
                 navigationUI        : "androidx.navigation:navigation-ui-ktx:2.2.2",
 
                 // firebase
-                firebaseDatabase    : 'com.google.firebase:firebase-database:19.5.0',
+                firebaseDatabase    : "com.google.firebase:firebase-database-ktx:19.5.0",
                 firebaseAuth        : "com.google.firebase:firebase-auth:19.3.0",
                 firebaseAnalytics   : "com.google.firebase:firebase-analytics:17.2.1",
 
