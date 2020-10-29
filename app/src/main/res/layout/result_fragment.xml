@@ -110,6 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/otherAppText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/other_apps"
@@ -133,10 +134,11 @@
 
     <ImageView
         android:id="@+id/imagenLoading"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         tools:src="@drawable/animated_dog"
         android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/otherAppText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

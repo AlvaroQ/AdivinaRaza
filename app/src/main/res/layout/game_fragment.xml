@@ -54,8 +54,9 @@
 
         <ImageView
             android:id="@+id/imagenLoading"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.35"
             tools:src="@drawable/animated_dog"
             android:layout_gravity="center"
             app:layout_constraintTop_toTopOf="parent"
