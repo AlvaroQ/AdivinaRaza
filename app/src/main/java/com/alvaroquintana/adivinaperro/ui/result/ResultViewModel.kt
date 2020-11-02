@@ -38,7 +38,17 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended) : Scop
         _navigation.value = Navigation.Game
     }
 
+    fun navigateToRate() {
+        _navigation.value = Navigation.Rate
+    }
+
+    fun navigateToShare(points: Int) {
+        _navigation.value = Navigation.Share(points)
+    }
+
     sealed class Navigation {
+        data class Share(val points: Int) : Navigation()
+        object Rate : Navigation()
         object Game : Navigation()
         data class Open(val url : String): Navigation()
     }

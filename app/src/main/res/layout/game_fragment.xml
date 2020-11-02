@@ -8,17 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.game.GameFragment">
 
-    <ProgressBar
-        android:id="@+id/progressGame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleHorizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:progress="1"
-        android:max="5"/>
-
     <TextView
         android:id="@+id/textCounter"
         android:layout_width="wrap_content"
@@ -30,7 +19,9 @@
         app:fontFamily="@font/cutout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardQuiz"

@@ -32,18 +32,16 @@ class GameFragment : Fragment() {
     private val gameViewModel: GameViewModel by lifecycleScope.viewModel(this)
     private lateinit var binding: GameFragmentBinding
 
-    lateinit var progressGame: ProgressBar
     lateinit var imageLoading: ImageView
     lateinit var imageQuiz: ImageView
     lateinit var btnOptionOne: TextView
     lateinit var btnOptionTwo: TextView
     lateinit var btnOptionThree: TextView
     lateinit var btnOptionFour: TextView
-    lateinit var textCounter: TextView
 
+    private var life: Int = 2
     private var stage: Int = 1
     private var points: Int = 0
-    var cTimer: CountDownTimer? = null
 
 
     companion object {
@@ -57,14 +55,12 @@ class GameFragment : Fragment() {
         binding = GameFragmentBinding.inflate(inflater)
         val root = binding.root
 
-        progressGame = root.findViewById(R.id.progressGame)
         imageLoading = root.findViewById(R.id.imagenLoading)
         imageQuiz = root.findViewById(R.id.imageQuiz)
         btnOptionOne = root.findViewById(R.id.btnOptionOne)
         btnOptionTwo = root.findViewById(R.id.btnOptionTwo)
         btnOptionThree = root.findViewById(R.id.btnOptionThree)
         btnOptionFour = root.findViewById(R.id.btnOptionFour)
-        textCounter = root.findViewById(R.id.textCounter)
 
         btnOptionOne.setSafeOnClickListener {
             btnOptionOne.isSelected = !btnOptionOne.isSelected
@@ -99,15 +95,10 @@ class GameFragment : Fragment() {
 
     private fun navigate(navigation: GameViewModel.Navigation?) {
         when (navigation) {
-            GameViewModel.Navigation.Result -> {
-                activity?.startActivity<ResultActivity> { putExtra(POINTS, points.toFloat()) }
+            is GameViewModel.Navigation.Result -> {
+                activity?.startActivity<ResultActivity> { putExtra(POINTS, points) }
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        cancelCountDown()
     }
 
     private fun updateProgress(model: GameViewModel.UiModel?) {
@@ -151,32 +142,7 @@ class GameFragment : Fragment() {
         btnOptionThree.text = optionsListByPos[2]
         btnOptionFour.text = optionsListByPos[3]
 
-        progressGame.progress = stage
-        startCountDown()
-    }
-
-    private fun startCountDown() {
-        val timeSinceVerificationSent = 10000L
-        if(cTimer == null) {
-            cTimer = object : CountDownTimer(timeSinceVerificationSent, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    textCounter.text = (millisUntilFinished / 1000).toString()
-                }
-
-                override fun onFinish() {
-                    MediaPlayer.create(context, R.raw.fail).start()
-                    checkResponse()
-                }
-            }
-            (cTimer as CountDownTimer).start()
-        }
-    }
-
-    private fun cancelCountDown() {
-        cTimer = with(cTimer) {
-            this?.cancel()
-            null
-        }
+        (activity as GameActivity).writeStage(stage)
     }
 
     private fun checkResponse() {
@@ -185,11 +151,16 @@ class GameFragment : Fragment() {
         btnOptionThree.isClickable = false
         btnOptionFour.isClickable = false
 
-        cancelCountDown()
+        //cancelCountDown()
         stage += 1
 
         drawCorrectResponse(gameViewModel.getNameBreedCorrect()!!)
         nextScreen()
+    }
+
+    private fun deleteLife() {
+        life--
+        (activity as GameActivity).writeDeleteLife(life)
     }
 
     private fun drawCorrectResponse(dogNameCorrect: String) {
@@ -203,15 +174,22 @@ class GameFragment : Fragment() {
                     }
                     btnOptionTwo.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
+                    }
+                    else -> {
+                        MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                     }
                 }
             }
@@ -220,6 +198,7 @@ class GameFragment : Fragment() {
                 when {
                     btnOptionOne.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
@@ -228,11 +207,17 @@ class GameFragment : Fragment() {
                     }
                     btnOptionThree.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
+                    }
+                    else -> {
+                        MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                     }
                 }
             }
@@ -241,10 +226,12 @@ class GameFragment : Fragment() {
                 when {
                     btnOptionOne.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
@@ -253,7 +240,12 @@ class GameFragment : Fragment() {
                     }
                     btnOptionFour.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
+                    }
+                    else -> {
+                        MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                     }
                 }
             }
@@ -262,19 +254,26 @@ class GameFragment : Fragment() {
                 when {
                     btnOptionOne.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
                         MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
                         MediaPlayer.create(context, R.raw.success).start()
                         points += 1
+                    }
+                    else -> {
+                        MediaPlayer.create(context, R.raw.fail).start()
+                        deleteLife()
                     }
                 }
             }
@@ -283,9 +282,9 @@ class GameFragment : Fragment() {
 
     private fun nextScreen() {
         CoroutineScope(Dispatchers.IO).launch {
-            delay(TimeUnit.SECONDS.toMillis(2))
+            delay(TimeUnit.MILLISECONDS.toMillis(500))
             withContext(Dispatchers.Main) {
-                if(stage < TOTAL_STAGE) gameViewModel.generateNewStage()
+                if(stage == TOTAL_STAGE || life > 0) gameViewModel.generateNewStage()
                 else gameViewModel.navigateToResult()
             }
         }

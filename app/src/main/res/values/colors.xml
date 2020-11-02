@@ -12,6 +12,8 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FF9800</color>
     <color name="textColor">#612F1F</color>
     <color name="textColorLight">#98472E</color>
     <color name="textColorDark">#3C1C11</color>

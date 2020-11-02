@@ -29,26 +29,7 @@ class ResultActivity : BaseActivity() {
             }
         }
         toolbarTitle.text = getString(R.string.resultado_screen_title)
-        imageShare.visibility = View.VISIBLE
-        imageShare.setSafeOnClickListener {
-            shareApp()
-        }
+        layoutLife.visibility = View.GONE
     }
 
-    private fun shareApp() {
-        try {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            var shareMessage = getString(R.string.share_message)
-            shareMessage =
-                """
-                ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
-                """.trimIndent()
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one)))
-        } catch (e: Exception) {
-            log(getString(R.string.share), e.toString())
-        }
-    }
 }

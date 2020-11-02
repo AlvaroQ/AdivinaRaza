@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">Adivina Perro</string>
-    <string name="game_screen_title">Adivina la raza</string>
+    <string name="game_screen_title">Adivina raza</string>
     <string name="resultado_screen_title">Resultado final</string>
-    <string name="back">Volver</string>
-    <string name="dog_game_image">Imagen de la raza de perro</string>
-    <string name="calification">Calificación</string>
-    <string name="note_image">Imagen de diploma</string>
-    <string name="imagen_de_universidad_canina">Imagen de universidad canina</string>
-    <string name="nota_result_text_fail">Estimado amante perruno, este documento le certifica que no ha superado el test canino.</string>
-    <string name="nota_result_text_success">Estimado amante perruno, este documento le certifica que ha aprobado el test canino.</string>
-    <string name="stamp_result">sello de calificación</string>
-    <string name="signature">firma</string>
-    <string name="game_title">Título del juego</string>
-    <string name="loading_image">imagen de cargando</string>
-    <string name="telon">Telon</string>
-    <string name="share">Compartir</string>
-    <string name="share_message">\nMe ha gustado esta aplicación.\n\n</string>
+    <string name="share_message">\nHice una puntuación de %d ¿eres capaz de superarlo?\n\n</string>
     <string name="choose_one">Elige una:</string>
     <string name="other_apps">Otras aplicaciones</string>
+    <string name="life">life</string>
+    <string name="play_again">Jugar de nuevo</string>
+    <string name="share">Compartir</string>
+    <string name="rate_on_play_store">Puntuar en play store</string>
+    <string name="result">Resultado: %d</string>
+    <string name="personal_record">Récord personal: %d</string>
+    <string name="world_record">Récord mundial: %d</string>
+
+    <!-- content description image -->
+    <string name="game_title">Título del juego</string>
+    <string name="loading_image">imagen de cargando</string>
+    <string name="back">Volver</string>
+    <string name="dog_game_image">Imagen de la raza de perro</string>
 </resources>

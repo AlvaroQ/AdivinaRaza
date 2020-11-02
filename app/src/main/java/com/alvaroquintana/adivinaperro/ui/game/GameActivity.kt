@@ -2,6 +2,7 @@ package com.alvaroquintana.adivinaperro.ui.game
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.base.BaseActivity
 import com.alvaroquintana.adivinaperro.common.startActivity
@@ -32,12 +33,39 @@ class GameActivity : BaseActivity() {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             }
         }
-        toolbarTitle.text = getString(R.string.game_screen_title)
+
+        writeStage(1)
     }
 
     private fun loadAd(mAdView: AdView) {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
+    }
+
+    fun writeStage(stage: Int) {
+        toolbarTitle.text = stage.toString()
+    }
+
+    fun writeDeleteLife(life: Int) {
+        when(life) {
+            2 -> {
+                lifeSecond.setImageDrawable(getDrawable(R.drawable.ic_life_on))
+                lifeFirst.setImageDrawable(getDrawable(R.drawable.ic_life_on))
+            }
+            1 -> {
+                lifeSecond.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_xy_collapse))
+
+                lifeSecond.setImageDrawable(getDrawable(R.drawable.ic_life_off))
+                lifeFirst.setImageDrawable(getDrawable(R.drawable.ic_life_on))
+            }
+            0 -> {
+                lifeFirst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_xy_collapse))
+
+                // GAME OVER
+                lifeSecond.setImageDrawable(getDrawable(R.drawable.ic_life_off))
+                lifeFirst.setImageDrawable(getDrawable(R.drawable.ic_life_off))
+            }
+        }
     }
 }
