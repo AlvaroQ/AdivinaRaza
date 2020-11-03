@@ -1,8 +1,11 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import com.alvaroquintana.adivinaperro.utils.Constants.RECORD_PERSONAL
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.usecases.GetAppsRecommended
 import kotlinx.coroutines.launch
@@ -44,6 +47,16 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended) : Scop
 
     fun navigateToShare(points: Int) {
         _navigation.value = Navigation.Share(points)
+    }
+
+    fun getPersonalRecord(context: Context): Int {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return sharedPreferences.getInt(RECORD_PERSONAL, 0)
+    }
+
+    fun savePersonalRecord(context: Context, record: Int) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPreferences.edit().putInt(RECORD_PERSONAL, record).apply()
     }
 
     sealed class Navigation {

@@ -8,7 +8,7 @@ import com.alvaroquintana.adivinaperro.ui.result.ResultViewModel
 import com.alvaroquintana.adivinaperro.ui.select.SelectFragment
 import com.alvaroquintana.adivinaperro.ui.select.SelectViewModel
 import com.alvaroquintana.data.datasource.DataBaseSource
-import com.alvaroquintana.adivinaperro.datasource.DataBaseBaseSourceImpl
+import com.alvaroquintana.adivinaperro.datasource.DataBaseSourceImpl
 import com.alvaroquintana.data.repository.AppsRecommendedRepository
 import com.alvaroquintana.data.repository.BreedByIdRepository
 import com.alvaroquintana.usecases.GetBreedById
@@ -37,7 +37,7 @@ fun Application.initDI() {
 
 private val appModule = module {
     single<CoroutineDispatcher> { Dispatchers.Main }
-    factory<DataBaseSource> { DataBaseBaseSourceImpl() }
+    factory<DataBaseSource> { DataBaseSourceImpl() }
 }
 
 val dataModule = module {

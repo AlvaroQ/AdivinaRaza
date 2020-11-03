@@ -46,8 +46,14 @@ class ResultFragment : Fragment() {
         textResult.text = resources.getString(R.string.result, points)
 
         val textPersonalRecord: TextView = root.findViewById(R.id.textPersonalRecord)
-        textPersonalRecord.text = resources.getString(R.string.personal_record, points)
-
+        val personalRecord = resultViewModel.getPersonalRecord(requireContext())
+        if(points > personalRecord) {
+            resultViewModel.savePersonalRecord(requireContext(), points)
+            textPersonalRecord.text = resources.getString(R.string.personal_record, points)
+        }
+        else {
+            textPersonalRecord.text = resources.getString(R.string.personal_record, personalRecord)
+        }
         val textWorldRecord: TextView = root.findViewById(R.id.textWorldRecord)
         textWorldRecord.text = resources.getString(R.string.world_record, points)
 

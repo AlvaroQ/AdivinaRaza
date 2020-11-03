@@ -15,7 +15,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import com.google.firebase.database.ktx.getValue
 
-class DataBaseBaseSourceImpl : DataBaseSource {
+class DataBaseSourceImpl : DataBaseSource {
 
     override suspend fun getBreedById(id: Int): Dog {
         return suspendCancellableCoroutine { continuation ->
