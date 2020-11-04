@@ -57,8 +57,8 @@ class ResultFragment : Fragment() {
         resultViewModel.getPersonalRecord(gamePoints, requireContext())
         resultViewModel.setPersonalRecordOnServer(gamePoints)
 
-        val btnReturn: TextView = root.findViewById(R.id.btnContinue)
-        btnReturn.setSafeOnClickListener { resultViewModel.navigateToGame() }
+        val btnContinue: TextView = root.findViewById(R.id.btnContinue)
+        btnContinue.setSafeOnClickListener { resultViewModel.navigateToGame() }
 
         val btnShare: TextView = root.findViewById(R.id.btnShare)
         btnShare.setSafeOnClickListener { resultViewModel.navigateToShare(gamePoints) }

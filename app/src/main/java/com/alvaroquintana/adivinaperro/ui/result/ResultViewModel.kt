@@ -4,12 +4,9 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.common.ResourceProvider
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
-import com.alvaroquintana.adivinaperro.utils.Constants
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.utils.Constants.RECORD_PERSONAL
-import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.domain.User
 import com.alvaroquintana.usecases.GetAppsRecommended
@@ -38,6 +35,7 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
     val worldRecord: LiveData<String> = _worldRecord
 
     init {
+        Analytics.analyticsScreenViewed(Analytics.SCREEN_RESULT)
         launch {
             _progress.value = UiModel.Loading(true)
             _list.value = appsRecommended()
@@ -86,26 +84,32 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
     }
 
     private fun showDialogToSaveGame(points: String) {
+        Analytics.analyticsScreenViewed(Analytics.SCREEN_DIALOG_SAVE_SCORE)
         _navigation.value = Navigation.Dialog(points)
     }
 
     fun onAppClicked(url: String) {
+        Analytics.analyticsAppRecommendedOpen(url)
         _navigation.value = Navigation.Open(url)
     }
 
     fun navigateToGame() {
+        Analytics.analyticsClicked(Analytics.BTN_PLAY_AGAIN)
         _navigation.value = Navigation.Game
     }
 
     fun navigateToRate() {
+        Analytics.analyticsClicked(Analytics.BTN_RATE)
         _navigation.value = Navigation.Rate
     }
 
     fun navigateToRanking() {
+        Analytics.analyticsClicked(Analytics.BTN_RANKING)
         _navigation.value = Navigation.Ranking
     }
 
     fun navigateToShare(points: Int) {
+        Analytics.analyticsClicked(Analytics.BTN_SHARE)
         _navigation.value = Navigation.Share(points)
     }
 

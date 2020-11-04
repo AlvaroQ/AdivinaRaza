@@ -3,6 +3,7 @@ package com.alvaroquintana.adivinaperro.ui.game
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetBreedById
@@ -25,6 +26,7 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
     val navigation: LiveData<Navigation> = _navigation
 
     init {
+        Analytics.analyticsScreenViewed(Analytics.SCREEN_GAME)
         generateNewStage()
     }
 
@@ -70,7 +72,8 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
         return getBreedById.invoke(id)
     }
 
-    fun navigateToResult() {
+    fun navigateToResult(points: String) {
+        Analytics.analyticsGameFinished(points)
         _navigation.value = Navigation.Result
     }
 

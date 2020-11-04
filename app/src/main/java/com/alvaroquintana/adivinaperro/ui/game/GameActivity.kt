@@ -6,6 +6,7 @@ import android.view.animation.AnimationUtils
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.base.BaseActivity
 import com.alvaroquintana.adivinaperro.common.startActivity
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.ui.select.SelectActivity
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import com.google.android.gms.ads.AdRequest

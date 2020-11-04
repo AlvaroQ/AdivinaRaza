@@ -3,6 +3,7 @@ package com.alvaroquintana.adivinaperro.ui.ranking
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.domain.User
 import com.alvaroquintana.usecases.GetRankingScore
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ class RankingViewModel(private val getRankingScore: GetRankingScore) : ScopedVie
     val rankingList: LiveData<MutableList<User>> = _rankingList
 
     init {
+        Analytics.analyticsScreenViewed(Analytics.SCREEN_RANKING)
         launch {
             _progress.value = UiModel.Loading(true)
             _rankingList.value = getRanking()

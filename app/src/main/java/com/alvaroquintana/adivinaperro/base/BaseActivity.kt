@@ -10,6 +10,7 @@ import kotlin.coroutines.CoroutineContext
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.adivinaperro.utils.screenOrientationPortrait
 import com.google.firebase.auth.FirebaseAuth
@@ -43,6 +44,7 @@ abstract class BaseActivity(var uiContext: CoroutineContext = Dispatchers.Main) 
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+        Analytics.initialize(this)
     }
 
     public override fun onStart() {
@@ -81,6 +83,9 @@ abstract class BaseActivity(var uiContext: CoroutineContext = Dispatchers.Main) 
             FirebaseCrashlytics.getInstance().setUserId(user?.uid!!)
             log(tag, "updateUI, you are login in")
         }
+    }
 
+    fun getUID(): String {
+        return auth.currentUser?.uid!!
     }
 }

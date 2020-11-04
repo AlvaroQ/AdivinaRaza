@@ -282,7 +282,7 @@ class GameFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(TimeUnit.MILLISECONDS.toMillis(1000))
             withContext(Dispatchers.Main) {
-                if(stage > TOTAL_BREED || life < 1) gameViewModel.navigateToResult()
+                if(stage > TOTAL_BREED || life < 1) gameViewModel.navigateToResult(points.toString())
                 else gameViewModel.generateNewStage()
             }
         }
