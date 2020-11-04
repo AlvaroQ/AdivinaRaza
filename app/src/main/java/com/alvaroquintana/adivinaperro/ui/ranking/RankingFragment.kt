@@ -14,6 +14,9 @@ import com.alvaroquintana.adivinaperro.databinding.RankingFragmentBinding
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.domain.User
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
@@ -35,6 +38,8 @@ class RankingFragment : Fragment() {
 
         val cardScore: CardView = root.findViewById(R.id.cardScore)
         cardScore.alpha = 0f
+
+        loadAd(root.findViewById(R.id.adViewRanking))
 
         return root
     }
@@ -66,5 +71,11 @@ class RankingFragment : Fragment() {
                 activity?.finish()
             }
         }
+    }
+
+    private fun loadAd(mAdView: AdView) {
+        MobileAds.initialize(activity)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 }

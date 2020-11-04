@@ -8,6 +8,7 @@ import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.data.datasource.FirestoreDataSource
 import com.alvaroquintana.data.repository.RepositoryException
 import com.alvaroquintana.domain.User
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObjects
@@ -25,6 +26,7 @@ class FirestoreDataSourceImpl(private val database: FirebaseFirestore) : Firesto
                 }
                 .addOnFailureListener {
                     continuation.resume(RepositoryException.NoConnectionException.left())
+                    FirebaseCrashlytics.getInstance().recordException(Throwable(it.cause))
                 }
         }
     }
@@ -42,6 +44,7 @@ class FirestoreDataSourceImpl(private val database: FirebaseFirestore) : Firesto
                 }
                 .addOnFailureListener {
                     continuation.resume(mutableListOf())
+                    FirebaseCrashlytics.getInstance().recordException(Throwable(it.cause))
                 }
         }
     }
@@ -59,6 +62,7 @@ class FirestoreDataSourceImpl(private val database: FirebaseFirestore) : Firesto
                 }
                 .addOnFailureListener {
                     continuation.resume("")
+                    FirebaseCrashlytics.getInstance().recordException(Throwable(it.cause))
                 }
         }
     }

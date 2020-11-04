@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class DataBaseSourceImpl : DataBaseSource {
 
@@ -29,6 +30,7 @@ class DataBaseSourceImpl : DataBaseSource {
                     override fun onCancelled(error: DatabaseError) {
                         log("getBreedById FAILED", "Failed to read value.", error.toException())
                         continuation.resume(Dog())
+                        FirebaseCrashlytics.getInstance().recordException(Throwable(error.toException()))
                     }
                 })
         }
@@ -46,9 +48,9 @@ class DataBaseSourceImpl : DataBaseSource {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        // Failed to read value
                         log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
                         continuation.resume(mutableListOf())
+                        FirebaseCrashlytics.getInstance().recordException(Throwable(error.toException()))
                     }
                 })
         }

@@ -29,6 +29,7 @@ buildscript {
 
     dependencies {
         classpath "com.google.gms:google-services:${libsversions.google_services_version}"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
         classpath "com.android.tools.build:gradle:${libsversions.gradle_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${libsversions.kotlin_version}"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1"
@@ -67,6 +68,9 @@ buildscript {
                 firebaseAnalytics   : "com.google.firebase:firebase-analytics:17.2.1",
                 BoMFirebasePlatform : "com.google.firebase:firebase-bom:25.12.0",
                 firebaseAuthKtx     : "com.google.firebase:firebase-auth-ktx:19.4.0",
+
+                // Firebase Crashlytics SDK.
+                crashlytics         : "com.google.firebase:firebase-crashlytics:17.0.0",
 
                 // Admod
                 admob               : 'com.google.android.gms:play-services-ads:19.4.0'
