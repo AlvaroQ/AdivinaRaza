@@ -33,7 +33,10 @@
             android:noHistory="true"/>
 
         <activity
-            android:name=".ui.result.ResultActivity"
+            android:name=".ui.result.ResultActivity"/>
+
+        <activity
+            android:name=".ui.ranking.RankingActivity"
             android:noHistory="true"/>
 
     </application>

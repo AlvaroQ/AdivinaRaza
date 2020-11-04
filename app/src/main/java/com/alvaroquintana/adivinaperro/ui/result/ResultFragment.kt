@@ -1,13 +1,17 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,11 +20,14 @@ import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.ResultFragmentBinding
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
+import com.alvaroquintana.adivinaperro.ui.ranking.RankingActivity
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
 import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import com.alvaroquintana.domain.App
+import com.alvaroquintana.domain.User
+import kotlinx.android.synthetic.main.dialog_save_record.*
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
@@ -28,6 +35,7 @@ import org.koin.android.viewmodel.scope.viewModel
 class ResultFragment : Fragment() {
     private lateinit var binding: ResultFragmentBinding
     private val resultViewModel: ResultViewModel by lifecycleScope.viewModel(this)
+    private var gamePoints = 0
 
     companion object {
         fun newInstance() = ResultFragment()
@@ -41,31 +49,25 @@ class ResultFragment : Fragment() {
         val root = binding.root
 
         MediaPlayer.create(context, R.raw.ladrido).start()
-        val points : Int = activity?.intent?.extras?.getInt(POINTS)!!
+        gamePoints = activity?.intent?.extras?.getInt(POINTS)!!
+
         val textResult: TextView = root.findViewById(R.id.textResult)
-        textResult.text = resources.getString(R.string.result, points)
+        textResult.text = resources.getString(R.string.result, gamePoints)
 
-        val textPersonalRecord: TextView = root.findViewById(R.id.textPersonalRecord)
-        val personalRecord = resultViewModel.getPersonalRecord(requireContext())
-        if(points > personalRecord) {
-            resultViewModel.savePersonalRecord(requireContext(), points)
-            textPersonalRecord.text = resources.getString(R.string.personal_record, points)
-        }
-        else {
-            textPersonalRecord.text = resources.getString(R.string.personal_record, personalRecord)
-        }
-        val textWorldRecord: TextView = root.findViewById(R.id.textWorldRecord)
-        textWorldRecord.text = resources.getString(R.string.world_record, points)
-
+        resultViewModel.getPersonalRecord(gamePoints, requireContext())
+        resultViewModel.setPersonalRecordOnServer(gamePoints)
 
         val btnReturn: TextView = root.findViewById(R.id.btnContinue)
         btnReturn.setSafeOnClickListener { resultViewModel.navigateToGame() }
 
         val btnShare: TextView = root.findViewById(R.id.btnShare)
-        btnShare.setSafeOnClickListener { resultViewModel.navigateToShare(points) }
+        btnShare.setSafeOnClickListener { resultViewModel.navigateToShare(gamePoints) }
 
         val btnRate: TextView = root.findViewById(R.id.btnRate)
         btnRate.setSafeOnClickListener { resultViewModel.navigateToRate() }
+
+        val btnRanking: TextView = root.findViewById(R.id.btnRanking)
+        btnRanking.setSafeOnClickListener { resultViewModel.navigateToRanking() }
 
         return binding.root
     }
@@ -75,6 +77,16 @@ class ResultFragment : Fragment() {
         resultViewModel.navigation.observe(viewLifecycleOwner, Observer(::navigate))
         resultViewModel.progress.observe(viewLifecycleOwner, Observer(::updateProgress))
         resultViewModel.list.observe(viewLifecycleOwner, Observer(::fillAppList))
+        resultViewModel.personalRecord.observe(viewLifecycleOwner, Observer(::fillPersonalRecord))
+        resultViewModel.worldRecord.observe(viewLifecycleOwner, Observer(::fillWorldRecord))
+    }
+
+    private fun fillWorldRecord(recordWorldPoints: String) {
+        binding.textWorldRecord.text = resources.getString(R.string.world_record, recordWorldPoints)
+    }
+
+    private fun fillPersonalRecord(points: String) {
+        binding.textPersonalRecord.text = resources.getString(R.string.personal_record, points)
     }
 
     private fun fillAppList(appList: MutableList<App>) {
@@ -96,18 +108,12 @@ class ResultFragment : Fragment() {
 
     private fun navigate(navigation: ResultViewModel.Navigation?) {
         when (navigation) {
-            is ResultViewModel.Navigation.Share -> {
-                shareApp(navigation.points)
-            }
-            ResultViewModel.Navigation.Rate -> {
-                rateApp()
-            }
-            ResultViewModel.Navigation.Game -> {
-                activity?.startActivity<GameActivity> {}
-            }
-            is ResultViewModel.Navigation.Open -> {
-                openAppOnPlayStore(navigation.url)
-            }
+            ResultViewModel.Navigation.Rate -> rateApp()
+            ResultViewModel.Navigation.Game -> activity?.startActivity<GameActivity> {}
+            ResultViewModel.Navigation.Ranking -> activity?.startActivity<RankingActivity> {}
+            is ResultViewModel.Navigation.Share -> shareApp(navigation.points)
+            is ResultViewModel.Navigation.Open -> openAppOnPlayStore(navigation.url)
+            is ResultViewModel.Navigation.Dialog -> showEnterNameDialog(navigation.points)
         }
     }
 
@@ -139,8 +145,6 @@ class ResultFragment : Fragment() {
     private fun rateApp() {
         val uri: Uri = Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
         goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
                 Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
@@ -149,6 +153,19 @@ class ResultFragment : Fragment() {
         } catch (e: ActivityNotFoundException) {
             startActivity(Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")))
+        }
+    }
+
+    private fun showEnterNameDialog(points: String) {
+        Dialog(requireContext()).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_save_record)
+            btnSubmit.setSafeOnClickListener {
+                resultViewModel.saveTopScore(User(editTextWorldRecord.text.toString(), points))
+                dismiss()
+            }
+            show()
         }
     }
 }

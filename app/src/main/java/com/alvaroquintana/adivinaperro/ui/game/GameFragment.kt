@@ -2,12 +2,10 @@ package com.alvaroquintana.adivinaperro.ui.game
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,7 +22,7 @@ import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 import java.util.concurrent.TimeUnit
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
-import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_STAGE
+import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.domain.Dog
 
 
@@ -282,10 +280,10 @@ class GameFragment : Fragment() {
 
     private fun nextScreen() {
         CoroutineScope(Dispatchers.IO).launch {
-            delay(TimeUnit.MILLISECONDS.toMillis(500))
+            delay(TimeUnit.MILLISECONDS.toMillis(1000))
             withContext(Dispatchers.Main) {
-                if(stage == TOTAL_STAGE || life > 0) gameViewModel.generateNewStage()
-                else gameViewModel.navigateToResult()
+                if(stage > TOTAL_BREED || life < 1) gameViewModel.navigateToResult()
+                else gameViewModel.generateNewStage()
             }
         }
     }

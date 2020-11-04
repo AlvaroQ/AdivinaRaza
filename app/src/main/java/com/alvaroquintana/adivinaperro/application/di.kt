@@ -1,5 +1,7 @@
 package com.alvaroquintana.adivinaperro.application
 
+import com.alvaroquintana.adivinaperro.datasource.FirestoreDataSourceImpl
+import com.alvaroquintana.data.datasource.FirestoreDataSource
 import android.app.Application
 import com.alvaroquintana.adivinaperro.ui.game.GameFragment
 import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
@@ -9,10 +11,14 @@ import com.alvaroquintana.adivinaperro.ui.select.SelectFragment
 import com.alvaroquintana.adivinaperro.ui.select.SelectViewModel
 import com.alvaroquintana.data.datasource.DataBaseSource
 import com.alvaroquintana.adivinaperro.datasource.DataBaseSourceImpl
+import com.alvaroquintana.adivinaperro.ui.ranking.RankingFragment
+import com.alvaroquintana.adivinaperro.ui.ranking.RankingViewModel
 import com.alvaroquintana.data.repository.AppsRecommendedRepository
 import com.alvaroquintana.data.repository.BreedByIdRepository
-import com.alvaroquintana.usecases.GetBreedById
-import com.alvaroquintana.usecases.GetAppsRecommended
+import com.alvaroquintana.data.repository.RankingRepository
+import com.alvaroquintana.usecases.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
@@ -36,13 +42,16 @@ fun Application.initDI() {
 }
 
 private val appModule = module {
+    factory { Firebase.firestore }
     single<CoroutineDispatcher> { Dispatchers.Main }
     factory<DataBaseSource> { DataBaseSourceImpl() }
+    factory<FirestoreDataSource> { FirestoreDataSourceImpl(get()) }
 }
 
 val dataModule = module {
     factory { BreedByIdRepository(get()) }
     factory { AppsRecommendedRepository(get()) }
+    factory { RankingRepository(get()) }
 }
 
 private val scopesModule = module {
@@ -54,8 +63,13 @@ private val scopesModule = module {
         scoped { GetBreedById(get()) }
     }
     scope(named<ResultFragment>()) {
-        viewModel { ResultViewModel(get()) }
+        viewModel { ResultViewModel(get(), get(), get()) }
+        scoped { GetRecordScore(get()) }
         scoped { GetAppsRecommended(get()) }
+        scoped { SaveTopScore(get()) }
     }
-
+    scope(named<RankingFragment>()) {
+        viewModel { RankingViewModel(get()) }
+        scoped { GetRankingScore(get()) }
+    }
 }

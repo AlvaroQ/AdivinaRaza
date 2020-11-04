@@ -15,6 +15,8 @@
     <dimen name="margin_text_result">60dp</dimen>
     <dimen name="margin_button_signature">20dp</dimen>
     <dimen name="margin_button_stamp">20dp</dimen>
+    <dimen name="dialog_corner_radius">24dp</dimen>
+    <dimen name="dialog_elevation">12dp</dimen>
 
 
     <!--Text sizes -->

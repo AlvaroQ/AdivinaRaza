@@ -23,12 +23,11 @@ class DataBaseSourceImpl : DataBaseSource {
                 .addValueEventListener(object : ValueEventListener {
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        log("Data Base SUCESS", "SUCCESS")
                         continuation.resume(dataSnapshot.getValue(Dog::class.java) as Dog)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        log("Data Base FAILED", "Failed to read value.", error.toException())
+                        log("getBreedById FAILED", "Failed to read value.", error.toException())
                         continuation.resume(Dog())
                     }
                 })

@@ -17,4 +17,7 @@
     <color name="textColor">#612F1F</color>
     <color name="textColorLight">#98472E</color>
     <color name="textColorDark">#3C1C11</color>
+
+    <color name="gradientTop">#DC7C5E</color>
+    <color name="gradientBottom">#985743</color>
 </resources>
