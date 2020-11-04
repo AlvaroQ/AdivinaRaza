@@ -14,6 +14,9 @@ This is an example Android Application that follow up Clean Architecture princip
  - Google Firebase analytics
  - Make a Clean Architecture, similar to Robert C. Martin (Uncle Bob) solution (https://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html).
 
+Link play store
+https://play.google.com/store/apps/details?id=com.alvaroquintana.adivinaperro
+
 <p align="center">
  <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/seleccione.jpeg" width="250"> 
  <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/game_fail.jpeg" width="250"> 
