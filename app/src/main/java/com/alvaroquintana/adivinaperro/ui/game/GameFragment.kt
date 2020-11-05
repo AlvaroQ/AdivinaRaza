@@ -23,7 +23,8 @@ import org.koin.android.viewmodel.scope.viewModel
 import java.util.concurrent.TimeUnit
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
-import com.alvaroquintana.domain.Dog
+import com.alvaroquintana.adivinaperro.common.traslationAnimation
+import com.alvaroquintana.adivinaperro.common.traslationAnimationFadeIn
 
 
 class GameFragment : Fragment() {
@@ -40,7 +41,6 @@ class GameFragment : Fragment() {
     private var life: Int = 2
     private var stage: Int = 1
     private var points: Int = 0
-
 
     companion object {
         fun newInstance() = GameFragment()
@@ -79,7 +79,6 @@ class GameFragment : Fragment() {
             btnOptionFour.isSelected = !btnOptionFour.isSelected
             checkResponse()
         }
-
         return root
     }
 
@@ -102,31 +101,24 @@ class GameFragment : Fragment() {
     private fun updateProgress(model: GameViewModel.UiModel?) {
         if (model is GameViewModel.UiModel.Loading && model.show) {
             glideLoadingGif(activity as GameActivity, imageLoading)
-            imageQuiz.visibility = View.GONE
             imageLoading.visibility = View.VISIBLE
 
-            btnOptionOne.text = ""
-            btnOptionTwo.text = ""
-            btnOptionThree.text = ""
-            btnOptionFour.text = ""
+            btnOptionOne.isSelected = false
+            btnOptionTwo.isSelected = false
+            btnOptionThree.isSelected = false
+            btnOptionFour.isSelected = false
+
+            enableBtn(false)
+        } else {
+            imageLoading.visibility = View.GONE
 
             btnOptionOne.background = context?.getDrawable(R.drawable.button)
             btnOptionTwo.background = context?.getDrawable(R.drawable.button)
             btnOptionThree.background = context?.getDrawable(R.drawable.button)
             btnOptionFour.background = context?.getDrawable(R.drawable.button)
 
-            btnOptionOne.isSelected = false
-            btnOptionTwo.isSelected = false
-            btnOptionThree.isSelected = false
-            btnOptionFour.isSelected = false
-        } else {
-            imageLoading.visibility = View.GONE
-            imageQuiz.visibility = View.VISIBLE
-
-            btnOptionOne.isClickable = true
-            btnOptionTwo.isClickable = true
-            btnOptionThree.isClickable = true
-            btnOptionFour.isClickable = true
+            enableBtn(true)
+            (activity as GameActivity).writeStage(stage)
         }
     }
 
@@ -135,21 +127,26 @@ class GameFragment : Fragment() {
     }
 
     private fun drawOptionsResponse(optionsListByPos: MutableList<String>) {
-        btnOptionOne.text = optionsListByPos[0]
-        btnOptionTwo.text = optionsListByPos[1]
-        btnOptionThree.text = optionsListByPos[2]
-        btnOptionFour.text = optionsListByPos[3]
+        var delay = 150L
+        if(stage == 1) {
+            delay = 0L
+            binding.containerButtons.traslationAnimationFadeIn()
+        }
+        else binding.containerButtons.traslationAnimation()
 
-        (activity as GameActivity).writeStage(stage)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(TimeUnit.MILLISECONDS.toMillis(delay))
+            withContext(Dispatchers.Main) {
+                btnOptionOne.text = optionsListByPos[0]
+                btnOptionTwo.text = optionsListByPos[1]
+                btnOptionThree.text = optionsListByPos[2]
+                btnOptionFour.text = optionsListByPos[3]
+            }
+        }
     }
 
     private fun checkResponse() {
-        btnOptionOne.isClickable = false
-        btnOptionTwo.isClickable = false
-        btnOptionThree.isClickable = false
-        btnOptionFour.isClickable = false
-
-        //cancelCountDown()
+        enableBtn(false)
         stage += 1
 
         drawCorrectResponse(gameViewModel.getNameBreedCorrect()!!)
@@ -276,6 +273,13 @@ class GameFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun enableBtn(isEnable: Boolean) {
+        btnOptionOne.isClickable = isEnable
+        btnOptionTwo.isClickable = isEnable
+        btnOptionThree.isClickable = isEnable
+        btnOptionFour.isClickable = isEnable
     }
 
     private fun nextScreen() {

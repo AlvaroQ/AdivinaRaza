@@ -33,17 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/imageQuiz"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:src="load"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/dog_game_image"/>
-
-        <ImageView
             android:id="@+id/imagenLoading"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -56,11 +45,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="@string/loading_image" />
 
+        <ImageView
+            android:id="@+id/imageQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@drawable/wood_dialog"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/dog_game_image"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerButtons"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:alpha="0"
+        tools:alpha="1"
         app:layout_constraintHeight_percent="0.35"
         app:layout_constraintTop_toBottomOf="@+id/cardQuiz"
         app:layout_constraintBottom_toBottomOf="parent"
