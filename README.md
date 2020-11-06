@@ -9,9 +9,8 @@ This is an example Android Application that follow up Clean Architecture princip
  - Koin dependency injector
  - MVVM presentation pattern
  - Google Architecture Components.
- - Google Firebase: Crashlitics, Firestore and real time database
+ - Google Firebase: Crashlitics, Analytics, Firestore and Real Time database
  - Google Admob
- - Google Firebase analytics
  - Make a Clean Architecture, similar to Robert C. Martin (Uncle Bob) solution (https://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html).
 
 Link play store
