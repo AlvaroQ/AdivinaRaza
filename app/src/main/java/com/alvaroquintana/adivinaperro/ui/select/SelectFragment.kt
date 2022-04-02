@@ -11,6 +11,8 @@ import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.SelectFragmentBinding
 import androidx.lifecycle.Observer
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
+import com.alvaroquintana.adivinaperro.ui.info.InfoActivity
+import com.alvaroquintana.adivinaperro.ui.settings.SettingsActivity
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
@@ -27,10 +29,14 @@ class SelectFragment : Fragment() {
         binding = SelectFragmentBinding.inflate(inflater)
         val root = binding.root
 
-        val btnSubmit: Button = root.findViewById(R.id.btnStart)
-        btnSubmit.setSafeOnClickListener {
-            selectViewModel.navigateToGame()
-        }
+        val btnStart: Button = root.findViewById(R.id.btnStart)
+        btnStart.setSafeOnClickListener { selectViewModel.navigateToGame() }
+
+        val btnLearn: Button = root.findViewById(R.id.btnLearn)
+        btnLearn.setSafeOnClickListener { selectViewModel.navigateToLearn() }
+
+        val btnSettings: Button = root.findViewById(R.id.btnSettings)
+        btnSettings.setSafeOnClickListener { selectViewModel.navigateToSettings() }
         return root
     }
 
@@ -41,7 +47,9 @@ class SelectFragment : Fragment() {
 
     private fun navigate(navigation: SelectViewModel.Navigation?) {
         when (navigation) {
-            SelectViewModel.Navigation.Game -> { activity?.startActivity<GameActivity> {} }
+            SelectViewModel.Navigation.Game -> activity?.startActivity<GameActivity> {}
+            SelectViewModel.Navigation.Learn -> activity?.startActivity<InfoActivity> {}
+            SelectViewModel.Navigation.Setting ->activity?.startActivity<SettingsActivity> {}
         }
     }
 }

@@ -3,6 +3,7 @@ package com.alvaroquintana.adivinaperro.datasource
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.utils.Constants.PATH_REFERENCE_BREEDS
 import com.alvaroquintana.adivinaperro.utils.Constants.PATH_REFERENCE_APPS
+import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_ITEM_EACH_LOAD
 import com.alvaroquintana.data.datasource.DataBaseSource
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.adivinaperro.utils.log
@@ -30,6 +31,33 @@ class DataBaseSourceImpl : DataBaseSource {
                     override fun onCancelled(error: DatabaseError) {
                         log("getBreedById FAILED", "Failed to read value.", error.toException())
                         continuation.resume(Dog())
+                        FirebaseCrashlytics.getInstance().recordException(Throwable(error.toException()))
+                    }
+                })
+        }
+    }
+
+    override suspend fun getBreedList(currentPage: Int): MutableList<Dog> {
+        return suspendCancellableCoroutine { continuation ->
+            FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
+                .orderByKey()
+                .startAt((currentPage * TOTAL_ITEM_EACH_LOAD).toString())
+                .limitToFirst(TOTAL_ITEM_EACH_LOAD)
+                .addValueEventListener(object : ValueEventListener {
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val prideList = mutableListOf<Dog>()
+                        if(dataSnapshot.hasChildren()) {
+                            for(snapshot in dataSnapshot.children) {
+                                prideList.add(snapshot.getValue(Dog::class.java)!!)
+                            }
+                        }
+                        continuation.resume(prideList) {}
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
+                        continuation.resume(mutableListOf()){}
                         FirebaseCrashlytics.getInstance().recordException(Throwable(error.toException()))
                     }
                 })

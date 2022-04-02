@@ -4,6 +4,7 @@
     <string name="resultado_screen_title">Final result</string>
     <string name="ranking_screen_title">Ranking</string>
     <string name="share_message">\nMy score is %d, can you get over me?\n\n</string>
+    <string name="share_message_general">\nThis is a great app and it\'s free!.\n\n</string>
     <string name="choose_one">Choose:</string>
     <string name="other_apps">Other applications</string>
     <string name="life">life</string>
@@ -18,6 +19,8 @@
     <string name="dialog_ranking_description">Your score has entered the world ranking</string>
     <string name="dialog_name">Name</string>
     <string name="dialog_save">Save</string>
+    <string name="info_title">Information</string>
+    <string name="settings">Settings</string>
 
     <!-- content description image -->
     <string name="game_title">game title</string>
@@ -26,4 +29,19 @@
     <string name="dog_game_image">image to guess</string>
     <string name="best_score">best scores</string>
     <string name="score_image_background">background</string>
+
+    <!-- Settings screen -->
+    <string name="settings_version">Version</string>
+    <string name="settings_delete_ads">Delete ads</string>
+    <string name="settings_delete_ads_summary">Remove ads forever</string>
+    <string name="settings_sounds">Sounds</string>
+    <string name="settings_rate_app">Rate app</string>
+    <string name="settings_rate_app_summary">Go to play store to rate app</string>
+    <string name="settings_more_apps">More application</string>
+    <string name="settings_more_apps_summary">Free applications recommended</string>
+    <string name="settings_share">Share with your friends</string>
+    <string name="settings_share_summary">Share with your friend this application to play with them</string>
+    <string name="more_apps">More applications</string>
+    <string name="sounds_on">Sound on</string>
+    <string name="sounds_off">Sound off</string>
 </resources>

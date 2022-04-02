@@ -20,7 +20,7 @@ class RankingListAdapter(var rankingList: MutableList<User>,
     override fun onBindViewHolder(holder: RankingListViewHolder, position: Int) {
         val user = rankingList[position]
         holder.userName.text = user.name
-        holder.userPoints.text = user.points
+        holder.userPoints.text = user.points.toString()
     }
 
     override fun getItemCount(): Int {

@@ -12,3 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
+app/google-services.json
+firma/
+app/src/main/res/values/secrets.xml
+.idea/

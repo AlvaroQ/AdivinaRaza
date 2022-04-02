@@ -20,4 +20,5 @@
 
     <color name="gradientTop">#DC7C5E</color>
     <color name="gradientBottom">#985743</color>
+    <color name="settongsIconColor">#000000</color>
 </resources>

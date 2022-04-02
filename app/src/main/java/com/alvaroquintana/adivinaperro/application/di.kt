@@ -11,8 +11,11 @@ import com.alvaroquintana.adivinaperro.ui.select.SelectFragment
 import com.alvaroquintana.adivinaperro.ui.select.SelectViewModel
 import com.alvaroquintana.data.datasource.DataBaseSource
 import com.alvaroquintana.adivinaperro.datasource.DataBaseSourceImpl
+import com.alvaroquintana.adivinaperro.ui.info.InfoFragment
+import com.alvaroquintana.adivinaperro.ui.info.InfoViewModel
 import com.alvaroquintana.adivinaperro.ui.ranking.RankingFragment
 import com.alvaroquintana.adivinaperro.ui.ranking.RankingViewModel
+import com.alvaroquintana.adivinaperro.ui.settings.SettingsFragment
 import com.alvaroquintana.data.repository.AppsRecommendedRepository
 import com.alvaroquintana.data.repository.BreedByIdRepository
 import com.alvaroquintana.data.repository.RankingRepository
@@ -71,5 +74,9 @@ private val scopesModule = module {
     scope(named<RankingFragment>()) {
         viewModel { RankingViewModel(get()) }
         scoped { GetRankingScore(get()) }
+    }
+    scope(named<InfoFragment>()) {
+        viewModel { InfoViewModel(get()) }
+        scoped { GetBreedList(get()) }
     }
 }

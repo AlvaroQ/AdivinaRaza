@@ -15,16 +15,15 @@ import android.view.Window
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.ResultFragmentBinding
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.ui.ranking.RankingActivity
+import com.alvaroquintana.adivinaperro.utils.*
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
-import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
-import com.alvaroquintana.adivinaperro.utils.log
-import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.domain.User
 import kotlinx.android.synthetic.main.dialog_save_record.*
@@ -48,7 +47,10 @@ class ResultFragment : Fragment() {
         binding = ResultFragmentBinding.inflate(inflater)
         val root = binding.root
 
-        MediaPlayer.create(context, R.raw.ladrido).start()
+
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("sound", true)) {
+            MediaPlayer.create(context, R.raw.ladrido).start()
+        }
         gamePoints = activity?.intent?.extras?.getInt(POINTS)!!
 
         val textResult: TextView = root.findViewById(R.id.textResult)
@@ -108,10 +110,13 @@ class ResultFragment : Fragment() {
 
     private fun navigate(navigation: ResultViewModel.Navigation?) {
         when (navigation) {
-            ResultViewModel.Navigation.Rate -> rateApp()
-            ResultViewModel.Navigation.Game -> activity?.startActivity<GameActivity> {}
+            ResultViewModel.Navigation.Game -> {
+                activity?.finishAfterTransition()
+                activity?.startActivity<GameActivity> {}
+            }
+            ResultViewModel.Navigation.Rate -> rateApp(requireContext())
             ResultViewModel.Navigation.Ranking -> activity?.startActivity<RankingActivity> {}
-            is ResultViewModel.Navigation.Share -> shareApp(navigation.points)
+            is ResultViewModel.Navigation.Share -> shareApp(requireContext(), navigation.points)
             is ResultViewModel.Navigation.Open -> openAppOnPlayStore(navigation.url)
             is ResultViewModel.Navigation.Dialog -> showEnterNameDialog(navigation.points)
         }
@@ -125,44 +130,13 @@ class ResultFragment : Fragment() {
         }
     }
 
-    private fun shareApp(points: Int) {
-        try {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            var shareMessage = resources.getString(R.string.share_message, points)
-            shareMessage =
-                """
-                ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
-                """.trimIndent()
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one)))
-        } catch (e: Exception) {
-            log(getString(R.string.share), e.toString())
-        }
-    }
-
-    private fun rateApp() {
-        val uri: Uri = Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
-        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-        try {
-            startActivity(goToMarket)
-        } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")))
-        }
-    }
-
     private fun showEnterNameDialog(points: String) {
         Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(R.layout.dialog_save_record)
             btnSubmit.setSafeOnClickListener {
-                resultViewModel.saveTopScore(User(editTextWorldRecord.text.toString(), points))
+                resultViewModel.saveTopScore(User(editTextWorldRecord.text.toString(), points.toInt()))
                 dismiss()
             }
             show()

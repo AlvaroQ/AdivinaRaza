@@ -4,6 +4,7 @@
     <string name="resultado_screen_title">Resultado final</string>
     <string name="ranking_screen_title">Ranking</string>
     <string name="share_message">\nHice una puntuación de %d ¿eres capaz de superarlo?\n\n</string>
+    <string name="share_message_general">\nMe ha gustado mucho esta aplicación.\n\n</string>
     <string name="choose_one">Elige una:</string>
     <string name="other_apps">Otras aplicaciones</string>
     <string name="life">life</string>
@@ -18,6 +19,8 @@
     <string name="dialog_ranking_description">Entraste en el ranking de mejores puntuaciones</string>
     <string name="dialog_name">Nombre</string>
     <string name="dialog_save">Guardar</string>
+    <string name="info_title">Información</string>
+    <string name="settings">Ajustes</string>
 
     <!-- content description image -->
     <string name="game_title">Título del juego</string>
@@ -26,4 +29,22 @@
     <string name="dog_game_image">Imagen de la raza de perro</string>
     <string name="best_score">Mejores puntuaciones</string>
     <string name="score_image_background">fondo de la clasificación</string>
+
+    <!-- Settings screen -->
+    <string name="settings_version">Version</string>
+    <string name="settings_delete_ads">Quitar anuncios</string>
+    <string name="settings_delete_ads_summary">Quitar anuncios para siempre</string>
+    <string name="settings_sounds">Sonidos</string>
+    <string name="settings_rate_app">Valorar la aplicación</string>
+    <string name="settings_rate_app_summary">Ir al play store para puntuar la app</string>
+    <string name="settings_more_apps">Más aplicaciones</string>
+    <string name="settings_more_apps_summary">Aplicaciones gratuitas recomendadas</string>
+    <string name="sounds_on">Sonido activo</string>
+    <string name="sounds_off">Sonido desactivado</string>
+    <string name="more_apps">Más aplicaciones</string>
+    <string name="know_more">Saber más</string>
+    <string name="settings_share">Comparte con tus amigos</string>
+    <string name="settings_share_summary">Comparte con tus amigos esta app</string>
+    <string name="not_exist">No existe</string>
+    <string name="read_info">Información</string>
 </resources>

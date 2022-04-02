@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.GameFragmentBinding
@@ -38,7 +39,7 @@ class GameFragment : Fragment() {
     lateinit var btnOptionThree: TextView
     lateinit var btnOptionFour: TextView
 
-    private var life: Int = 2
+    private var life: Int = 3
     private var stage: Int = 1
     private var points: Int = 0
 
@@ -164,26 +165,26 @@ class GameFragment : Fragment() {
                 btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseCorrect))
                 when {
                     btnOptionOne.isSelected -> {
-                        MediaPlayer.create(context, R.raw.success).start()
+                        soundSuccess()
                         points += 1
                     }
                     btnOptionTwo.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     else -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                     }
                 }
@@ -192,26 +193,26 @@ class GameFragment : Fragment() {
                 btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseCorrect))
                 when {
                     btnOptionOne.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
-                        MediaPlayer.create(context, R.raw.success).start()
+                        soundSuccess()
                         points += 1
                     }
                     btnOptionThree.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     else -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                     }
                 }
@@ -220,26 +221,26 @@ class GameFragment : Fragment() {
                 btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseCorrect))
                 when {
                     btnOptionOne.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
-                        MediaPlayer.create(context, R.raw.success).start()
+                        soundSuccess()
                         points += 1
                     }
                     btnOptionFour.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     else -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                     }
                 }
@@ -248,26 +249,26 @@ class GameFragment : Fragment() {
                 btnOptionFour.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseCorrect))
                 when {
                     btnOptionOne.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionOne.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionTwo.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionTwo.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionThree.isSelected -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                         btnOptionThree.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.responseFail))
                     }
                     btnOptionFour.isSelected -> {
-                        MediaPlayer.create(context, R.raw.success).start()
+                        soundSuccess()
                         points += 1
                     }
                     else -> {
-                        MediaPlayer.create(context, R.raw.fail).start()
+                        soundFail()
                         deleteLife()
                     }
                 }
@@ -289,6 +290,18 @@ class GameFragment : Fragment() {
                 if(stage > TOTAL_BREED || life < 1) gameViewModel.navigateToResult(points.toString())
                 else gameViewModel.generateNewStage()
             }
+        }
+    }
+
+    private fun soundFail() {
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("sound", true)) {
+            MediaPlayer.create(context, R.raw.fail).start()
+        }
+    }
+
+    private fun soundSuccess() {
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("sound", true)) {
+            MediaPlayer.create(context, R.raw.success).start()
         }
     }
 }
