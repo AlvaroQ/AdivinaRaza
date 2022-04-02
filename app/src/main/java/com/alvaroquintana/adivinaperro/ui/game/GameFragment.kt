@@ -86,9 +86,22 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         gameViewModel.navigation.observe(viewLifecycleOwner, Observer(::navigate))
-        gameViewModel.progress.observe(viewLifecycleOwner, Observer(::updateProgress))
+        gameViewModel.progress.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
         gameViewModel.question.observe(viewLifecycleOwner, Observer(::drawQuestionImage))
+        gameViewModel.showingAds.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
         gameViewModel.responseOptions.observe(viewLifecycleOwner, Observer(::drawOptionsResponse))
+    }
+
+    private fun loadAdAndProgress(model: GameViewModel.UiModel) {
+        when(model) {
+            is GameViewModel.UiModel.ShowBannerAd -> {
+                (activity as GameActivity).showBannerAd()
+            }
+            is GameViewModel.UiModel.ShowReewardAd -> {
+                (activity as GameActivity).showRewardedAd(model.show)
+            }
+            is GameViewModel.UiModel.Loading -> updateProgress(model.show)
+        }
     }
 
     private fun navigate(navigation: GameViewModel.Navigation?) {
@@ -99,8 +112,8 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun updateProgress(model: GameViewModel.UiModel?) {
-        if (model is GameViewModel.UiModel.Loading && model.show) {
+    private fun updateProgress(isShowing: Boolean) {
+        if (isShowing) {
             glideLoadingGif(activity as GameActivity, imageLoading)
             imageLoading.visibility = View.VISIBLE
 
@@ -287,8 +300,13 @@ class GameFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(TimeUnit.MILLISECONDS.toMillis(1000))
             withContext(Dispatchers.Main) {
-                if(stage > TOTAL_BREED || life < 1) gameViewModel.navigateToResult(points.toString())
-                else gameViewModel.generateNewStage()
+                if(stage > TOTAL_BREED || life < 1) {
+                    gameViewModel.navigateToResult(points.toString())
+                }
+                else {
+                    gameViewModel.generateNewStage()
+                    if(stage % 10 == 0) gameViewModel.showRewardedAd()
+                }
             }
         }
     }

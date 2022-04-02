@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.InfoFragmentBinding
+import com.alvaroquintana.adivinaperro.ui.game.GameActivity
+import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
 import com.alvaroquintana.adivinaperro.ui.select.SelectActivity
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_ITEM_EACH_LOAD
@@ -46,15 +48,26 @@ class InfoFragment : Fragment() {
         infoViewModel.navigation.observe(viewLifecycleOwner, Observer(::navigate))
         infoViewModel.prideList.observe(viewLifecycleOwner, Observer(::fillPrideList))
         infoViewModel.updatePrideList.observe(viewLifecycleOwner, Observer(::updatePrideList))
-        infoViewModel.progress.observe(viewLifecycleOwner, Observer(::updateProgress))
+        infoViewModel.progress.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
+        infoViewModel.showingAds.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
     }
 
-    private fun updateProgress(model: InfoViewModel.UiModel?) {
-        if (model is InfoViewModel.UiModel.Loading && model.show) {
-            glideLoadingGif(activity as InfoActivity, binding.imagenLoading)
-            binding.imagenLoading.visibility = View.VISIBLE
-        } else {
-            binding.imagenLoading.visibility = View.GONE
+    private fun loadAdAndProgress(model: InfoViewModel.UiModel) {
+        when(model) {
+            is InfoViewModel.UiModel.ShowAd -> {
+                (activity as InfoActivity).showAd()
+            }
+            is InfoViewModel.UiModel.ShowReewardAd -> {
+                (activity as InfoActivity).showRewardedAd(model.show)
+            }
+            is InfoViewModel.UiModel.Loading -> {
+                if (model.show) {
+                    glideLoadingGif(activity as InfoActivity, binding.imagenLoading)
+                    binding.imagenLoading.visibility = View.VISIBLE
+                } else {
+                    binding.imagenLoading.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -86,6 +99,9 @@ class InfoFragment : Fragment() {
                         currentPage++
                         infoViewModel.loadMorePrideList(currentPage)
                     }
+
+
+                    if(currentPage % 4 == 0) infoViewModel.showRewardedAd()
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.alvaroquintana.adivinaperro.ui.info
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetBreedList
 import kotlinx.coroutines.launch
@@ -51,6 +52,10 @@ class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() 
         _navigation.value = Navigation.Select
     }
 
+    fun showRewardedAd() {
+        _showingAds.value = UiModel.ShowReewardAd(true)
+    }
+
     sealed class Navigation {
         object Select : Navigation()
     }
@@ -58,5 +63,6 @@ class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()
         data class ShowAd(val show: Boolean) : UiModel()
+        data class ShowReewardAd(val show: Boolean) : UiModel()
     }
 }

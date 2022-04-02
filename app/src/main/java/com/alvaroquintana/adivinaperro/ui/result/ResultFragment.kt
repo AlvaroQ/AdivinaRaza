@@ -81,6 +81,12 @@ class ResultFragment : Fragment() {
         resultViewModel.list.observe(viewLifecycleOwner, Observer(::fillAppList))
         resultViewModel.personalRecord.observe(viewLifecycleOwner, Observer(::fillPersonalRecord))
         resultViewModel.worldRecord.observe(viewLifecycleOwner, Observer(::fillWorldRecord))
+        resultViewModel.showingAds.observe(viewLifecycleOwner, Observer(::loadAd))
+    }
+
+    private fun loadAd(model: ResultViewModel.UiModel) {
+        if (model is ResultViewModel.UiModel.ShowAd)
+            (activity as ResultActivity).showAd()
     }
 
     private fun fillWorldRecord(recordWorldPoints: String) {

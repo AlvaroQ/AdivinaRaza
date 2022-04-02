@@ -34,12 +34,16 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
     private val _worldRecord = MutableLiveData<String>()
     val worldRecord: LiveData<String> = _worldRecord
 
+    private val _showingAds = MutableLiveData<UiModel>()
+    val showingAds: LiveData<UiModel> = _showingAds
+
     init {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_RESULT)
         launch {
             _progress.value = UiModel.Loading(true)
             _list.value = appsRecommended()
             _worldRecord.value = getPointsWorldRecord()
+            _showingAds.value = UiModel.ShowAd(true)
             _progress.value = UiModel.Loading(false)
         }
     }
@@ -124,5 +128,6 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()
+        data class ShowAd(val show: Boolean) : UiModel()
     }
 }

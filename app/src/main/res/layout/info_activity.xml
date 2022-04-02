@@ -16,18 +16,18 @@
         android:id="@+id/containerInfo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/adViewInfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBar" />
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
+        android:id="@+id/adViewInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ads:adSize="FULL_BANNER"
-        ads:adUnitId="@string/admob_banner_test_id"
+        ads:adUnitId="@string/BANNER_INFO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

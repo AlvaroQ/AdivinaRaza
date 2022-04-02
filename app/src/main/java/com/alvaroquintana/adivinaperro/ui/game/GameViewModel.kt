@@ -25,9 +25,13 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
     private val _navigation = MutableLiveData<Navigation>()
     val navigation: LiveData<Navigation> = _navigation
 
+    private val _showingAds = MutableLiveData<UiModel>()
+    val showingAds: LiveData<UiModel> = _showingAds
+
     init {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_GAME)
         generateNewStage()
+        _showingAds.value = UiModel.ShowBannerAd(true)
     }
 
     fun generateNewStage() {
@@ -68,6 +72,10 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
         }
     }
 
+    fun showRewardedAd() {
+        _showingAds.value = UiModel.ShowReewardAd(true)
+    }
+
     private suspend fun getBreed(id: Int): Dog {
         return getBreedById.invoke(id)
     }
@@ -91,6 +99,8 @@ class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() 
 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()
+        data class ShowBannerAd(val show: Boolean) : UiModel()
+        data class ShowReewardAd(val show: Boolean) : UiModel()
     }
 
     sealed class Navigation {

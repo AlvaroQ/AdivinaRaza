@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -38,8 +41,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // more_apps
         val moreApps: Preference? = findPreference("more_apps")
         moreApps?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-     //       activity?.startActivity<MoreAppsActivity> {}
+            openAppOnPlayStore()
             false
+        }
+    }
+
+    private fun openAppOnPlayStore() {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/dev?id=8877600766041307852")))
+        } catch (notFoundException: ActivityNotFoundException) {
+
         }
     }
 }
