@@ -305,7 +305,7 @@ class GameFragment : Fragment() {
                 }
                 else {
                     gameViewModel.generateNewStage()
-                    if(stage % 10 == 0) gameViewModel.showRewardedAd()
+                    if(stage != 0 && stage % 10 == 0) gameViewModel.showRewardedAd()
                 }
             }
         }
