@@ -10,7 +10,6 @@ import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.inflate
 import com.alvaroquintana.adivinaperro.utils.glideLoadBase64
-import com.alvaroquintana.adivinaperro.utils.glideLoadURL
 
 class InfoListAdapter(
     val context: Context,

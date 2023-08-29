@@ -16,9 +16,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
-import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.common.startActivity
+import com.alvaroquintana.adivinaperro.databinding.DialogSaveRecordBinding
 import com.alvaroquintana.adivinaperro.databinding.ResultFragmentBinding
 import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.ui.ranking.RankingActivity
@@ -26,14 +26,12 @@ import com.alvaroquintana.adivinaperro.utils.*
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.domain.User
-import kotlinx.android.synthetic.main.dialog_save_record.*
-import org.koin.android.scope.lifecycleScope
-import org.koin.android.viewmodel.scope.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ResultFragment : Fragment() {
     private lateinit var binding: ResultFragmentBinding
-    private val resultViewModel: ResultViewModel by lifecycleScope.viewModel(this)
+    private val resultViewModel: ResultViewModel by viewModel()
     private var gamePoints = 0
 
     companion object {
@@ -86,7 +84,7 @@ class ResultFragment : Fragment() {
 
     private fun loadAd(model: ResultViewModel.UiModel) {
         if (model is ResultViewModel.UiModel.ShowAd)
-            (activity as ResultActivity).showAd()
+            (activity as ResultActivity).showAd(model.show)
     }
 
     private fun fillWorldRecord(recordWorldPoints: String) {
@@ -114,7 +112,7 @@ class ResultFragment : Fragment() {
         }
     }
 
-    private fun navigate(navigation: ResultViewModel.Navigation?) {
+    private fun navigate(navigation: ResultViewModel.Navigation) {
         when (navigation) {
             ResultViewModel.Navigation.Game -> {
                 activity?.finishAfterTransition()
@@ -137,12 +135,14 @@ class ResultFragment : Fragment() {
     }
 
     private fun showEnterNameDialog(points: String) {
+        lateinit var dialogBinding: DialogSaveRecordBinding
+
         Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setContentView(R.layout.dialog_save_record)
-            btnSubmit.setSafeOnClickListener {
-                resultViewModel.saveTopScore(User(editTextWorldRecord.text.toString(), points.toInt()))
+            setContentView(dialogBinding.root)
+            dialogBinding.btnSubmit.setSafeOnClickListener {
+                resultViewModel.saveTopScore(User(dialogBinding.editTextWorldRecord.text.toString(), points.toInt()))
                 dismiss()
             }
             show()

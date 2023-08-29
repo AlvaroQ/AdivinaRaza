@@ -9,27 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import org.koin.android.scope.lifecycleScope
-import org.koin.android.viewmodel.scope.viewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.InfoFragmentBinding
-import com.alvaroquintana.adivinaperro.ui.game.GameActivity
-import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
 import com.alvaroquintana.adivinaperro.ui.select.SelectActivity
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_ITEM_EACH_LOAD
 import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.domain.Dog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class InfoFragment : Fragment() {
     private lateinit var binding: InfoFragmentBinding
-    private val infoViewModel: InfoViewModel by lifecycleScope.viewModel(this)
+    private val infoViewModel: InfoViewModel by viewModel()
     private var currentPage = 0
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    lateinit var adapter: InfoListAdapter
+    private lateinit var adapter: InfoListAdapter
 
     companion object {
         fun newInstance() = InfoFragment()
@@ -46,8 +43,8 @@ class InfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         infoViewModel.navigation.observe(viewLifecycleOwner, Observer(::navigate))
-        infoViewModel.prideList.observe(viewLifecycleOwner, Observer(::fillPrideList))
-        infoViewModel.updatePrideList.observe(viewLifecycleOwner, Observer(::updatePrideList))
+        infoViewModel.dogList.observe(viewLifecycleOwner, Observer(::fillDogList))
+        infoViewModel.updateDogList.observe(viewLifecycleOwner, Observer(::updateDogList))
         infoViewModel.progress.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
         infoViewModel.showingAds.observe(viewLifecycleOwner, Observer(::loadAdAndProgress))
     }
@@ -55,7 +52,7 @@ class InfoFragment : Fragment() {
     private fun loadAdAndProgress(model: InfoViewModel.UiModel) {
         when(model) {
             is InfoViewModel.UiModel.ShowAd -> {
-                (activity as InfoActivity).showAd()
+                (activity as InfoActivity).showAd(model.show)
             }
             is InfoViewModel.UiModel.ShowReewardAd -> {
                 (activity as InfoActivity).showRewardedAd(model.show)
@@ -71,15 +68,15 @@ class InfoFragment : Fragment() {
         }
     }
 
-    private fun fillPrideList(prideList: MutableList<Dog>) {
-        adapter = InfoListAdapter(requireContext(), prideList)
+    private fun fillDogList(dogList: MutableList<Dog>) {
+        adapter = InfoListAdapter(requireContext(), dogList)
         binding.recyclerviewInfo.adapter = adapter
         setRecyclerViewScrollListener()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun updatePrideList(prideList: MutableList<Dog>) {
-        adapter.update(prideList)
+    private fun updateDogList(dogList: MutableList<Dog>) {
+        adapter.update(dogList)
         adapter.notifyDataSetChanged()
         setRecyclerViewScrollListener()
     }
@@ -97,9 +94,8 @@ class InfoFragment : Fragment() {
                     if(currentPage * TOTAL_ITEM_EACH_LOAD < TOTAL_BREED) {
                         Log.d("MyTAG", "Load new list")
                         currentPage++
-                        infoViewModel.loadMorePrideList(currentPage)
+                        infoViewModel.loadMoreDogList(currentPage)
                     }
-
 
                     if(currentPage % 4 == 0) infoViewModel.showRewardedAd()
                 }
@@ -108,14 +104,13 @@ class InfoFragment : Fragment() {
         binding.recyclerviewInfo.addOnScrollListener(scrollListener)
     }
 
-    private fun navigate(navigation: InfoViewModel.Navigation?) {
+    private fun navigate(navigation: InfoViewModel.Navigation) {
         when (navigation) {
             InfoViewModel.Navigation.Select -> {
                 activity?.startActivity<SelectActivity> {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 }
             }
-            else -> {}
         }
     }
 }

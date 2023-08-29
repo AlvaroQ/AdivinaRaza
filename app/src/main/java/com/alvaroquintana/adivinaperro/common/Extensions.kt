@@ -75,3 +75,10 @@ fun View.traslationAnimation() {
 fun View.traslationAnimationFadeIn() {
     this.animate().alpha(1f).setInterpolator(AccelerateDecelerateInterpolator()).duration = 100
 }
+
+
+inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
+    crossinline bindingInflater: (LayoutInflater) -> T) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        bindingInflater.invoke(layoutInflater)
+    }

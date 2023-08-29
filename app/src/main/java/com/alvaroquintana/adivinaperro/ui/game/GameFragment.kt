@@ -19,25 +19,24 @@ import com.alvaroquintana.adivinaperro.utils.glideLoadBase64
 import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
 import kotlinx.coroutines.*
-import org.koin.android.scope.lifecycleScope
-import org.koin.android.viewmodel.scope.viewModel
 import java.util.concurrent.TimeUnit
 import com.alvaroquintana.adivinaperro.utils.Constants.POINTS
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.common.traslationAnimation
 import com.alvaroquintana.adivinaperro.common.traslationAnimationFadeIn
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class GameFragment : Fragment() {
-    private val gameViewModel: GameViewModel by lifecycleScope.viewModel(this)
+    private val gameViewModel: GameViewModel by viewModel()
     private lateinit var binding: GameFragmentBinding
 
-    lateinit var imageLoading: ImageView
-    lateinit var imageQuiz: ImageView
-    lateinit var btnOptionOne: TextView
-    lateinit var btnOptionTwo: TextView
-    lateinit var btnOptionThree: TextView
-    lateinit var btnOptionFour: TextView
+    private lateinit var imageLoading: ImageView
+    private lateinit var imageQuiz: ImageView
+    private lateinit var btnOptionOne: TextView
+    private lateinit var btnOptionTwo: TextView
+    private lateinit var btnOptionThree: TextView
+    private lateinit var btnOptionFour: TextView
 
     private var life: Int = 3
     private var stage: Int = 1
@@ -95,7 +94,7 @@ class GameFragment : Fragment() {
     private fun loadAdAndProgress(model: GameViewModel.UiModel) {
         when(model) {
             is GameViewModel.UiModel.ShowBannerAd -> {
-                (activity as GameActivity).showBannerAd()
+                (activity as GameActivity).showBannerAd(model.show)
             }
             is GameViewModel.UiModel.ShowReewardAd -> {
                 (activity as GameActivity).showRewardedAd(model.show)
@@ -104,7 +103,7 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun navigate(navigation: GameViewModel.Navigation?) {
+    private fun navigate(navigation: GameViewModel.Navigation) {
         when (navigation) {
             is GameViewModel.Navigation.Result -> {
                 activity?.startActivity<ResultActivity> { putExtra(POINTS, points) }
@@ -305,7 +304,7 @@ class GameFragment : Fragment() {
                 }
                 else {
                     gameViewModel.generateNewStage()
-                    if(stage != 0 && stage % 10 == 0) gameViewModel.showRewardedAd()
+                    if(stage != 0 && stage % 6 == 0) gameViewModel.showRewardedAd()
                 }
             }
         }

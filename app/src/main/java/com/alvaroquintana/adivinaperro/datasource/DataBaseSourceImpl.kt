@@ -16,6 +16,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class DataBaseSourceImpl : DataBaseSource {
 
@@ -37,6 +38,7 @@ class DataBaseSourceImpl : DataBaseSource {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override suspend fun getBreedList(currentPage: Int): MutableList<Dog> {
         return suspendCancellableCoroutine { continuation ->
             FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
@@ -46,13 +48,13 @@ class DataBaseSourceImpl : DataBaseSource {
                 .addValueEventListener(object : ValueEventListener {
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val prideList = mutableListOf<Dog>()
+                        val dogList = mutableListOf<Dog>()
                         if(dataSnapshot.hasChildren()) {
                             for(snapshot in dataSnapshot.children) {
-                                prideList.add(snapshot.getValue(Dog::class.java)!!)
+                                dogList.add(snapshot.getValue(Dog::class.java)!!)
                             }
                         }
-                        continuation.resume(prideList) {}
+                        continuation.resume(dogList) {}
                     }
 
                     override fun onCancelled(error: DatabaseError) {

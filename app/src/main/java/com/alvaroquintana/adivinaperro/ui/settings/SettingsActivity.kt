@@ -5,13 +5,13 @@ import android.view.MenuItem
 import android.view.View
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.base.BaseActivity
+import com.alvaroquintana.adivinaperro.common.viewBinding
+import com.alvaroquintana.adivinaperro.databinding.SettingsActivityBinding
 import com.alvaroquintana.adivinaperro.utils.setSafeOnClickListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import kotlinx.android.synthetic.main.app_bar_layout.*
 
 
 class SettingsActivity : BaseActivity() {
+    private val binding by viewBinding(SettingsActivityBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +35,8 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun setupToolbar() {
-        toolbarTitle.text = getString(R.string.settings)
-        layoutLife.visibility = View.GONE
-        btnBack.setSafeOnClickListener { finishAfterTransition() }
+        binding.appBar.toolbarTitle.text = getString(R.string.settings)
+        binding.appBar.layoutLife.visibility = View.GONE
+        binding.appBar.btnBack.setSafeOnClickListener { finishAfterTransition() }
     }
 }

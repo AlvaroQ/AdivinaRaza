@@ -4,26 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.common.startActivity
 import com.alvaroquintana.adivinaperro.databinding.RankingFragmentBinding
-import com.alvaroquintana.adivinaperro.ui.game.GameActivity
 import com.alvaroquintana.adivinaperro.utils.glideLoadingGif
 import com.alvaroquintana.domain.User
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
-import org.koin.android.scope.lifecycleScope
-import org.koin.android.viewmodel.scope.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RankingFragment : Fragment() {
     private lateinit var binding: RankingFragmentBinding
-    private val rankingViewModel: RankingViewModel by lifecycleScope.viewModel(this)
+    private val rankingViewModel: RankingViewModel by viewModel()
 
     companion object {
         fun newInstance() = RankingFragment()
@@ -38,8 +31,6 @@ class RankingFragment : Fragment() {
 
         val cardScore: CardView = root.findViewById(R.id.cardScore)
         cardScore.alpha = 0f
-
-        loadAd(root.findViewById(R.id.adViewRanking))
 
         return root
     }
@@ -65,17 +56,11 @@ class RankingFragment : Fragment() {
         }
     }
 
-    private fun navigate(navigation: RankingViewModel.Navigation?) {
+    private fun navigate(navigation: RankingViewModel.Navigation) {
         when (navigation) {
             RankingViewModel.Navigation.Result -> {
                 activity?.finish()
             }
         }
-    }
-
-    private fun loadAd(mAdView: AdView) {
-        MobileAds.initialize(activity)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
     }
 }

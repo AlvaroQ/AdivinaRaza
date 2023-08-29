@@ -17,11 +17,11 @@ class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() 
     private val _navigation = MutableLiveData<Navigation>()
     val navigation: LiveData<Navigation> = _navigation
 
-    private val _prideList = MutableLiveData<MutableList<Dog>>()
-    val prideList: LiveData<MutableList<Dog>> = _prideList
+    private val _dogList = MutableLiveData<MutableList<Dog>>()
+    val dogList: LiveData<MutableList<Dog>> = _dogList
 
-    private val _updatePrideList = MutableLiveData<MutableList<Dog>>()
-    val updatePrideList: LiveData<MutableList<Dog>> = _updatePrideList
+    private val _updateDogList = MutableLiveData<MutableList<Dog>>()
+    val updateDogList: LiveData<MutableList<Dog>> = _updateDogList
 
     private val _showingAds = MutableLiveData<UiModel>()
     val showingAds: LiveData<UiModel> = _showingAds
@@ -29,16 +29,16 @@ class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() 
     init {
         launch {
             _progress.value = UiModel.Loading(true)
-            _prideList.value = getBreedList(0)
+            _dogList.value = getBreedList(0)
             _showingAds.value = UiModel.ShowAd(true)
             _progress.value = UiModel.Loading(false)
         }
     }
 
-    fun loadMorePrideList(currentPage: Int) {
+    fun loadMoreDogList(currentPage: Int) {
         launch {
             _progress.value = UiModel.Loading(true)
-            _updatePrideList.value = getBreedList(currentPage)
+            _updateDogList.value = getBreedList(currentPage)
             _progress.value = UiModel.Loading(false)
         }
     }
