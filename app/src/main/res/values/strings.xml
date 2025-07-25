@@ -44,4 +44,7 @@
     <string name="more_apps">More applications</string>
     <string name="sounds_on">Sound on</string>
     <string name="sounds_off">Sound off</string>
+    <string name="know_more">Know more</string>
+    <string name="not_exist">Not exist</string>
+    <string name="read_info">Read info</string>
 </resources>
