@@ -1,10 +1,9 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.utils.Constants.RECORD_PERSONAL
 import com.alvaroquintana.domain.App
@@ -12,38 +11,45 @@ import com.alvaroquintana.domain.User
 import com.alvaroquintana.usecases.GetAppsRecommended
 import com.alvaroquintana.usecases.GetRecordScore
 import com.alvaroquintana.usecases.SaveTopScore
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
                       private val saveTopScore: SaveTopScore,
                       private val getRecordScore: GetRecordScore
-) : ScopedViewModel() {
+) : ViewModel() {
 
-    private val _progress = MutableLiveData<UiModel>()
-    val progress: LiveData<UiModel> = _progress
+    private val _progress = MutableStateFlow<UiModel>(UiModel.Loading(false))
+    val progress: StateFlow<UiModel> = _progress.asStateFlow()
 
-    private val _navigation = MutableLiveData<Navigation>()
-    val navigation: LiveData<Navigation> = _navigation
+    private val _navigation = MutableSharedFlow<Navigation>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val navigation: SharedFlow<Navigation> = _navigation.asSharedFlow()
 
-    private val _list = MutableLiveData<MutableList<App>>()
-    val list: LiveData<MutableList<App>> = _list
+    private val _list = MutableStateFlow<MutableList<App>>(mutableListOf())
+    val list: StateFlow<MutableList<App>> = _list.asStateFlow()
 
-    private val _personalRecord = MutableLiveData<String>()
-    val personalRecord: LiveData<String> = _personalRecord
+    private val _personalRecord = MutableStateFlow("")
+    val personalRecord: StateFlow<String> = _personalRecord.asStateFlow()
 
-    private val _worldRecord = MutableLiveData<String>()
-    val worldRecord: LiveData<String> = _worldRecord
+    private val _worldRecord = MutableStateFlow("")
+    val worldRecord: StateFlow<String> = _worldRecord.asStateFlow()
 
-    private val _showingAds = MutableLiveData<UiModel>()
-    val showingAds: LiveData<UiModel> = _showingAds
+    private val _showingAds = MutableSharedFlow<UiModel>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val showingAds: SharedFlow<UiModel> = _showingAds.asSharedFlow()
 
     init {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_RESULT)
-        launch {
+        viewModelScope.launch {
             _progress.value = UiModel.Loading(true)
             _list.value = appsRecommended()
             _worldRecord.value = getPointsWorldRecord()
-            _showingAds.value = UiModel.ShowAd(true)
+            _showingAds.tryEmit(UiModel.ShowAd(true))
             _progress.value = UiModel.Loading(false)
         }
     }
@@ -57,7 +63,7 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
     }
 
     fun setPersonalRecordOnServer(gamePoints: Int) {
-        launch {
+        viewModelScope.launch {
             val pointsLastClassified = getRecordScore.invoke(30)
             if(gamePoints > pointsLastClassified.toInt()) {
                 showDialogToSaveGame(gamePoints.toString())
@@ -66,8 +72,9 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
     }
 
     fun saveTopScore(user: User) {
-        launch {
+        viewModelScope.launch {
             saveTopScore.invoke(user)
+            Analytics.analyticsRecordSaved(user.points ?: 0, user.name ?: "")
         }
     }
 
@@ -89,32 +96,32 @@ class ResultViewModel(private val getAppsRecommended: GetAppsRecommended,
 
     private fun showDialogToSaveGame(points: String) {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_DIALOG_SAVE_SCORE)
-        _navigation.value = Navigation.Dialog(points)
+        _navigation.tryEmit(Navigation.Dialog(points))
     }
 
     fun onAppClicked(url: String) {
         Analytics.analyticsAppRecommendedOpen(url)
-        _navigation.value = Navigation.Open(url)
+        _navigation.tryEmit(Navigation.Open(url))
     }
 
     fun navigateToGame() {
         Analytics.analyticsClicked(Analytics.BTN_PLAY_AGAIN)
-        _navigation.value = Navigation.Game
+        _navigation.tryEmit(Navigation.Game)
     }
 
     fun navigateToRate() {
         Analytics.analyticsClicked(Analytics.BTN_RATE)
-        _navigation.value = Navigation.Rate
+        _navigation.tryEmit(Navigation.Rate)
     }
 
     fun navigateToRanking() {
         Analytics.analyticsClicked(Analytics.BTN_RANKING)
-        _navigation.value = Navigation.Ranking
+        _navigation.tryEmit(Navigation.Ranking)
     }
 
     fun navigateToShare(points: Int) {
         Analytics.analyticsClicked(Analytics.BTN_SHARE)
-        _navigation.value = Navigation.Share(points)
+        _navigation.tryEmit(Navigation.Share(points))
     }
 
     sealed class Navigation {

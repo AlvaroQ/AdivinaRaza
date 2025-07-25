@@ -1,44 +1,58 @@
 package com.alvaroquintana.adivinaperro.ui.info
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.alvaroquintana.adivinaperro.common.ScopedViewModel
-import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetBreedList
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() {
+class InfoViewModel(private val getBreedList: GetBreedList) : ViewModel() {
     private var list = mutableListOf<Dog>()
 
-    private val _progress = MutableLiveData<UiModel>()
-    val progress: LiveData<UiModel> = _progress
+    private val _progress = MutableStateFlow<UiModel>(UiModel.Loading(false))
+    val progress: StateFlow<UiModel> = _progress.asStateFlow()
 
-    private val _navigation = MutableLiveData<Navigation>()
-    val navigation: LiveData<Navigation> = _navigation
+    private val _navigation = MutableSharedFlow<Navigation>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val navigation: SharedFlow<Navigation> = _navigation.asSharedFlow()
 
-    private val _dogList = MutableLiveData<MutableList<Dog>>()
-    val dogList: LiveData<MutableList<Dog>> = _dogList
+    private val _dogList = MutableSharedFlow<MutableList<Dog>>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val dogList: SharedFlow<MutableList<Dog>> = _dogList.asSharedFlow()
 
-    private val _updateDogList = MutableLiveData<MutableList<Dog>>()
-    val updateDogList: LiveData<MutableList<Dog>> = _updateDogList
+    private val _updateDogList = MutableSharedFlow<MutableList<Dog>>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val updateDogList: SharedFlow<MutableList<Dog>> = _updateDogList.asSharedFlow()
 
-    private val _showingAds = MutableLiveData<UiModel>()
-    val showingAds: LiveData<UiModel> = _showingAds
+    private val _currentDogList = MutableStateFlow<List<Dog>>(emptyList())
+    val currentDogList: StateFlow<List<Dog>> = _currentDogList.asStateFlow()
+
+    private val _showingAds = MutableSharedFlow<UiModel>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val showingAds: SharedFlow<UiModel> = _showingAds.asSharedFlow()
 
     init {
-        launch {
+        Analytics.analyticsScreenViewed(Analytics.SCREEN_INFO)
+        viewModelScope.launch {
             _progress.value = UiModel.Loading(true)
-            _dogList.value = getBreedList(0)
-            _showingAds.value = UiModel.ShowAd(true)
+            val initialList = getBreedList(0)
+            _dogList.tryEmit(initialList)
+            _currentDogList.value = initialList.toList()
+            _showingAds.tryEmit(UiModel.ShowAd(true))
             _progress.value = UiModel.Loading(false)
         }
     }
 
     fun loadMoreDogList(currentPage: Int) {
-        launch {
+        viewModelScope.launch {
             _progress.value = UiModel.Loading(true)
-            _updateDogList.value = getBreedList(currentPage)
+            val updatedList = getBreedList(currentPage)
+            _updateDogList.tryEmit(updatedList)
+            _currentDogList.value = updatedList.toList()
             _progress.value = UiModel.Loading(false)
         }
     }
@@ -49,11 +63,11 @@ class InfoViewModel(private val getBreedList: GetBreedList) : ScopedViewModel() 
     }
 
     fun navigateToSelect() {
-        _navigation.value = Navigation.Select
+        _navigation.tryEmit(Navigation.Select)
     }
 
     fun showRewardedAd() {
-        _showingAds.value = UiModel.ShowReewardAd(true)
+        _showingAds.tryEmit(UiModel.ShowReewardAd(true))
     }
 
     sealed class Navigation {
