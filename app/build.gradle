@@ -67,6 +67,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.alvaroquintana.adivinaperro'
 }
 
 dependencies {
