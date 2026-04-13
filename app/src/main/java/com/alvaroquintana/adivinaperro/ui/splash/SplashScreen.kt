@@ -41,8 +41,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.GameCream
 import com.alvaroquintana.adivinaperro.ui.theme.GameDark
 import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
 import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import kotlinx.coroutines.delay
 
 @Composable
@@ -105,8 +104,8 @@ fun SplashScreen(
             // Title
             Text(
                 text = stringResource(R.string.app_name),
-                fontFamily = JetBrainsMonoFamily,
-                fontWeight = FontWeight.ExtraBold,
+                fontFamily = ComfortaaFamily,
+                fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
                 color = GameDark
             )
@@ -128,7 +127,7 @@ fun SplashScreen(
             // Loading text
             Text(
                 text = "Cargando...",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
                 color = GameMuted

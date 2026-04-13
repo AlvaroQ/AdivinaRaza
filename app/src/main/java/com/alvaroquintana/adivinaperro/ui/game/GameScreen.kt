@@ -43,8 +43,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.GameCream
 import com.alvaroquintana.adivinaperro.ui.theme.GameDark
 import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
 import com.alvaroquintana.adivinaperro.ui.theme.GameRed
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import kotlinx.coroutines.delay
 
@@ -113,7 +112,7 @@ fun GameScreen(
             // Progress
             Text(
                 text = "$stage/$TOTAL_BREED",
-                fontFamily = JetBrainsMonoFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = GameDark
@@ -134,7 +133,7 @@ fun GameScreen(
             // Score
             Text(
                 text = "$points pts",
-                fontFamily = JetBrainsMonoFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = GameOrange
@@ -169,7 +168,7 @@ fun GameScreen(
         // Question text
         Text(
             text = "¿Qué raza es este perro?",
-            fontFamily = GeistFamily,
+            fontFamily = ComfortaaFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = GameDark

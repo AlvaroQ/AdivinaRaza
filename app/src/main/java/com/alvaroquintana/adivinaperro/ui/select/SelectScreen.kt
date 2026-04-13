@@ -34,8 +34,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.GameCream
 import com.alvaroquintana.adivinaperro.ui.theme.GameDark
 import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
 import com.alvaroquintana.adivinaperro.ui.theme.GameWhite
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 
 @Composable
@@ -70,7 +69,7 @@ fun SelectScreen(
             )
             Text(
                 text = stringResource(R.string.app_name),
-                fontFamily = JetBrainsMonoFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = GameDark
@@ -95,7 +94,7 @@ fun SelectScreen(
         // Subtitle
         Text(
             text = "Descubre razas y pon a prueba tu memoria",
-            fontFamily = GeistFamily,
+            fontFamily = ComfortaaFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             color = GameDark,
@@ -126,7 +125,7 @@ fun SelectScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.start_game),
-                        fontFamily = GeistFamily,
+                        fontFamily = ComfortaaFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = GameWhite
@@ -151,7 +150,7 @@ fun SelectScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.learn),
-                        fontFamily = GeistFamily,
+                        fontFamily = ComfortaaFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = GameOrange

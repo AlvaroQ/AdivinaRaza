@@ -49,8 +49,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
 import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
 import com.alvaroquintana.adivinaperro.ui.theme.GameSilver
 import com.alvaroquintana.adivinaperro.ui.theme.GameWhite
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import com.alvaroquintana.domain.User
 
 @Composable
@@ -82,14 +81,14 @@ fun RankingScreen(viewModel: RankingViewModel) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Clasificación",
-                            fontFamily = GeistFamily,
-                            fontWeight = FontWeight.ExtraBold,
+                            fontFamily = ComfortaaFamily,
+                            fontWeight = FontWeight.Bold,
                             fontSize = 28.sp,
                             color = GameDark
                         )
                         Text(
                             text = "Los mejores jugadores",
-                            fontFamily = GeistFamily,
+                            fontFamily = ComfortaaFamily,
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp,
                             color = GameMuted
@@ -231,8 +230,8 @@ private fun PodiumCard(
                 Box(contentAlignment = Alignment.Center) {
                     Text(
                         text = position.toString(),
-                        fontFamily = JetBrainsMonoFamily,
-                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = ComfortaaFamily,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         color = color
                     )
@@ -242,7 +241,7 @@ private fun PodiumCard(
             // Name
             Text(
                 text = user.name ?: "",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
                 color = GameDark,
@@ -254,7 +253,7 @@ private fun PodiumCard(
             // Score
             Text(
                 text = "${user.points ?: 0} pts",
-                fontFamily = JetBrainsMonoFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp,
                 color = if (isFirst) GameOrange else GameMuted
@@ -277,8 +276,8 @@ private fun RankingListItem(
         // Position number
         Text(
             text = position.toString(),
-            fontFamily = JetBrainsMonoFamily,
-            fontWeight = FontWeight.ExtraBold,
+            fontFamily = ComfortaaFamily,
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = GameMuted,
             modifier = Modifier.width(28.dp)
@@ -308,7 +307,7 @@ private fun RankingListItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = user.name ?: "",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = GameDark,
@@ -317,7 +316,7 @@ private fun RankingListItem(
             )
             Text(
                 text = "${user.points ?: 0} pts",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = GameMuted

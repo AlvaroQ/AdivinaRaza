@@ -40,7 +40,7 @@ import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 import com.alvaroquintana.adivinaperro.ui.theme.GameDark
 import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
 import com.alvaroquintana.adivinaperro.ui.theme.GameWhite
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalGameColors
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 
@@ -144,7 +144,7 @@ fun AnswerOptionCard(
         ) {
             Text(
                 text = text,
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 color = animatedContentColor,

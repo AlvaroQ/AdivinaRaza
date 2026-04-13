@@ -8,119 +8,114 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.alvaroquintana.adivinaperro.R
 
-val JetBrainsMonoFamily = FontFamily(
-    Font(R.font.jetbrains_mono_regular, FontWeight.Normal),
-    Font(R.font.jetbrains_mono_medium, FontWeight.Medium),
-    Font(R.font.jetbrains_mono_bold, FontWeight.Bold),
-    Font(R.font.jetbrains_mono_extrabold, FontWeight.ExtraBold)
-)
-
-val GeistFamily = FontFamily(
-    Font(R.font.geist_regular, FontWeight.Normal),
-    Font(R.font.geist_medium, FontWeight.Medium),
-    Font(R.font.geist_bold, FontWeight.Bold)
+val ComfortaaFamily = FontFamily(
+    Font(R.font.comfortaa_light, FontWeight.Light),
+    Font(R.font.comfortaa_regular, FontWeight.Normal),
+    Font(R.font.comfortaa_medium, FontWeight.Medium),
+    Font(R.font.comfortaa_semibold, FontWeight.SemiBold),
+    Font(R.font.comfortaa_bold, FontWeight.Bold)
 )
 
 // Keep aliases for backward compatibility with any existing references
-val NunitoFamily = JetBrainsMonoFamily
-val NunitoSansFamily = GeistFamily
+val NunitoFamily = ComfortaaFamily
+val NunitoSansFamily = ComfortaaFamily
 
 val AdivinaTypography = Typography(
     displayLarge = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
-        fontWeight = FontWeight.ExtraBold,
+        fontFamily = ComfortaaFamily,
+        fontWeight = FontWeight.Bold,
         fontSize = 57.sp,
         lineHeight = 64.sp,
         letterSpacing = (-0.25).sp
     ),
     displayMedium = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 45.sp,
         lineHeight = 52.sp
     ),
     displaySmall = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 36.sp,
         lineHeight = 44.sp
     ),
     headlineLarge = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
-        fontWeight = FontWeight.ExtraBold,
+        fontFamily = ComfortaaFamily,
+        fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = (-0.5).sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
         lineHeight = 36.sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 32.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = JetBrainsMonoFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         lineHeight = 28.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 22.sp,
         letterSpacing = 0.1.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.25.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = GeistFamily,
+        fontFamily = ComfortaaFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,

@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
-import com.alvaroquintana.adivinaperro.ui.theme.NunitoFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,8 +56,8 @@ fun AnimatedScoreCounter(
         Text(
             text = "$displayScore",
             style = MaterialTheme.typography.displayLarge.copy(
-                fontFamily = NunitoFamily,
-                fontWeight = FontWeight.ExtraBold,
+                fontFamily = ComfortaaFamily,
+                fontWeight = FontWeight.Bold,
                 fontFeatureSettings = "tnum"
             ),
             color = MaterialTheme.colorScheme.primary

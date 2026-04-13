@@ -59,8 +59,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.GameGreen
 import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
 import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
 import com.alvaroquintana.adivinaperro.ui.theme.GameWhite
-import com.alvaroquintana.adivinaperro.ui.theme.GeistFamily
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.domain.App
 
@@ -120,8 +119,8 @@ fun ResultScreen(
             // Title
             Text(
                 text = stringResource(R.string.result, gamePoints),
-                fontFamily = GeistFamily,
-                fontWeight = FontWeight.ExtraBold,
+                fontFamily = ComfortaaFamily,
+                fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
                 color = GameDark,
                 textAlign = TextAlign.Center
@@ -132,7 +131,7 @@ fun ResultScreen(
             // Subtitle
             Text(
                 text = if (gamePoints > 5) "¡Gran resultado!" else "¡Sigue intentándolo!",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
                 color = GameMuted
@@ -199,7 +198,7 @@ fun ResultScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.play_again),
-                            fontFamily = GeistFamily,
+                            fontFamily = ComfortaaFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = GameWhite
@@ -231,7 +230,7 @@ fun ResultScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.best_score),
-                            fontFamily = GeistFamily,
+                            fontFamily = ComfortaaFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = GameOrange
@@ -254,7 +253,7 @@ fun ResultScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.share),
-                        fontFamily = GeistFamily,
+                        fontFamily = ComfortaaFamily,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
                         color = GameOrange,
@@ -271,7 +270,7 @@ fun ResultScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.rate_on_play_store),
-                        fontFamily = GeistFamily,
+                        fontFamily = ComfortaaFamily,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
                         color = GameOrange,
@@ -299,7 +298,7 @@ fun ResultScreen(
                     ) {
                         Text(
                             text = stringResource(R.string.other_apps),
-                            fontFamily = GeistFamily,
+                            fontFamily = ComfortaaFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = GameDark,
@@ -353,14 +352,14 @@ private fun StatItem(
         icon()
         Text(
             text = value,
-            fontFamily = JetBrainsMonoFamily,
+            fontFamily = ComfortaaFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = GameDark
         )
         Text(
             text = label,
-            fontFamily = GeistFamily,
+            fontFamily = ComfortaaFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             color = GameMuted
@@ -392,7 +391,7 @@ private fun AppItem(
             )
             Text(
                 text = app.name ?: "",
-                fontFamily = GeistFamily,
+                fontFamily = ComfortaaFamily,
                 fontSize = 12.sp,
                 color = GameDark,
                 textAlign = TextAlign.Center,

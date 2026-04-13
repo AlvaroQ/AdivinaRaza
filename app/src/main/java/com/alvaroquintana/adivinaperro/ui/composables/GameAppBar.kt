@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.theme.GameCream
 import com.alvaroquintana.adivinaperro.ui.theme.GameDark
-import com.alvaroquintana.adivinaperro.ui.theme.JetBrainsMonoFamily
+import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
 
 @Composable
 fun GameAppBar(
@@ -62,7 +62,7 @@ fun GameAppBar(
             Text(
                 text = title,
                 color = GameDark,
-                fontFamily = JetBrainsMonoFamily,
+                fontFamily = ComfortaaFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
