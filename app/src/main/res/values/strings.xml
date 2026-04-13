@@ -20,6 +20,8 @@
     <string name="dialog_name">Name</string>
     <string name="dialog_save">Save</string>
     <string name="info_title">Information</string>
+    <string name="start_game">Start</string>
+    <string name="learn">Learn</string>
     <string name="settings">Settings</string>
 
     <!-- content description image -->

@@ -20,6 +20,8 @@
     <string name="dialog_name">Nombre</string>
     <string name="dialog_save">Guardar</string>
     <string name="info_title">Información</string>
+    <string name="start_game">Jugar</string>
+    <string name="learn">Aprender</string>
     <string name="settings">Ajustes</string>
 
     <!-- content description image -->

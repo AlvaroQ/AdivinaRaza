@@ -12,9 +12,8 @@
 #   public *;
 #}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Hide the original source file name in stack traces
+-renamesourcefileattribute SourceFile
 
 # Add this global rule
 -keepattributes Signature
@@ -29,16 +28,14 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-# Application classes that will be serialized/deserialized over Gson
--keepclassmembers class com.alvaroquintana.domain.* { *; }
--keep class com.alvaroquintana.domain.* { *; }
+# Domain classes — keep fields for Firebase/Gson deserialization, allow method obfuscation
+-keepclassmembers class com.alvaroquintana.domain.* { <fields>; }
+-keep class com.alvaroquintana.domain.* { <init>(...); }
 
--ignorewarnings
--dontwarn okhttp3.**
--dontwarn okio.**
+# Javax annotations
 -dontwarn javax.annotation.**
--dontwarn org.conscrypt.**
--dontwarn com.squareup.okhttp.**
+
+# Test frameworks (not in release but suppresses build noise)
 -dontnote junit.framework.**
 -dontnote junit.runner.**
 -dontwarn android.test.**
@@ -48,6 +45,15 @@
 -dontwarn com.squareup.javawriter.JavaWriter
 -dontwarn org.mockito.**
 
-# Crashlitics
+# Crashlytics
 -keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+
+# Kotlin serialization
+-keepattributes RuntimeVisibleAnnotations
+-keepclassmembers class kotlinx.serialization.** { *; }
+-keep class * implements kotlinx.serialization.KSerializer { *; }
+
+# Navigation type-safe args
+-keep class * extends androidx.navigation.NavArgs { *; }
+-keepnames @kotlinx.serialization.Serializable class *
