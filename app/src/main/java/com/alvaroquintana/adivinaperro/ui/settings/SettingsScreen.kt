@@ -30,8 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.GameCream
 import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
+import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 
 @Composable
 fun SettingsScreen(
@@ -42,20 +42,20 @@ fun SettingsScreen(
     onSoundToggle: (Boolean) -> Unit,
     onThemeModeChanged: (ThemeMode) -> Unit,
     onRateApp: () -> Unit,
-    onMoreApps: () -> Unit,
     onShare: () -> Unit,
-    onPrivacyOptions: () -> Unit = {}
+    onPrivacyOptions: () -> Unit = {},
+    onPrivacyPolicy: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(GameCream)
+            .background(getBackgroundGradient())
             .padding(16.dp)
     ) {
         // General section
         item {
             Text(
-                text = "General",
+                text = stringResource(R.string.settings_section_general),
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
@@ -92,7 +92,7 @@ fun SettingsScreen(
         // About section
         item {
             Text(
-                text = "About",
+                text = stringResource(R.string.settings_section_about),
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
@@ -116,12 +116,6 @@ fun SettingsScreen(
                         onClick = onRateApp
                     )
 
-                    SettingsClickableItem(
-                        iconRes = R.drawable.ic_store,
-                        title = stringResource(R.string.settings_more_apps),
-                        summary = stringResource(R.string.settings_more_apps_summary),
-                        onClick = onMoreApps
-                    )
 
                     SettingsClickableItem(
                         iconRes = R.drawable.ic_share,
@@ -133,11 +127,18 @@ fun SettingsScreen(
                     if (showPrivacyOptions) {
                         SettingsClickableItem(
                             iconRes = R.drawable.ic_version,
-                            title = "Privacy Settings",
-                            summary = "Manage your ad consent preferences",
+                            title = stringResource(R.string.settings_privacy_options),
+                            summary = stringResource(R.string.settings_privacy_options_summary),
                             onClick = onPrivacyOptions
                         )
                     }
+
+                    SettingsClickableItem(
+                        iconRes = R.drawable.ic_privacy,
+                        title = stringResource(R.string.settings_privacy_policy),
+                        summary = stringResource(R.string.settings_privacy_policy_summary),
+                        onClick = onPrivacyPolicy
+                    )
 
                     SettingsInfoItem(
                         iconRes = R.drawable.ic_version,
@@ -176,15 +177,15 @@ private fun ThemeSelectorItem(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Theme",
+                    text = stringResource(R.string.settings_theme),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = when (currentMode) {
-                        ThemeMode.SYSTEM -> "Follow system"
-                        ThemeMode.LIGHT -> "Light"
-                        ThemeMode.DARK -> "Dark"
+                        ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_follow_system)
+                        ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
+                        ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -213,9 +214,9 @@ private fun ThemeSelectorItem(
                 ) {
                     Text(
                         text = when (mode) {
-                            ThemeMode.SYSTEM -> "System"
-                            ThemeMode.LIGHT -> "Light"
-                            ThemeMode.DARK -> "Dark"
+                            ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_system)
+                            ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
+                            ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
                         },
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal

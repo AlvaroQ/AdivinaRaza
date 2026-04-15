@@ -20,6 +20,7 @@ class SelectScreenTest {
                 onNavigateToGame = {},
                 onNavigateToBiggerSmaller = {},
                 onNavigateToDescription = {},
+                onNavigateToFciTrivia = {},
                 onNavigateToLearn = {},
                 onNavigateToSettings = {}
             )
@@ -35,6 +36,7 @@ class SelectScreenTest {
                 onNavigateToGame = {},
                 onNavigateToBiggerSmaller = {},
                 onNavigateToDescription = {},
+                onNavigateToFciTrivia = {},
                 onNavigateToLearn = {},
                 onNavigateToSettings = {}
             )
@@ -51,6 +53,7 @@ class SelectScreenTest {
                 onNavigateToGame = { navigated = true },
                 onNavigateToBiggerSmaller = {},
                 onNavigateToDescription = {},
+                onNavigateToFciTrivia = {},
                 onNavigateToLearn = {},
                 onNavigateToSettings = {}
             )
@@ -68,6 +71,7 @@ class SelectScreenTest {
                 onNavigateToGame = {},
                 onNavigateToBiggerSmaller = {},
                 onNavigateToDescription = {},
+                onNavigateToFciTrivia = {},
                 onNavigateToLearn = { navigated = true },
                 onNavigateToSettings = {}
             )

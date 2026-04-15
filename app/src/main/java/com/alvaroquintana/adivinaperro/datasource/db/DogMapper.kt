@@ -26,7 +26,15 @@ fun DogEntity.toDomain(): Dog = Dog(
     barkingLevel = barkingLevel,
     funFact = funFact,
     images = images,
-    dataVersion = dataVersion
+    dataVersion = dataVersion,
+    nutrition = nutrition,
+    hygiene = hygiene,
+    lossHair = lossHair,
+    commonDiseases = commonDiseases,
+    otherNames = otherNames,
+    fciGroup = fciGroup,
+    fciSection = fciSection,
+    fciSectionType = fciSectionType
 )
 
 fun Dog.toEntity(id: Int): DogEntity = DogEntity(
@@ -54,5 +62,13 @@ fun Dog.toEntity(id: Int): DogEntity = DogEntity(
     barkingLevel = barkingLevel,
     funFact = funFact,
     images = images,
-    dataVersion = dataVersion
+    dataVersion = dataVersion,
+    nutrition = nutrition,
+    hygiene = hygiene,
+    lossHair = lossHair,
+    commonDiseases = commonDiseases,
+    otherNames = otherNames,
+    fciGroup = fciGroup,
+    fciSection = fciSection,
+    fciSectionType = fciSectionType
 )

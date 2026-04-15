@@ -2,7 +2,7 @@ package com.alvaroquintana.adivinaperro.ui.game
 
 import app.cash.turbine.test
 import com.alvaroquintana.domain.Dog
-import com.alvaroquintana.usecases.GetBreedById
+import com.alvaroquintana.usecases.GetRandomBreedsWithDescription
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -21,13 +21,18 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class GameViewModelTest {
 
-    private val getBreedById = mockk<GetBreedById>()
+    private val getRandomBreedsWithDescription = mockk<GetRandomBreedsWithDescription>()
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        coEvery { getBreedById.invoke(any()) } returns Dog(name = "Poodle", icon = "poodle.png")
+        coEvery { getRandomBreedsWithDescription.invoke(4) } returns listOf(
+            Dog(name = "Poodle", icon = "poodle.png"),
+            Dog(name = "Bulldog", icon = "bulldog.png"),
+            Dog(name = "Labrador", icon = "labrador.png"),
+            Dog(name = "Beagle", icon = "beagle.png")
+        )
     }
 
     @After
@@ -35,7 +40,7 @@ class GameViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel() = GameViewModel(getBreedById)
+    private fun createViewModel() = GameViewModel(getRandomBreedsWithDescription)
 
     @Test
     fun `init emits ShowBannerAd true`() = runTest {
@@ -59,7 +64,7 @@ class GameViewModelTest {
 
     @Test
     fun `generateNewStage emits 4 response options`() = runTest {
-        coEvery { getBreedById.invoke(any()) } returnsMany listOf(
+        coEvery { getRandomBreedsWithDescription.invoke(4) } returns listOf(
             Dog(name = "Poodle", icon = "poodle.png"),
             Dog(name = "Bulldog", icon = "bulldog.png"),
             Dog(name = "Labrador", icon = "labrador.png"),
@@ -102,10 +107,16 @@ class GameViewModelTest {
 
     @Test
     fun `getNameBreedCorrect returns correct breed name after stage generation`() = runTest {
-        coEvery { getBreedById.invoke(any()) } returns Dog(name = "Husky", icon = "husky.png")
+        coEvery { getRandomBreedsWithDescription.invoke(4) } returns listOf(
+            Dog(name = "Husky", icon = "husky.png"),
+            Dog(name = "Poodle", icon = "poodle.png"),
+            Dog(name = "Bulldog", icon = "bulldog.png"),
+            Dog(name = "Beagle", icon = "beagle.png")
+        )
         val viewModel = createViewModel()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Husky", viewModel.getNameBreedCorrect())
+        val correctName = viewModel.getNameBreedCorrect()
+        assertTrue(listOf("Husky", "Poodle", "Bulldog", "Beagle").contains(correctName))
     }
 }

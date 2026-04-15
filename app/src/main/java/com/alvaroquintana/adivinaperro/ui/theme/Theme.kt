@@ -8,6 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
@@ -84,6 +85,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun AdivinaPerroTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
+    windowSizeClass: WindowSizeClass? = null,
     content: @Composable () -> Unit
 ) {
     val darkTheme = when (themeMode) {
@@ -104,9 +106,12 @@ fun AdivinaPerroTheme(
         }
     }
 
+    val resolvedWindowSizeClass = windowSizeClass ?: rememberWindowSizeClass()
+
     CompositionLocalProvider(
         LocalGameColors provides gameColors,
-        LocalThemeMode provides themeMode
+        LocalThemeMode provides themeMode,
+        LocalWindowSizeClass provides resolvedWindowSizeClass
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

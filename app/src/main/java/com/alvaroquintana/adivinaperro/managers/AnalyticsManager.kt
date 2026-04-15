@@ -3,28 +3,19 @@ package com.alvaroquintana.adivinaperro.managers
 import android.content.Context
 import android.os.Bundle
 import com.alvaroquintana.adivinaperro.BuildConfig
-import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.auth
 
 object Analytics {
     lateinit var mFirebase: FirebaseAnalytics
-    lateinit var ctx: Context
 
     fun initialize(ctx: Context) {
-        this.ctx = ctx
         mFirebase = FirebaseAnalytics.getInstance(ctx.applicationContext)
-    }
-
-    private fun getUID(): String {
-        return Firebase.auth.currentUser?.uid ?: ""
     }
 
     // region Screen Events
 
     fun analyticsScreenViewed(screenTitle: String) {
         logEvent(Event("screen_viewed")
-            .with("uid", getUID())
             .with("screen_title", screenTitle)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
@@ -36,7 +27,6 @@ object Analytics {
 
     fun analyticsGameFinished(points: String, gameMode: String) {
         logEvent(Event("game_finished")
-            .with("uid", getUID())
             .with("points", points)
             .with("game_mode", gameMode)
             .with("app_version", BuildConfig.VERSION_NAME)
@@ -45,7 +35,6 @@ object Analytics {
 
     fun analyticsGameModeSelected(gameMode: String) {
         logEvent(Event("game_mode_selected")
-            .with("uid", getUID())
             .with("game_mode", gameMode)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
@@ -53,19 +42,9 @@ object Analytics {
 
     fun analyticsGameAnswer(isCorrect: Boolean, stage: Int, gameMode: String) {
         logEvent(Event("game_answer")
-            .with("uid", getUID())
             .with("is_correct", isCorrect.toString())
             .with("stage", stage.toString())
             .with("game_mode", gameMode)
-            .with("app_version", BuildConfig.VERSION_NAME)
-            .with("app_name", BuildConfig.APPLICATION_ID))
-    }
-
-    fun analyticsRecordSaved(points: Int, playerName: String) {
-        logEvent(Event("record_saved")
-            .with("uid", getUID())
-            .with("points", points.toString())
-            .with("player_name", playerName)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
@@ -76,7 +55,6 @@ object Analytics {
 
     fun analyticsAdImpression(adType: String, adLocation: String) {
         logEvent(Event("ad_impression")
-            .with("uid", getUID())
             .with("ad_type", adType)
             .with("ad_location", adLocation)
             .with("app_version", BuildConfig.VERSION_NAME)
@@ -85,7 +63,6 @@ object Analytics {
 
     fun analyticsAdRewardEarned(adLocation: String) {
         logEvent(Event("ad_reward_earned")
-            .with("uid", getUID())
             .with("ad_location", adLocation)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
@@ -93,7 +70,6 @@ object Analytics {
 
     fun analyticsAdFailedToLoad(adType: String, adLocation: String, errorMessage: String) {
         logEvent(Event("ad_failed_to_load")
-            .with("uid", getUID())
             .with("ad_type", adType)
             .with("ad_location", adLocation)
             .with("error_message", errorMessage)
@@ -107,7 +83,6 @@ object Analytics {
 
     fun analyticsClicked(btnDescription: String) {
         logEvent(Event("clicked")
-            .with("uid", getUID())
             .with("component", btnDescription)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
@@ -115,8 +90,7 @@ object Analytics {
 
     fun analyticsAppRecommendedOpen(appName: String) {
         logEvent(Event("app_recommended_open")
-            .with("uid", getUID())
-            .with("app_name", appName)
+            .with("recommended_app", appName)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
@@ -150,11 +124,11 @@ object Analytics {
     // Screens
     const val SCREEN_GAME = "screen_game"
     const val SCREEN_RESULT = "screen_result"
-    const val SCREEN_RANKING = "screen_ranking"
     const val SCREEN_SELECT_GAME = "screen_select_game"
-    const val SCREEN_DIALOG_SAVE_SCORE = "screen_dialog_save_score"
     const val SCREEN_DESCRIPTION_GAME = "screen_description_game"
     const val SCREEN_BIGGER_SMALLER = "screen_bigger_smaller"
+    const val SCREEN_FCI_TRIVIA = "screen_fci_trivia"
+    const val SCREEN_CARE_FOOD = "screen_care_food"
     const val SCREEN_INFO = "screen_info"
     const val SCREEN_SETTINGS = "screen_settings"
 
@@ -162,6 +136,8 @@ object Analytics {
     const val MODE_CLASSIC = "classic"
     const val MODE_BIGGER_SMALLER = "bigger_smaller"
     const val MODE_DESCRIPTION = "description"
+    const val MODE_FCI_TRIVIA = "fci_trivia"
+    const val MODE_CARE_FOOD = "care_food"
 
     // Ad Types
     const val AD_TYPE_BANNER = "banner"
@@ -171,13 +147,11 @@ object Analytics {
     // Ad Locations
     const val AD_LOC_GAME = "game"
     const val AD_LOC_GAME_OVER = "game_over"
-    const val AD_LOC_RANKING = "ranking"
     const val AD_LOC_INFO = "info"
 
     // Clicked
     const val BTN_PLAY_AGAIN = "btn_play_again"
     const val BTN_RATE = "btn_rate"
-    const val BTN_RANKING = "btn_ranking"
     const val BTN_SHARE = "btn_share"
     const val BTN_LEARN = "btn_learn"
     const val BTN_SETTINGS = "btn_settings"

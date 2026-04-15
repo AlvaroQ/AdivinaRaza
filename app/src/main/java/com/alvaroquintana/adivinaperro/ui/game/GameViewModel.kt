@@ -3,9 +3,8 @@ package com.alvaroquintana.adivinaperro.ui.game
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.adivinaperro.managers.Analytics
-import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.domain.Dog
-import com.alvaroquintana.usecases.GetBreedById
+import com.alvaroquintana.usecases.GetRandomBreedsWithDescription
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +14,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GameViewModel(private val getBreedById: GetBreedById) : ViewModel() {
-    private var randomBreeds = mutableListOf<Int>()
+class GameViewModel(private val getRandomBreedsWithDescription: GetRandomBreedsWithDescription) : ViewModel() {
     private lateinit var dog: Dog
 
     private val _question = MutableStateFlow("")
@@ -44,33 +42,19 @@ class GameViewModel(private val getBreedById: GetBreedById) : ViewModel() {
         viewModelScope.launch {
             _progress.value = UiModel.Loading(true)
 
-            /** Generate question */
-            val numRandomMain = generateRandomExcluding(0, TOTAL_BREED, *randomBreeds.toIntArray())
-            randomBreeds.add(numRandomMain)
+            val dogs = getRandomBreedsWithDescription.invoke(4)
+            if (dogs.size < 4) {
+                _progress.value = UiModel.Loading(false)
+                _navigation.tryEmit(Navigation.Result)
+                return@launch
+            }
 
-            dog = getBreed(numRandomMain)
+            val correctIndex = (0 until 4).random()
+            dog = dogs[correctIndex]
 
-            /** Generate responses */
-            val numRandomMainPosition = generateRandomExcluding(0, 4)
-
-            val numRandomOption1 = generateRandomExcluding(0, TOTAL_BREED, numRandomMain)
-            val dogOption1: Dog = getBreed(numRandomOption1)
-            val numRandomPosition1 = generateRandomExcluding(0, 4, numRandomMainPosition)
-
-            val numRandomOption2 = generateRandomExcluding(0, TOTAL_BREED, numRandomMain, numRandomOption1)
-            val dogOption2: Dog = getBreed(numRandomOption2)
-            val numRandomPosition2 = generateRandomExcluding(0, 4, numRandomMainPosition, numRandomPosition1)
-
-            val numRandomOption3 = generateRandomExcluding(0, TOTAL_BREED, numRandomMain, numRandomOption1, numRandomOption2)
-            val dogOption3: Dog = getBreed(numRandomOption3)
-            val numRandomPosition3 = generateRandomExcluding(0, 4, numRandomMainPosition, numRandomPosition1, numRandomPosition2)
-
-            /** Save value */
-            val optionList = mutableListOf("", "", "", "")
-            optionList[numRandomMainPosition] = dog.name
-            optionList[numRandomPosition1] = dogOption1.name
-            optionList[numRandomPosition2] = dogOption2.name
-            optionList[numRandomPosition3] = dogOption3.name
+            val optionList = dogs.map { it.name }.toMutableList()
+            // Shuffle options but keep correct answer tracking via dog.name
+            optionList.shuffle()
 
             _responseOptions.tryEmit(optionList)
             _question.value = dog.icon
@@ -83,10 +67,6 @@ class GameViewModel(private val getBreedById: GetBreedById) : ViewModel() {
         _showingAds.tryEmit(UiModel.ShowReewardAd(true))
     }
 
-    private suspend fun getBreed(id: Int): Dog {
-        return getBreedById.invoke(id)
-    }
-
     fun navigateToResult(points: String) {
         Analytics.analyticsGameFinished(points, Analytics.MODE_CLASSIC)
         _navigation.tryEmit(Navigation.Result)
@@ -96,13 +76,7 @@ class GameViewModel(private val getBreedById: GetBreedById) : ViewModel() {
         return dog.name
     }
 
-    private fun generateRandomExcluding(startInclusive: Int, endExclusive: Int, vararg exclude: Int): Int {
-        var numRandom = (startInclusive until endExclusive).random()
-        while(exclude.contains(numRandom)){
-            numRandom = (startInclusive until endExclusive).random()
-        }
-        return numRandom
-    }
+    // No numeric-id based random selection; we rely on repository random sampling.
 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()

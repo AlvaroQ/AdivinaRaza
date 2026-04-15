@@ -26,6 +26,7 @@ class DescriptionViewModel(
         val score: Int = 0,
         val lives: Int = 3,
         val stage: Int = 1,
+        val roundId: Int = 0,
         val isLoading: Boolean = true,
         val lastResult: AnswerResult? = null,
         val correctName: String = ""
@@ -46,8 +47,10 @@ class DescriptionViewModel(
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
     init {
-        Analytics.analyticsScreenViewed(Analytics.SCREEN_DESCRIPTION_GAME)
-        FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_DESCRIPTION_GAME)
+        runCatching {
+            Analytics.analyticsScreenViewed(Analytics.SCREEN_DESCRIPTION_GAME)
+            FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_DESCRIPTION_GAME)
+        }
         loadNewRound()
         _events.tryEmit(Event.ShowBannerAd(true))
     }
@@ -78,6 +81,7 @@ class DescriptionViewModel(
                     options = options,
                     descriptionText = description,
                     correctName = correctBreed.name,
+                    roundId = it.roundId + 1,
                     isLoading = false
                 )
             }
@@ -88,26 +92,26 @@ class DescriptionViewModel(
         val parts = mutableListOf<String>()
 
         if (dog.temperament.isNotBlank()) {
-            parts.add("This breed is known for being ${dog.temperament.lowercase()}.")
+            parts.add("Esta raza se caracteriza por ser ${dog.temperament.lowercase()}.")
         }
         if (dog.sizeCategory.isNotBlank()) {
-            parts.add("It is a ${dog.sizeCategory.lowercase()} sized dog.")
+            parts.add("Es un perro de tamaño ${dog.sizeCategory.lowercase()}.")
         }
         if (dog.origin.isNotBlank()) {
-            parts.add("Originally from ${dog.origin}.")
+            parts.add("Originario de ${dog.origin}.")
         }
         if (dog.breedGroup.isNotBlank()) {
-            parts.add("It belongs to the ${dog.breedGroup} group.")
+            parts.add("Pertenece al grupo ${dog.breedGroup}.")
         }
         if (dog.coatType.isNotBlank()) {
-            parts.add("It has a ${dog.coatType.lowercase()} coat.")
+            parts.add("Tiene un pelaje ${dog.coatType.lowercase()}.")
         }
         if (dog.lifeSpanMin > 0 && dog.lifeSpanMax > 0) {
-            parts.add("Life expectancy: ${dog.lifeSpanMin}-${dog.lifeSpanMax} years.")
+            parts.add("Esperanza de vida: ${dog.lifeSpanMin}-${dog.lifeSpanMax} años.")
         }
 
         return if (parts.isEmpty()) {
-            "A wonderful dog breed. Can you guess which one?"
+            "Una raza de perro increíble. ¿Puedes adivinar cuál es?"
         } else {
             parts.joinToString(" ")
         }
@@ -117,7 +121,9 @@ class DescriptionViewModel(
         val currentState = _state.value
         val isCorrect = selectedName == currentState.correctName
 
-        Analytics.analyticsGameAnswer(isCorrect, currentState.stage, Analytics.MODE_DESCRIPTION)
+        runCatching {
+            Analytics.analyticsGameAnswer(isCorrect, currentState.stage, Analytics.MODE_DESCRIPTION)
+        }
 
         if (isCorrect) {
             _state.update {
@@ -138,18 +144,22 @@ class DescriptionViewModel(
             }
         }
 
-        FirebaseCrashlytics.getInstance().apply {
-            setCustomKey("game_mode", Analytics.MODE_DESCRIPTION)
-            setCustomKey("current_stage", _state.value.stage)
-            setCustomKey("current_score", _state.value.score)
-            setCustomKey("lives_remaining", _state.value.lives)
+        runCatching {
+            FirebaseCrashlytics.getInstance().apply {
+                setCustomKey("game_mode", Analytics.MODE_DESCRIPTION)
+                setCustomKey("current_stage", _state.value.stage)
+                setCustomKey("current_score", _state.value.score)
+                setCustomKey("lives_remaining", _state.value.lives)
+            }
         }
     }
 
     fun proceedAfterResult() {
         val currentState = _state.value
         if (currentState.lives < 1) {
-            Analytics.analyticsGameFinished(currentState.score.toString(), Analytics.MODE_DESCRIPTION)
+            runCatching {
+                Analytics.analyticsGameFinished(currentState.score.toString(), Analytics.MODE_DESCRIPTION)
+            }
             _events.tryEmit(Event.NavigateToResult(currentState.score))
         } else {
             if (currentState.stage % 6 == 0) {

@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,12 +36,11 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
-import com.alvaroquintana.adivinaperro.ui.theme.GameDark
-import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
-import com.alvaroquintana.adivinaperro.ui.theme.GameWhite
-import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
+import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffSemiCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalGameColors
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
+import androidx.compose.ui.res.stringResource
+import com.alvaroquintana.adivinaperro.R
 
 enum class AnswerState { NEUTRAL, SELECTED, CORRECT, WRONG }
 
@@ -57,22 +55,22 @@ fun AnswerOptionCard(
     val gameColors = LocalGameColors.current
 
     val targetContainerColor: Color = when (state) {
-        AnswerState.NEUTRAL -> GameWhite
-        AnswerState.SELECTED -> GameWhite
+        AnswerState.NEUTRAL -> MaterialTheme.colorScheme.surface
+        AnswerState.SELECTED -> MaterialTheme.colorScheme.surface
         AnswerState.CORRECT -> gameColors.correctContainer
         AnswerState.WRONG -> gameColors.wrongContainer
     }
 
     val targetBorderColor: Color = when (state) {
-        AnswerState.NEUTRAL -> GameMuted.copy(alpha = 0.4f)
+        AnswerState.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
         AnswerState.SELECTED -> MaterialTheme.colorScheme.primary
         AnswerState.CORRECT -> gameColors.correctAnswer
         AnswerState.WRONG -> gameColors.wrongAnswer
     }
 
     val targetContentColor: Color = when (state) {
-        AnswerState.NEUTRAL -> GameDark
-        AnswerState.SELECTED -> GameDark
+        AnswerState.NEUTRAL -> MaterialTheme.colorScheme.onSurface
+        AnswerState.SELECTED -> MaterialTheme.colorScheme.onSurface
         AnswerState.CORRECT -> gameColors.onCorrectContainer
         AnswerState.WRONG -> gameColors.onWrongContainer
     }
@@ -144,7 +142,7 @@ fun AnswerOptionCard(
         ) {
             Text(
                 text = text,
-                fontFamily = ComfortaaFamily,
+                fontFamily = DynaPuffSemiCondensedFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 color = animatedContentColor,
@@ -183,7 +181,7 @@ fun AnswerOptionCard(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = "Wrong",
+                    contentDescription = stringResource(R.string.content_desc_wrong),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(24.dp),

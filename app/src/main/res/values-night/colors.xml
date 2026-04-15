@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF9F43</color>
+    <color name="colorPrimaryDark">#E68033</color>
+    <color name="colorAccent">#FFB366</color>
+
+    <!-- Game palette dark: negro cálido profundo, coherente con DarkBackground -->
+    <color name="gameCream">#1C1208</color>
+
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="textColor">#F2E4D0</color>
+    <color name="textColorLight">#B89878</color>
+    <color name="textColorDark">#9E7D5E</color>
+
+    <color name="settongsIconColor">#F2E4D0</color>
+</resources>
+
+

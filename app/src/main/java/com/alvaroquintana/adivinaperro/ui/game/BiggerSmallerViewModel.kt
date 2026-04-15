@@ -26,6 +26,7 @@ class BiggerSmallerViewModel(
         val score: Int = 0,
         val lives: Int = 3,
         val stage: Int = 1,
+        val roundId: Int = 0,
         val isLoading: Boolean = true,
         val lastResult: AnswerResult? = null
     )
@@ -47,8 +48,10 @@ class BiggerSmallerViewModel(
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
     init {
-        Analytics.analyticsScreenViewed(Analytics.SCREEN_BIGGER_SMALLER)
-        FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_BIGGER_SMALLER)
+        runCatching {
+            Analytics.analyticsScreenViewed(Analytics.SCREEN_BIGGER_SMALLER)
+            FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_BIGGER_SMALLER)
+        }
         loadNewRound()
         _events.tryEmit(Event.ShowBannerAd(true))
     }
@@ -72,6 +75,7 @@ class BiggerSmallerViewModel(
                     breedLeft = breeds[0],
                     breedRight = breeds[1],
                     comparisonType = type,
+                    roundId = it.roundId + 1,
                     isLoading = false
                 )
             }
@@ -100,7 +104,9 @@ class BiggerSmallerViewModel(
             (isLeftSelected && leftValue >= rightValue) ||
             (!isLeftSelected && rightValue >= leftValue)
 
-        Analytics.analyticsGameAnswer(isCorrect, currentState.stage, Analytics.MODE_BIGGER_SMALLER)
+        runCatching {
+            Analytics.analyticsGameAnswer(isCorrect, currentState.stage, Analytics.MODE_BIGGER_SMALLER)
+        }
 
         if (isCorrect) {
             _state.update {
@@ -121,18 +127,22 @@ class BiggerSmallerViewModel(
             }
         }
 
-        FirebaseCrashlytics.getInstance().apply {
-            setCustomKey("game_mode", Analytics.MODE_BIGGER_SMALLER)
-            setCustomKey("current_stage", _state.value.stage)
-            setCustomKey("current_score", _state.value.score)
-            setCustomKey("lives_remaining", _state.value.lives)
+        runCatching {
+            FirebaseCrashlytics.getInstance().apply {
+                setCustomKey("game_mode", Analytics.MODE_BIGGER_SMALLER)
+                setCustomKey("current_stage", _state.value.stage)
+                setCustomKey("current_score", _state.value.score)
+                setCustomKey("lives_remaining", _state.value.lives)
+            }
         }
     }
 
     fun proceedAfterResult() {
         val currentState = _state.value
         if (currentState.lives < 1) {
-            Analytics.analyticsGameFinished(currentState.score.toString(), Analytics.MODE_BIGGER_SMALLER)
+            runCatching {
+                Analytics.analyticsGameFinished(currentState.score.toString(), Analytics.MODE_BIGGER_SMALLER)
+            }
             _events.tryEmit(Event.NavigateToResult(currentState.score))
         } else {
             if (currentState.stage % 6 == 0) {

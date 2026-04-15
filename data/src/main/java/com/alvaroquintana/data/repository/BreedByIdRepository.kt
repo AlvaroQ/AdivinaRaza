@@ -13,4 +13,8 @@ class BreedByIdRepository(private val dataBaseSource: DataBaseSource) {
 
     suspend fun getRandomBreedsWithDescription(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithDescription(count)
 
+    suspend fun getRandomBreedsWithFciGroup(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithFciGroup(count)
+
+    suspend fun getRandomBreedsWithCare(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithCare(count)
+
 }

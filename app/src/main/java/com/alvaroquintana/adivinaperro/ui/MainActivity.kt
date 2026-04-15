@@ -6,15 +6,22 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,44 +45,43 @@ import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.adivinaperro.ui.animation.NavTransitions
 import com.alvaroquintana.adivinaperro.ui.composables.AdBannerView
 import com.alvaroquintana.adivinaperro.ui.composables.GameAppBar
-import com.alvaroquintana.adivinaperro.ui.composables.SaveRecordDialog
-import com.alvaroquintana.adivinaperro.ui.composables.rememberInterstitialAdState
 import com.alvaroquintana.adivinaperro.ui.composables.rememberRewardedAdState
 import com.alvaroquintana.adivinaperro.ui.game.BiggerSmallerScreenContent
 import com.alvaroquintana.adivinaperro.ui.game.BiggerSmallerViewModel
 import com.alvaroquintana.adivinaperro.ui.game.DescriptionScreenContent
 import com.alvaroquintana.adivinaperro.ui.game.DescriptionViewModel
+import com.alvaroquintana.adivinaperro.ui.game.FciTriviaScreenContent
+import com.alvaroquintana.adivinaperro.ui.game.FciTriviaViewModel
+
 import com.alvaroquintana.adivinaperro.ui.game.GameScreen
 import com.alvaroquintana.adivinaperro.ui.game.GameViewModel
 import com.alvaroquintana.adivinaperro.ui.info.InfoScreen
 import com.alvaroquintana.adivinaperro.ui.info.InfoViewModel
 import com.alvaroquintana.adivinaperro.ui.navigation.BiggerSmaller
 import com.alvaroquintana.adivinaperro.ui.navigation.Description
+import com.alvaroquintana.adivinaperro.ui.navigation.FciTrivia
+
 import com.alvaroquintana.adivinaperro.ui.navigation.Game
 import com.alvaroquintana.adivinaperro.ui.navigation.Info
-import com.alvaroquintana.adivinaperro.ui.navigation.Ranking
 import com.alvaroquintana.adivinaperro.ui.navigation.Result
 import com.alvaroquintana.adivinaperro.ui.navigation.Select
 import com.alvaroquintana.adivinaperro.ui.navigation.Settings
 import com.alvaroquintana.adivinaperro.ui.navigation.Splash
-import com.alvaroquintana.adivinaperro.ui.ranking.RankingScreen
 import com.alvaroquintana.adivinaperro.ui.splash.SplashScreen
-import com.alvaroquintana.adivinaperro.ui.ranking.RankingViewModel
 import com.alvaroquintana.adivinaperro.ui.result.ResultScreen
 import com.alvaroquintana.adivinaperro.ui.result.ResultViewModel
 import com.alvaroquintana.adivinaperro.ui.select.SelectScreen
 import com.alvaroquintana.adivinaperro.ui.settings.SettingsScreen
 import com.alvaroquintana.adivinaperro.ui.theme.AdivinaPerroTheme
 import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
+import com.alvaroquintana.adivinaperro.ui.theme.rememberWindowSizeClass
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.adivinaperro.utils.playBarkSound
 import com.alvaroquintana.adivinaperro.utils.playFailSound
 import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import com.alvaroquintana.adivinaperro.utils.rateApp
-import com.alvaroquintana.adivinaperro.utils.screenOrientationPortrait
 import com.alvaroquintana.adivinaperro.utils.shareApp
-import com.alvaroquintana.domain.User
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -83,6 +89,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.alvaroquintana.adivinaperro.managers.ConsentManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
@@ -98,7 +105,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        screenOrientationPortrait()
+        // Helps diagnose Firestore queries on connected device/emulator only.
+        FirebaseFirestore.setLoggingEnabled(BuildConfig.DEBUG)
 
         auth = Firebase.auth
         Analytics.initialize(this)
@@ -119,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val prefs = remember {
-                getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE)
+                getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
             }
             var themeMode by remember {
                 mutableStateOf(
@@ -131,13 +139,15 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            AdivinaPerroTheme(themeMode = themeMode) {
+            val windowSizeClass = rememberWindowSizeClass()
+
+            AdivinaPerroTheme(themeMode = themeMode, windowSizeClass = windowSizeClass) {
                 val navController = rememberNavController()
                 AppNavHost(
                     navController = navController,
                     onThemeModeChanged = { mode ->
                         themeMode = mode
-                        prefs.edit().putString("theme_mode", mode.name).apply()
+                        prefs.edit { putString("theme_mode", mode.name) }
                     }
                 )
             }
@@ -172,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         if (!isSignedIn) {
             signInAnonymously()
         } else {
-            FirebaseCrashlytics.getInstance().setUserId(user?.uid!!)
+            FirebaseCrashlytics.getInstance().setUserId(user.uid)
             log(tag, "updateUI, you are login in")
         }
     }
@@ -210,7 +220,6 @@ private fun AppNavHost(
         }
 
         composable<Select> {
-            val selectViewModel: com.alvaroquintana.adivinaperro.ui.select.SelectViewModel = koinViewModel()
             SelectScreen(
                 onNavigateToGame = {
                     Analytics.analyticsGameModeSelected(Analytics.MODE_CLASSIC)
@@ -223,6 +232,10 @@ private fun AppNavHost(
                 onNavigateToDescription = {
                     Analytics.analyticsGameModeSelected(Analytics.MODE_DESCRIPTION)
                     navController.navigate(Description)
+                },
+                onNavigateToFciTrivia = {
+                    Analytics.analyticsGameModeSelected(Analytics.MODE_FCI_TRIVIA)
+                    navController.navigate(FciTrivia)
                 },
                 onNavigateToLearn = {
                     Analytics.analyticsClicked(Analytics.BTN_LEARN)
@@ -247,6 +260,11 @@ private fun AppNavHost(
             DescriptionRoute(navController = navController)
         }
 
+        composable<FciTrivia> {
+            FciTriviaRoute(navController = navController)
+        }
+
+
         composable<Result>(
             enterTransition = { NavTransitions.resultEnterTransition },
             exitTransition = { NavTransitions.resultExitTransition },
@@ -255,10 +273,6 @@ private fun AppNavHost(
         ) { backStackEntry ->
             val result: Result = backStackEntry.toRoute()
             ResultRoute(navController = navController, gamePoints = result.points)
-        }
-
-        composable<Ranking> {
-            RankingRoute(navController = navController)
         }
 
         composable<Info>(
@@ -284,6 +298,51 @@ private fun AppNavHost(
     }
 }
 
+// region FCI Trivia Route
+
+@Composable
+private fun FciTriviaRoute(navController: NavHostController) {
+    val viewModel: FciTriviaViewModel = koinViewModel()
+    val context = LocalContext.current
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    var showBanner by remember { mutableStateOf(false) }
+
+    val rewardedAdState = rememberRewardedAdState(
+        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adLocation = Analytics.AD_LOC_GAME
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is FciTriviaViewModel.Event.NavigateToResult -> {
+                    navController.navigate(Result(event.points)) {
+                        popUpTo<Select>()
+                    }
+                }
+                is FciTriviaViewModel.Event.ShowBannerAd -> showBanner = event.show
+                is FciTriviaViewModel.Event.ShowRewardedAd -> rewardedAdState.show()
+            }
+        }
+    }
+
+    GameScreenLayout(
+        title = stringResource(R.string.mode_fci_trivia),
+        onBackClick = { navController.popBackStack() },
+        showLives = false,
+        lives = state.lives,
+        showBanner = showBanner,
+        bannerAdUnitId = stringResource(R.string.BANNER_GAME),
+        bannerAdLocation = Analytics.AD_LOC_GAME
+    ) {
+        FciTriviaScreenContent(viewModel = viewModel, context = context)
+    }
+}
+
+
+// endregion
+
 // region Game Classic Route
 
 @Composable
@@ -301,20 +360,12 @@ private fun GameRoute(navController: NavHostController) {
         adLocation = Analytics.AD_LOC_GAME
     )
 
-    // Pre-load interstitial for game over
-    val interstitialAdState = rememberInterstitialAdState(
-        adUnitId = stringResource(R.string.INTERSTICIAL_GAME_OVER),
-        adLocation = Analytics.AD_LOC_GAME_OVER
-    )
-
     LaunchedEffect(Unit) {
         viewModel.navigation.collect { navigation ->
             when (navigation) {
                 is GameViewModel.Navigation.Result -> {
-                    interstitialAdState.show {
-                        navController.navigate(Result(points)) {
-                            popUpTo<Select>()
-                        }
+                    navController.navigate(Result(points)) {
+                        popUpTo<Select>()
                     }
                 }
             }
@@ -332,7 +383,7 @@ private fun GameRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stage.toString(),
+        title = stringResource(R.string.mode_classic_title),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         lives = life,
@@ -400,20 +451,12 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
         adLocation = Analytics.AD_LOC_GAME
     )
 
-    // Pre-load interstitial for game over
-    val interstitialAdState = rememberInterstitialAdState(
-        adUnitId = stringResource(R.string.INTERSTICIAL_GAME_OVER),
-        adLocation = Analytics.AD_LOC_GAME_OVER
-    )
-
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is BiggerSmallerViewModel.Event.NavigateToResult -> {
-                    interstitialAdState.show {
-                        navController.navigate(Result(event.points)) {
-                            popUpTo<Select>()
-                        }
+                    navController.navigate(Result(event.points)) {
+                        popUpTo<Select>()
                     }
                 }
                 is BiggerSmallerViewModel.Event.ShowBannerAd -> showBanner = event.show
@@ -423,9 +466,9 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = state.stage.toString(),
+        title = stringResource(R.string.mode_bigger_smaller),
         onBackClick = { navController.popBackStack() },
-        showLives = true,
+        showLives = false,
         lives = state.lives,
         showBanner = showBanner,
         bannerAdUnitId = stringResource(R.string.BANNER_GAME),
@@ -452,20 +495,12 @@ private fun DescriptionRoute(navController: NavHostController) {
         adLocation = Analytics.AD_LOC_GAME
     )
 
-    // Pre-load interstitial for game over
-    val interstitialAdState = rememberInterstitialAdState(
-        adUnitId = stringResource(R.string.INTERSTICIAL_GAME_OVER),
-        adLocation = Analytics.AD_LOC_GAME_OVER
-    )
-
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is DescriptionViewModel.Event.NavigateToResult -> {
-                    interstitialAdState.show {
-                        navController.navigate(Result(event.points)) {
-                            popUpTo<Select>()
-                        }
+                    navController.navigate(Result(event.points)) {
+                        popUpTo<Select>()
                     }
                 }
                 is DescriptionViewModel.Event.ShowBannerAd -> showBanner = event.show
@@ -475,9 +510,9 @@ private fun DescriptionRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = state.stage.toString(),
+        title = stringResource(R.string.mode_description),
         onBackClick = { navController.popBackStack() },
-        showLives = true,
+        showLives = false,
         lives = state.lives,
         showBanner = showBanner,
         bannerAdUnitId = stringResource(R.string.BANNER_GAME),
@@ -496,54 +531,21 @@ private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
     val viewModel: ResultViewModel = koinViewModel()
     val context = LocalContext.current
 
-    var showDialog by remember { mutableStateOf(false) }
-    var dialogPoints by remember { mutableStateOf("") }
-
-    val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME_OVER),
-        adLocation = Analytics.AD_LOC_GAME_OVER
-    )
-
     LaunchedEffect(Unit) {
         playBarkSound(context)
         viewModel.getPersonalRecord(gamePoints, context)
-        viewModel.setPersonalRecordOnServer(gamePoints)
     }
 
     LaunchedEffect(Unit) {
         viewModel.navigation.collect { navigation ->
             when (navigation) {
-                ResultViewModel.Navigation.Game -> {
-                    navController.navigate(Game) {
+                ResultViewModel.Navigation.Select -> {
+                    navController.navigate(Select) {
                         popUpTo<Select>()
                     }
                 }
                 ResultViewModel.Navigation.Rate -> rateApp(context)
-                ResultViewModel.Navigation.Ranking -> navController.navigate(Ranking)
                 is ResultViewModel.Navigation.Share -> shareApp(context, navigation.points)
-                is ResultViewModel.Navigation.Open -> {
-                    try {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${navigation.url}"))
-                        )
-                    } catch (_: ActivityNotFoundException) {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${navigation.url}"))
-                        )
-                    }
-                }
-                is ResultViewModel.Navigation.Dialog -> {
-                    dialogPoints = navigation.points
-                    showDialog = true
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.showingAds.collect { model ->
-            if (model is ResultViewModel.UiModel.ShowAd) {
-                rewardedAdState.show()
             }
         }
     }
@@ -561,42 +563,10 @@ private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
         ResultScreen(
             viewModel = viewModel,
             gamePoints = gamePoints,
-            onPlayAgain = { viewModel.navigateToGame() },
+            onPlayAgain = { viewModel.navigateToSelect() },
             onShare = { viewModel.navigateToShare(gamePoints) },
-            onRate = { viewModel.navigateToRate() },
-            onRanking = { viewModel.navigateToRanking() },
-            onAppClicked = { url -> viewModel.onAppClicked(url) }
+            onRate = { viewModel.navigateToRate() }
         )
-    }
-
-    if (showDialog) {
-        SaveRecordDialog(
-            onDismiss = { showDialog = false },
-            onSave = { name ->
-                viewModel.saveTopScore(User(name, dialogPoints.toInt()))
-                showDialog = false
-            }
-        )
-    }
-}
-
-// endregion
-
-// region Ranking Route
-
-@Composable
-private fun RankingRoute(navController: NavHostController) {
-    val viewModel: RankingViewModel = koinViewModel()
-
-    GameScreenLayout(
-        title = stringResource(R.string.ranking_screen_title),
-        onBackClick = { navController.popBackStack() },
-        showLives = false,
-        showBanner = true,
-        bannerAdUnitId = stringResource(R.string.BANNER_RANKING),
-        bannerAdLocation = Analytics.AD_LOC_RANKING
-    ) {
-        RankingScreen(viewModel = viewModel)
     }
 }
 
@@ -607,9 +577,9 @@ private fun RankingRoute(navController: NavHostController) {
 @Composable
 private fun InfoRoute(navController: NavHostController) {
     val viewModel: InfoViewModel = koinViewModel()
+    val selectedDog by viewModel.selectedDog.collectAsStateWithLifecycle()
 
     var currentPage by rememberSaveable { mutableIntStateOf(0) }
-    var showBanner by remember { mutableStateOf(false) }
 
     val rewardedAdState = rememberRewardedAdState(
         adUnitId = stringResource(R.string.BONIFICADO_GAME),
@@ -619,18 +589,27 @@ private fun InfoRoute(navController: NavHostController) {
     LaunchedEffect(Unit) {
         viewModel.showingAds.collect { model ->
             when (model) {
-                is InfoViewModel.UiModel.ShowAd -> showBanner = model.show
                 is InfoViewModel.UiModel.ShowReewardAd -> rewardedAdState.show()
                 else -> {}
             }
         }
     }
 
+    BackHandler(enabled = selectedDog != null) {
+        viewModel.closeDogDetail()
+    }
+
     GameScreenLayout(
         title = stringResource(R.string.info_title),
-        onBackClick = { navController.popBackStack() },
+        onBackClick = {
+            if (selectedDog != null) {
+                viewModel.closeDogDetail()
+            } else {
+                navController.popBackStack()
+            }
+        },
         showLives = false,
-        showBanner = showBanner,
+        showBanner = selectedDog != null,
         bannerAdUnitId = stringResource(R.string.BANNER_INFO),
         bannerAdLocation = Analytics.AD_LOC_INFO
     ) {
@@ -640,8 +619,7 @@ private fun InfoRoute(navController: NavHostController) {
             onLoadMore = { nextPage ->
                 currentPage = nextPage
                 viewModel.loadMoreDogList(nextPage)
-            },
-            onShowRewardedAd = { viewModel.showRewardedAd() }
+            }
         )
     }
 }
@@ -693,28 +671,25 @@ private fun SettingsRoute(
             showPrivacyOptions = consentManager.isPrivacyOptionsRequired,
             onSoundToggle = { enabled ->
                 isSoundEnabled = enabled
-                prefs.edit().putBoolean("sound", enabled).apply()
+                prefs.edit { putBoolean("sound", enabled) }
             },
             onThemeModeChanged = { mode ->
                 themeMode = mode
-                prefs.edit().putString("theme_mode", mode.name).apply()
+                prefs.edit { putString("theme_mode", mode.name) }
                 onThemeModeChanged(mode)
             },
             onRateApp = { rateApp(context) },
-            onMoreApps = {
-                try {
-                    context.startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://play.google.com/store/apps/collection/cluster?clp=igM4ChkKEzg4Nzc2MDA3NjYwNDEzMDc4NTIQCBgDEhkKEzg4Nzc2MDA3NjYwNDEzMDc4NTIQCBgDGAA%3D:S:ANO1ljItPd0&gsr=CjuKAzgKGQoTODg3NzYwMDc2NjA0MTMwNzg1MhAIGAMSGQoTODg3NzYwMDc2NjA0MTMwNzg1MhAIGAMYAA%3D%3D:S:ANO1ljLjm34")
-                        )
-                    )
-                } catch (_: ActivityNotFoundException) {
-                }
-            },
             onShare = { shareApp(context, -1) },
             onPrivacyOptions = {
                 consentManager.showPrivacyOptionsForm(context as android.app.Activity) { _ -> }
+            },
+            onPrivacyPolicy = {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        "https://sites.google.com/view/alvaroquintana-privacy-policy".toUri()
+                    )
+                )
             }
         )
     }
@@ -735,7 +710,12 @@ private fun GameScreenLayout(
     bannerAdLocation: String = Analytics.AD_LOC_GAME,
     content: @Composable () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(com.alvaroquintana.adivinaperro.ui.theme.GameCream)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .navigationBarsPadding()
+    ) {
         GameAppBar(
             title = title,
             onBackClick = onBackClick,
@@ -743,8 +723,15 @@ private fun GameScreenLayout(
             lives = lives
         )
 
-        Box(modifier = Modifier.weight(1f)) {
-            content()
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Box(modifier = Modifier.widthIn(max = 680.dp)) {
+                content()
+            }
         }
 
         if (showBanner && bannerAdUnitId.isNotEmpty()) {

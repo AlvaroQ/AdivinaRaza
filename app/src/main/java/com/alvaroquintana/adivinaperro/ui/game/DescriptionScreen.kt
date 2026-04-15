@@ -2,7 +2,6 @@ package com.alvaroquintana.adivinaperro.ui.game
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,17 +24,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alvaroquintana.adivinaperro.ui.theme.GameCream
+import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.components.AnswerOptionCard
 import com.alvaroquintana.adivinaperro.ui.components.AnswerState
+import com.alvaroquintana.adivinaperro.ui.components.GameStatusRow
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
+import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
+import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.adivinaperro.utils.playFailSound
 import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import kotlinx.coroutines.delay
@@ -52,20 +53,20 @@ fun DescriptionScreenContent(
         return
     }
 
-    var buttonsEnabled by remember(state.stage) { mutableStateOf(true) }
-    val answerStates = remember(state.stage, state.options) {
+    var buttonsEnabled by remember(state.roundId) { mutableStateOf(true) }
+    val answerStates = remember(state.roundId, state.options.size) {
         mutableStateListOf<AnswerState>().apply {
             repeat(state.options.size) { add(AnswerState.NEUTRAL) }
         }
     }
 
-    LaunchedEffect(state.lastResult, state.stage) {
+    LaunchedEffect(state.lastResult) {
         state.lastResult?.let { result ->
             when (result) {
                 DescriptionViewModel.AnswerResult.CORRECT -> playSuccessSound(context)
                 DescriptionViewModel.AnswerResult.INCORRECT -> playFailSound(context)
             }
-            delay(1200)
+            delay(AnimationSpecs.ANSWER_HOLD_DURATION.toLong())
             viewModel.proceedAfterResult()
         }
     }
@@ -73,33 +74,38 @@ fun DescriptionScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(GameCream)
-            .padding(12.dp)
+            .background(getBackgroundGradient())
+            .padding(horizontal = 20.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primaryContainer,
-                            MaterialTheme.colorScheme.tertiaryContainer
-                        )
-                    ),
-                    shape = MaterialTheme.shapes.large
-                )
-                .padding(horizontal = 16.dp, vertical = 14.dp)
-        ) {
-            Text(
-                text = "Adivina la raza",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        GameStatusRow(
+            stageLabel = stringResource(R.string.stage_value, state.stage),
+            lives = state.lives,
+            score = state.score
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.mode_description),
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = stringResource(R.string.choose_one),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -114,14 +120,13 @@ fun DescriptionScreenContent(
                 text = state.descriptionText,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyLarge,
-                fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().padding(20.dp),
                 lineHeight = 26.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         OptionGrid(options = state.options, modifier = Modifier.fillMaxWidth()) { index, option, cardModifier ->
             AnswerOptionCard(
@@ -132,10 +137,10 @@ fun DescriptionScreenContent(
                 onClick = {
                     if (buttonsEnabled) {
                         buttonsEnabled = false
-                        markDescriptionAnswerStates(
+                        applyAnswerFeedbackStates(
                             answerStates = answerStates,
                             options = state.options,
-                            correctName = state.correctName,
+                            correctAnswer = state.correctName,
                             selectedIndex = index
                         )
                         viewModel.onOptionSelected(option)
@@ -144,28 +149,7 @@ fun DescriptionScreenContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Score: ${state.score}",
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
-        )
-    }
-}
-
-private fun markDescriptionAnswerStates(
-    answerStates: MutableList<AnswerState>,
-    options: List<String>,
-    correctName: String,
-    selectedIndex: Int
-) {
-    val correctIndex = options.indexOfFirst { it == correctName }
-    if (correctIndex >= 0) {
-        answerStates[correctIndex] = AnswerState.CORRECT
-    }
-    if (selectedIndex != correctIndex) {
-        answerStates[selectedIndex] = AnswerState.WRONG
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

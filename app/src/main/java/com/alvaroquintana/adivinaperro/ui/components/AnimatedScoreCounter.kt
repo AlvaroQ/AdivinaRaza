@@ -1,10 +1,7 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
-import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
+import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffCondensedFamily
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,7 +53,7 @@ fun AnimatedScoreCounter(
         Text(
             text = "$displayScore",
             style = MaterialTheme.typography.displayLarge.copy(
-                fontFamily = ComfortaaFamily,
+                fontFamily = DynaPuffCondensedFamily,
                 fontWeight = FontWeight.Bold,
                 fontFeatureSettings = "tnum"
             ),

@@ -1,12 +1,11 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
 import app.cash.turbine.test
-import com.alvaroquintana.domain.App
-import com.alvaroquintana.usecases.GetAppsRecommended
-import com.alvaroquintana.usecases.GetRecordScore
-import com.alvaroquintana.usecases.SaveTopScore
-import io.mockk.coEvery
+import com.alvaroquintana.adivinaperro.managers.Analytics
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -22,66 +21,33 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class ResultViewModelTest {
 
-    private val getAppsRecommended = mockk<GetAppsRecommended>()
-    private val saveTopScore = mockk<SaveTopScore>(relaxed = true)
-    private val getRecordScore = mockk<GetRecordScore>()
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        coEvery { getAppsRecommended.invoke() } returns mutableListOf(
-            App(name = "TestApp", image = "test.png", url = "com.test.app")
-        )
-        coEvery { getRecordScore.invoke(1) } returns "100"
-        coEvery { getRecordScore.invoke(30) } returns "10"
+        mockkObject(Analytics)
+        every { Analytics.analyticsScreenViewed(any()) } returns Unit
+        every { Analytics.analyticsClicked(any()) } returns Unit
     }
 
     @After
     fun tearDown() {
+        unmockkObject(Analytics)
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel() = ResultViewModel(getAppsRecommended, saveTopScore, getRecordScore)
+    private fun createViewModel() = ResultViewModel()
 
     @Test
-    fun `init loads apps recommended`() = runTest {
-        val viewModel = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        val apps = viewModel.list.value
-        assertEquals(1, apps.size)
-        assertEquals("TestApp", apps[0].name)
-    }
-
-    @Test
-    fun `init loads world record`() = runTest {
-        val viewModel = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals("100", viewModel.worldRecord.value)
-    }
-
-    @Test
-    fun `init emits ShowAd`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.showingAds.test {
-            testDispatcher.scheduler.advanceUntilIdle()
-            val item = awaitItem()
-            assertTrue(item is ResultViewModel.UiModel.ShowAd)
-            cancelAndConsumeRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `navigateToGame emits Navigation Game`() = runTest {
+    fun `navigateToSelect emits Navigation Select`() = runTest {
         val viewModel = createViewModel()
         testDispatcher.scheduler.advanceUntilIdle()
 
         viewModel.navigation.test {
-            viewModel.navigateToGame()
+            viewModel.navigateToSelect()
             val nav = awaitItem()
-            assertTrue(nav is ResultViewModel.Navigation.Game)
+            assertTrue(nav is ResultViewModel.Navigation.Select)
             cancelAndConsumeRemainingEvents()
         }
     }
@@ -100,19 +66,6 @@ class ResultViewModelTest {
     }
 
     @Test
-    fun `navigateToRanking emits Navigation Ranking`() = runTest {
-        val viewModel = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        viewModel.navigation.test {
-            viewModel.navigateToRanking()
-            val nav = awaitItem()
-            assertTrue(nav is ResultViewModel.Navigation.Ranking)
-            cancelAndConsumeRemainingEvents()
-        }
-    }
-
-    @Test
     fun `navigateToShare emits Navigation Share with points`() = runTest {
         val viewModel = createViewModel()
         testDispatcher.scheduler.advanceUntilIdle()
@@ -122,20 +75,6 @@ class ResultViewModelTest {
             val nav = awaitItem()
             assertTrue(nav is ResultViewModel.Navigation.Share)
             assertEquals(42, (nav as ResultViewModel.Navigation.Share).points)
-            cancelAndConsumeRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `setPersonalRecordOnServer shows dialog when score is in top 30`() = runTest {
-        val viewModel = createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        viewModel.navigation.test {
-            viewModel.setPersonalRecordOnServer(50) // 50 > 10 (last classified)
-            testDispatcher.scheduler.advanceUntilIdle()
-            val nav = awaitItem()
-            assertTrue(nav is ResultViewModel.Navigation.Dialog)
             cancelAndConsumeRemainingEvents()
         }
     }

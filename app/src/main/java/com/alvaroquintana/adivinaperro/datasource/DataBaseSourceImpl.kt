@@ -43,19 +43,22 @@ class DataBaseSourceImpl(
 
         // Fallback to Firebase
         return suspendCancellableCoroutine { continuation ->
-            FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS + id)
-                .addValueEventListener(object : ValueEventListener {
+val reference = FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS + id)
+            val listener = object : ValueEventListener {
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        continuation.resume(dataSnapshot.getValue(Dog::class.java) as Dog)
-                    }
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    continuation.resume(dataSnapshot.getValue(Dog::class.java) ?: Dog())
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        log("getBreedById FAILED", "Failed to read value.", error.toException())
-                        continuation.resume(Dog())
-                        FirebaseCrashlytics.getInstance().recordException(error.toException())
-                    }
-                })
+                override fun onCancelled(error: DatabaseError) {
+                    log("getBreedById FAILED", "Failed to read value.", error.toException())
+                    continuation.resume(Dog())
+                    FirebaseCrashlytics.getInstance().recordException(error.toException())
+                }
+            }
+
+            reference.addListenerForSingleValueEvent(listener)
+            continuation.invokeOnCancellation { reference.removeEventListener(listener) }
         }
     }
 
@@ -95,28 +98,31 @@ class DataBaseSourceImpl(
 
     private suspend fun fetchBreedListFromFirebase(currentPage: Int): MutableList<Dog> {
         return suspendCancellableCoroutine { continuation ->
-            FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
+            val query = FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
                 .orderByKey()
                 .startAt((currentPage * TOTAL_ITEM_EACH_LOAD).toString())
                 .limitToFirst(TOTAL_ITEM_EACH_LOAD)
-                .addValueEventListener(object : ValueEventListener {
+            val listener = object : ValueEventListener {
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val dogList = mutableListOf<Dog>()
-                        if (dataSnapshot.hasChildren()) {
-                            for (snapshot in dataSnapshot.children) {
-                                dogList.add(snapshot.getValue(Dog::class.java)!!)
-                            }
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val dogList = mutableListOf<Dog>()
+                    if (dataSnapshot.hasChildren()) {
+                        for (snapshot in dataSnapshot.children) {
+                            snapshot.getValue(Dog::class.java)?.let(dogList::add)
                         }
-                        continuation.resume(dogList)
                     }
+                    continuation.resume(dogList)
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
-                        continuation.resume(mutableListOf())
-                        FirebaseCrashlytics.getInstance().recordException(error.toException())
-                    }
-                })
+                override fun onCancelled(error: DatabaseError) {
+                    log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
+                    continuation.resume(mutableListOf())
+                    FirebaseCrashlytics.getInstance().recordException(error.toException())
+                }
+            }
+
+            query.addListenerForSingleValueEvent(listener)
+            continuation.invokeOnCancellation { query.removeEventListener(listener) }
         }
     }
 
@@ -149,60 +155,84 @@ class DataBaseSourceImpl(
             .take(count)
     }
 
+    override suspend fun getRandomBreedsWithFciGroup(count: Int): List<Dog> {
+        // Legacy dataset may not contain FCI fields. Best-effort fallback.
+        return getRandomBreedsWithDescription(count)
+            .filter { it.fciGroup > 0 || it.breedGroup.isNotBlank() }
+            .ifEmpty { getRandomBreedsWithDescription(count) }
+            .take(count)
+    }
+
+    override suspend fun getRandomBreedsWithCare(count: Int): List<Dog> {
+        // Legacy dataset may not contain care fields. Best-effort fallback.
+        return getRandomBreedsWithDescription(count)
+            .filter { it.nutrition.isNotBlank() || it.hygiene.isNotBlank() || it.lossHair.isNotBlank() || it.description.isNotBlank() }
+            .ifEmpty { getRandomBreedsWithDescription(count) }
+            .take(count)
+    }
+
     private suspend fun getRandomBreedsFromFirebase(
         count: Int,
         predicate: (Dog) -> Boolean
     ): List<Dog> {
         return suspendCancellableCoroutine { continuation ->
-            FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val dogs = dataSnapshot.children
-                            .mapNotNull { snapshot -> snapshot.getValue(Dog::class.java) }
-                            .filter(predicate)
-                            .shuffled()
-                            .take(count)
+            val reference = FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_BREEDS)
+            val listener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val dogs = dataSnapshot.children
+                        .mapNotNull { snapshot -> snapshot.getValue(Dog::class.java) }
+                        .filter(predicate)
+                        .shuffled()
+                        .take(count)
 
-                        continuation.resume(dogs)
-                    }
+                    continuation.resume(dogs)
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        log("DataBaseSourceImpl", "Failed to read random breeds from firebase.", error.toException())
-                        continuation.resume(emptyList())
-                        FirebaseCrashlytics.getInstance().recordException(error.toException())
-                    }
-                })
+                override fun onCancelled(error: DatabaseError) {
+                    log("DataBaseSourceImpl", "Failed to read random breeds from firebase.", error.toException())
+                    continuation.resume(emptyList())
+                    FirebaseCrashlytics.getInstance().recordException(error.toException())
+                }
+            }
+
+            reference.addListenerForSingleValueEvent(listener)
+            continuation.invokeOnCancellation { reference.removeEventListener(listener) }
         }
     }
 
     override suspend fun getAppsRecommended(): MutableList<App> {
         return suspendCancellableCoroutine { continuation ->
-            FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_APPS)
-                .addValueEventListener(object : ValueEventListener {
+            val reference = FirebaseDatabase.getInstance().getReference(PATH_REFERENCE_APPS)
+            val listener = object : ValueEventListener {
 
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            val appList = mutableListOf<App>()
-                            if (dataSnapshot.hasChildren()) {
-                                for (snapshot in dataSnapshot.children) {
-                                    val app = snapshot.getValue(App::class.java)
-                                    if (app != null) {
-                                        appList.add(app)
-                                    }
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    try {
+                        val appList = mutableListOf<App>()
+                        if (dataSnapshot.hasChildren()) {
+                            for (snapshot in dataSnapshot.children) {
+                                val app = snapshot.getValue(App::class.java)
+                                if (app != null) {
+                                    appList.add(app)
                                 }
                             }
-                            continuation.resume(appList)
-                        } catch (e: Exception) {
-                            continuation.resumeWith(Result.failure(e))
                         }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
+                        continuation.resume(appList)
+                    } catch (e: Exception) {
+                        log("DataBaseSourceImpl", "Failed to parse apps list.", e)
+                        FirebaseCrashlytics.getInstance().recordException(e)
                         continuation.resume(mutableListOf())
-                        FirebaseCrashlytics.getInstance().recordException(error.toException())
                     }
-                })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    log("DataBaseBaseSourceImpl", "Failed to read value.", error.toException())
+                    continuation.resume(mutableListOf())
+                    FirebaseCrashlytics.getInstance().recordException(error.toException())
+                }
+            }
+
+            reference.addListenerForSingleValueEvent(listener)
+            continuation.invokeOnCancellation { reference.removeEventListener(listener) }
         }
     }
 }

@@ -106,15 +106,15 @@ class BiggerSmallerViewModelTest {
         val viewModel = createViewModel()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Advance to stage 6 (5 correct answers → stage goes from 1 to 6)
-        repeat(5) {
+        // Advance to stage 5 first; the next correct answer moves the game to stage 6
+        repeat(4) {
             coEvery { getRandomBreedsWithWeight.invoke(2) } returns listOf(heavyDog, lightDog)
             viewModel.onBreedSelected(isLeftSelected = true)
             viewModel.proceedAfterResult()
             testDispatcher.scheduler.advanceUntilIdle()
         }
 
-        assertEquals(6, viewModel.state.value.stage)
+        assertEquals(5, viewModel.state.value.stage)
 
         viewModel.events.test {
             viewModel.onBreedSelected(isLeftSelected = true)

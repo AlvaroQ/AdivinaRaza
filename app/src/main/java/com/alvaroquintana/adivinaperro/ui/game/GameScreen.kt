@@ -5,30 +5,23 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,16 +29,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alvaroquintana.adivinaperro.ui.components.AnswerOptionCard
 import com.alvaroquintana.adivinaperro.ui.components.AnswerState
+import com.alvaroquintana.adivinaperro.ui.components.GameStatusRow
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
 import com.alvaroquintana.adivinaperro.ui.components.QuestionCard
-import com.alvaroquintana.adivinaperro.ui.theme.GameCream
-import com.alvaroquintana.adivinaperro.ui.theme.GameDark
-import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
-import com.alvaroquintana.adivinaperro.ui.theme.GameRed
-import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
+import androidx.compose.material3.MaterialTheme
+import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.alvaroquintana.adivinaperro.R
+import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 
 @Composable
 fun GameScreen(
@@ -65,7 +59,6 @@ fun GameScreen(
     var buttonsVisible by remember { mutableStateOf(false) }
     var buttonsEnabled by remember { mutableStateOf(true) }
     val answerStates = remember { mutableStateListOf(AnswerState.NEUTRAL, AnswerState.NEUTRAL, AnswerState.NEUTRAL, AnswerState.NEUTRAL) }
-    var streak by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         viewModel.responseOptions.collect { optionList ->
@@ -97,48 +90,17 @@ fun GameScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(GameCream)
+            .background(getBackgroundGradient())
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Top bar: progress | hearts | score
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Progress
-            Text(
-                text = "$stage/$TOTAL_BREED",
-                fontFamily = ComfortaaFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = GameDark
-            )
-
-            // Hearts
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                repeat(3) { index ->
-                    Icon(
-                        imageVector = if (lives > index) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                        contentDescription = null,
-                        tint = GameRed,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-
-            // Score
-            Text(
-                text = "$points pts",
-                fontFamily = ComfortaaFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = GameOrange
-            )
-        }
+        GameStatusRow(
+            stageLabel = "$stage/$TOTAL_BREED",
+            lives = lives,
+            score = points
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -158,7 +120,8 @@ fun GameScreen(
                     imageUrl = questionImage,
                     questionNumber = stage,
                     totalQuestions = TOTAL_BREED,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    imageContentScale = ContentScale.Fit
                 )
             }
         }
@@ -167,11 +130,11 @@ fun GameScreen(
 
         // Question text
         Text(
-            text = "¿Qué raza es este perro?",
-            fontFamily = ComfortaaFamily,
+            text = stringResource(R.string.question_guess_breed),
+            fontFamily = DynaPuffFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            color = GameDark
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -199,9 +162,7 @@ fun GameScreen(
                         if (buttonsEnabled) {
                             buttonsEnabled = false
                             val correctName: String = viewModel.getNameBreedCorrect()
-                            val isCorrect = option == correctName
-                            markAnswerStates(answerStates, options, correctName, index)
-                            streak = if (isCorrect) streak + 1 else 0
+                            applyAnswerFeedbackStates(answerStates, options, correctName, index)
                             onAnswerSelected(index, correctName, options)
                         }
                     }
@@ -213,17 +174,3 @@ fun GameScreen(
     }
 }
 
-private fun markAnswerStates(
-    answerStates: MutableList<AnswerState>,
-    options: List<String>,
-    correctName: String,
-    selectedIndex: Int
-) {
-    val correctIndex = options.indexOfFirst { it == correctName }
-    if (correctIndex >= 0) {
-        answerStates[correctIndex] = AnswerState.CORRECT
-    }
-    if (selectedIndex != correctIndex) {
-        answerStates[selectedIndex] = AnswerState.WRONG
-    }
-}

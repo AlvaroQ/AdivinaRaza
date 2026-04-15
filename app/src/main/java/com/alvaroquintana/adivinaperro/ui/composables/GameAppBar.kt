@@ -27,10 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.stringResource
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.GameCream
-import com.alvaroquintana.adivinaperro.ui.theme.GameDark
-import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
+import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffSemiCondensedFamily
 
 @Composable
 fun GameAppBar(
@@ -40,7 +40,7 @@ fun GameAppBar(
     lives: Int = 3
 ) {
     Surface(
-        color = GameCream,
+        color = MaterialTheme.colorScheme.background,
         tonalElevation = 0.dp
     ) {
         Row(
@@ -55,14 +55,14 @@ fun GameAppBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Back",
-                    tint = GameDark
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             Text(
                 text = title,
-                color = GameDark,
-                fontFamily = ComfortaaFamily,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontFamily = DynaPuffSemiCondensedFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
@@ -96,7 +96,7 @@ private fun LifeIcon(isAlive: Boolean) {
         painter = painterResource(
             id = if (isAlive) R.drawable.ic_life_on else R.drawable.ic_life_off
         ),
-        contentDescription = "Life",
+        contentDescription = stringResource(R.string.life),
         modifier = Modifier
             .size(24.dp)
             .scale(scale)

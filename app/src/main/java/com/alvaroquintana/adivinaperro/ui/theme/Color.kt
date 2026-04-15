@@ -16,6 +16,24 @@ val GameGold = Color(0xFFF9CA24)
 val GameSilver = Color(0xFFC0C0C0)
 val GameBronze = Color(0xFFCD7F32)
 
+// ── Dark theme palette (deep warm wood tones) ───────────────────────────────
+// Casi negro con calidez — el naranja resalta limpio sobre esto
+val DarkBackground = Color(0xFF1C1208)   // negro cálido profundo — fondo principal
+val DarkSurface    = Color(0xFF261A0E)   // madera oscura — tarjetas/superficies
+val DarkSurfaceVar = Color(0xFF352515)   // madera media — variante
+val DarkOnSurface  = Color(0xFFF2E4D0)  // crema cálida — texto primario
+val DarkOnVariant  = Color(0xFFB89878)   // arena dorada — texto secundario
+val DarkAccent     = Color(0xFF9E7D5E)   // madera clara — bordes y accents
+val DarkOutlineVar = Color(0xFF4A3520)   // madera profunda — outline suave
+
+// Aliases usados en paletas anteriores (se mantienen para compatibilidad si algo los referencia)
+val DarkBrown        = DarkBackground
+val DarkBrownSurface = DarkSurface
+val DarkBrownLight   = DarkSurfaceVar
+val BrownAccent      = DarkAccent
+val BrownLight       = DarkOnVariant
+val CreamLight       = DarkOnSurface
+
 // ── Light palette ───────────────────────────────────────────────────────────
 val md_theme_light_primary = GameOrange
 val md_theme_light_onPrimary = GameWhite
@@ -52,10 +70,10 @@ val md_theme_dark_primary = GameOrange
 val md_theme_dark_onPrimary = Color(0xFF2A1500)
 val md_theme_dark_primaryContainer = Color(0xFF5C3000)
 val md_theme_dark_onPrimaryContainer = Color(0xFFFFE8D0)
-val md_theme_dark_secondary = Color(0xFFB0C4DE)
-val md_theme_dark_onSecondary = Color(0xFF1A2A3A)
-val md_theme_dark_secondaryContainer = Color(0xFF2C3E50)
-val md_theme_dark_onSecondaryContainer = Color(0xFFD6EAF8)
+val md_theme_dark_secondary = BrownLight
+val md_theme_dark_onSecondary = DarkBrown
+val md_theme_dark_secondaryContainer = DarkBrownLight
+val md_theme_dark_onSecondaryContainer = BrownLight
 val md_theme_dark_tertiary = Color(0xFF7DDFCA)
 val md_theme_dark_onTertiary = Color(0xFF003D2D)
 val md_theme_dark_tertiaryContainer = Color(0xFF005140)
@@ -64,16 +82,16 @@ val md_theme_dark_error = Color(0xFFFF6B6B)
 val md_theme_dark_onError = Color(0xFF690005)
 val md_theme_dark_errorContainer = Color(0xFF93000A)
 val md_theme_dark_onErrorContainer = Color(0xFFFFDAD6)
-val md_theme_dark_background = Color(0xFF1A1A2E)
-val md_theme_dark_onBackground = Color(0xFFE6E1E5)
-val md_theme_dark_surface = Color(0xFF1C1B1F)
-val md_theme_dark_onSurface = Color(0xFFE6E1E5)
-val md_theme_dark_surfaceVariant = Color(0xFF49454F)
-val md_theme_dark_onSurfaceVariant = Color(0xFFCAC4D0)
-val md_theme_dark_outline = Color(0xFF938F99)
-val md_theme_dark_outlineVariant = Color(0xFF49454F)
-val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
-val md_theme_dark_inverseOnSurface = Color(0xFF313033)
+val md_theme_dark_background = DarkBrown
+val md_theme_dark_onBackground = CreamLight
+val md_theme_dark_surface = DarkBrownSurface
+val md_theme_dark_onSurface = CreamLight
+val md_theme_dark_surfaceVariant = DarkBrownLight
+val md_theme_dark_onSurfaceVariant = BrownAccent
+val md_theme_dark_outline = BrownAccent
+val md_theme_dark_outlineVariant = DarkBrownLight
+val md_theme_dark_inverseSurface = CreamLight
+val md_theme_dark_inverseOnSurface = DarkBrown
 val md_theme_dark_inversePrimary = Color(0xFFCC7A2A)
 val md_theme_dark_surfaceTint = GameOrange
 val md_theme_dark_scrim = Color(0xFF000000)

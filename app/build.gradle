@@ -14,8 +14,8 @@ android {
         applicationId "com.alvaroquintana.adivinaperro"
         minSdk 23
         targetSdk 36
-        versionCode 22
-        versionName "2.1.8"
+        versionCode 34
+        versionName "3.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -32,13 +32,12 @@ android {
             jniDebuggable true
             debuggable true
             minifyEnabled false
-            signingConfig signingConfigs.config
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
 
+            resValue 'string', 'admob_id', getAdmobAppId()
             resValue 'string', 'BANNER_GAME', getAdmobBannerTestId()
-            resValue 'string', 'BANNER_RANKING', getAdmobBannerTestId()
             resValue 'string', 'BANNER_INFO', getAdmobBannerTestId()
             resValue 'string', 'BONIFICADO_GAME', getAdmobBonificadoTestId()
             resValue 'string', 'BONIFICADO_GAME_OVER', getAdmobBonificadoTestId()
@@ -51,13 +50,14 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
+            ndk { debugSymbolLevel 'FULL' }
             signingConfig signingConfigs.config
             firebaseCrashlytics {
                 mappingFileUploadEnabled true
             }
 
+            resValue 'string', 'admob_id', getAdmobAppId()
             resValue 'string', 'BANNER_GAME', getAdmobBannerGameId()
-            resValue 'string', 'BANNER_RANKING', getAdmobBannerRankingId()
             resValue 'string', 'BANNER_INFO', getAdmobBannerInfoId()
             resValue 'string', 'BONIFICADO_GAME', getAdmobBonificadoGameId()
             resValue 'string', 'BONIFICADO_GAME_OVER', getAdmobBonificadoGameOverId()
@@ -125,11 +125,13 @@ dependencies {
     // Room
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.ktx
+    implementation libs.androidx.material3.window.size.class1
     ksp libs.androidx.room.compiler
 
     // Jetpack Compose
     implementation platform(libs.compose.bom)
     implementation libs.compose.material3
+    implementation libs.compose.material3.window.size
     implementation libs.compose.material.icons.extended
     implementation libs.compose.ui
     implementation libs.compose.ui.tooling.preview
@@ -150,9 +152,11 @@ dependencies {
     // Android Instrumented Testing
     androidTestImplementation platform(libs.compose.bom)
     androidTestImplementation libs.compose.ui.test.junit4
+    androidTestImplementation libs.test.ext.junit
     androidTestImplementation libs.espresso.core
     androidTestImplementation libs.test.runner
     androidTestImplementation libs.test.rules
+    androidTestImplementation libs.kotlinx.coroutines.test
     debugImplementation libs.compose.ui.test.manifest
 }
 // delete waring store com.google.android.gms:play-services-safetynet:17.0.0
@@ -162,10 +166,21 @@ configurations.all {
 
 import groovy.xml.XmlParser
 
+// ADMOB APPLICATION ID
+def getAdmobAppId() {
+    try {
+        def stringsFile = file("./secrets/secrets.xml")
+        return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_id' }.text()
+    } catch(e) {
+        println(e)
+        return ""
+    }
+}
+
 // KEYS ADMOB TEST
 def getAdmobBannerTestId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_banner_test_id' }.text()
     } catch(e) {
         println(e)
@@ -174,7 +189,7 @@ def getAdmobBannerTestId() {
 }
 def getAdmobBonificadoTestId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_bonificado_test_id' }.text()
     } catch(e) {
         println(e)
@@ -190,17 +205,8 @@ def getAdmobIntersticialTestId() {
 // KEYS ADMOB PRODUCTION
 def getAdmobBannerGameId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_banner_game' }.text()
-    } catch(e) {
-        println(e)
-        return ""
-    }
-}
-def getAdmobBannerRankingId() {
-    try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
-        return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_banner_ranking' }.text()
     } catch(e) {
         println(e)
         return ""
@@ -208,7 +214,7 @@ def getAdmobBannerRankingId() {
 }
 def getAdmobBannerInfoId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_banner_info' }.text()
     } catch(e) {
         println(e)
@@ -217,7 +223,7 @@ def getAdmobBannerInfoId() {
 }
 def getAdmobBonificadoGameId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_bonificado_game' }.text()
     } catch(e) {
         println(e)
@@ -226,7 +232,7 @@ def getAdmobBonificadoGameId() {
 }
 def getAdmobBonificadoGameOverId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_bonificado_game_over' }.text()
     } catch(e) {
         println(e)
@@ -235,7 +241,7 @@ def getAdmobBonificadoGameOverId() {
 }
 def getAdmobIntersticialId() {
     try {
-        def stringsFile = file("./src/main/res/values/secrets.xml")
+        def stringsFile = file("./secrets/secrets.xml")
         return new XmlParser().parse(stringsFile).string.find { it.@name.equals 'admob_intersticial' }.text()
     } catch(e) {
         println(e)

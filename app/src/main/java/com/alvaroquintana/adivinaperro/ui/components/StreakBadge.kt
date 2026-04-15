@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.R
@@ -75,7 +76,7 @@ fun StreakBadge(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_fire),
-                    contentDescription = "Streak",
+                    contentDescription = stringResource(R.string.content_desc_streak),
                     tint = gameColors.streakGold,
                     modifier = Modifier.size(24.dp)
                 )

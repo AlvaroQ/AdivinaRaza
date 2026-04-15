@@ -21,12 +21,8 @@
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
 
-# For using GSON @Expose annotation
--keepattributes *Annotation*
+# Legacy warnings
 -dontwarn sun.misc.**
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
 
 # Domain classes — keep fields for Firebase/Gson deserialization, allow method obfuscation
 -keepclassmembers class com.alvaroquintana.domain.* { <fields>; }
@@ -53,7 +49,16 @@
 -keepattributes RuntimeVisibleAnnotations
 -keepclassmembers class kotlinx.serialization.** { *; }
 -keep class * implements kotlinx.serialization.KSerializer { *; }
+-keepclassmembers @kotlinx.serialization.Serializable class * {
+	static ** Companion;
+}
+-keepclassmembers class **$$serializer { *; }
 
 # Navigation type-safe args
 -keep class * extends androidx.navigation.NavArgs { *; }
 -keepnames @kotlinx.serialization.Serializable class *
+
+# Type-safe Compose navigation routes
+-keepnames class com.alvaroquintana.adivinaperro.ui.navigation.**
+-keep class com.alvaroquintana.adivinaperro.ui.navigation.**$$serializer { *; }
+

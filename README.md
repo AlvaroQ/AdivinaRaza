@@ -21,5 +21,4 @@ https://play.google.com/store/apps/details?id=com.alvaroquintana.adivinaperro
  <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/game_fail.jpeg" width="250"> 
  <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/game_ok.jpeg" width="250"> 
  <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/result.jpeg" width="250"> 
- <img src="https://github.com/AlvaroQ/AdivinaRaza/blob/main/capture/ranking.jpeg" width="250"> 
 </p>

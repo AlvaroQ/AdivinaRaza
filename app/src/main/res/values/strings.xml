@@ -2,7 +2,6 @@
     <string name="app_name">Guess breed</string>
     <string name="game_screen_title">Guess dog breed</string>
     <string name="resultado_screen_title">Final result</string>
-    <string name="ranking_screen_title">Ranking</string>
     <string name="share_message">\nMy score is %d, can you get over me?\n\n</string>
     <string name="share_message_general">\nThis is a great app and it\'s free!.\n\n</string>
     <string name="choose_one">Choose:</string>
@@ -12,24 +11,64 @@
     <string name="share">Share</string>
     <string name="rate_on_play_store">Rate on play store</string>
     <string name="result">Result: %d</string>
+    <string name="result_points">Points</string>
+    <string name="result_record">Record</string>
     <string name="personal_record">Personal record: %s</string>
-    <string name="world_record">World record: %s</string>
-    <string name="best_points">Best scores</string>
-    <string name="dialog_ranking_congratulation">¡Congratulations</string>
-    <string name="dialog_ranking_description">Your score has entered the world ranking</string>
-    <string name="dialog_name">Name</string>
-    <string name="dialog_save">Save</string>
     <string name="info_title">Information</string>
+    <string name="info_header_title">Learn about every breed</string>
+    <string name="info_header_subtitle">Tap a card to open detailed facts, care profile and official classification.</string>
+    <string name="info_search_label">Search breeds</string>
+    <string name="info_search_placeholder">Type breed, group, origin or temperament</string>
+    <string name="info_search_clear">Clear search</string>
+    <string name="info_empty_search">No breeds match "%1$s".</string>
+    <string name="info_tab_all">All</string>
+    <string name="info_empty_filter">No breeds found for %1$s yet.</string>
+    <string name="info_back_to_list">Back to list</string>
+    <string name="info_empty_message">No breeds available at the moment.</string>
+    <string name="info_error_loading">We could not load breed information. Please try again.</string>
+    <string name="info_unknown">Unknown</string>
+    <string name="info_not_available">Not available</string>
+    <string name="info_section_description">Description</string>
+    <string name="info_section_temperament">Temperament</string>
+    <string name="info_section_metrics">Physical profile</string>
+    <string name="info_section_care">Care and compatibility</string>
+    <string name="info_section_extra">Extra facts</string>
+    <string name="info_section_fci">FCI classification</string>
+    <string name="info_weight_format">Weight: %1$s</string>
+    <string name="info_height_format">Height: %1$s</string>
+    <string name="info_life_span_format">Life span: %1$s</string>
+    <string name="info_size_format">Size: %1$s</string>
+    <string name="info_coat_type_format">Coat type: %1$s</string>
+    <string name="info_exercise_needs_format">Exercise needs: %1$s</string>
+    <string name="info_grooming_needs_format">Grooming needs: %1$s</string>
+    <string name="info_trainability_format">Trainability: %1$s</string>
+    <string name="info_children_format">Good with children: %1$s</string>
+    <string name="info_dogs_format">Good with other dogs: %1$s</string>
+    <string name="info_barking_level_format">Barking level: %1$s</string>
+    <string name="info_nutrition_format">Nutrition: %1$s</string>
+    <string name="info_hygiene_format">Hygiene: %1$s</string>
+    <string name="info_loss_hair_format">Hair loss: %1$s</string>
+    <string name="info_other_names_format">Other names: %1$s</string>
+    <string name="info_colors_format">Common colors: %1$s</string>
+    <string name="info_common_diseases_format">Common diseases: %1$s</string>
+    <string name="info_fun_fact_format">Fun fact: %1$s</string>
+    <string name="info_fci_group_format">Group %1$d</string>
+    <string name="info_fci_section_format">Section %1$d</string>
+    <string name="info_years_short">years</string>
     <string name="start_game">Start</string>
     <string name="learn">Learn</string>
     <string name="settings">Settings</string>
+
+    <string name="mode_bigger_smaller">Bigger / Smaller</string>
+    <string name="mode_description">Description</string>
+    <string name="mode_fci_trivia">FCI Trivia</string>
+    <string name="mode_care_food">Care &amp; Food</string>
 
     <!-- content description image -->
     <string name="game_title">game title</string>
     <string name="loading_image">loading</string>
     <string name="back">back</string>
     <string name="dog_game_image">image to guess</string>
-    <string name="best_score">best scores</string>
     <string name="score_image_background">background</string>
 
     <!-- Settings screen -->
@@ -43,10 +82,63 @@
     <string name="settings_more_apps_summary">Free applications recommended</string>
     <string name="settings_share">Share with your friends</string>
     <string name="settings_share_summary">Share with your friend this application to play with them</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_summary">Read our privacy policy</string>
     <string name="more_apps">More applications</string>
     <string name="sounds_on">Sound on</string>
     <string name="sounds_off">Sound off</string>
     <string name="know_more">Know more</string>
     <string name="not_exist">Not exist</string>
     <string name="read_info">Read info</string>
+
+    <!-- Select screen -->
+    <string name="select_subtitle">Discover breeds and play fun game modes</string>
+    <string name="mode_classic_title">Classic</string>
+    <string name="mode_classic_subtitle">Classic mode to guess the breed</string>
+    <string name="mode_bigger_smaller_subtitle">Compare weight or height</string>
+    <string name="mode_description_subtitle">Guess the breed from clues</string>
+    <string name="mode_fci_trivia_subtitle">Trivia about official groups</string>
+    <string name="mode_care_food_subtitle">Clues about hygiene and nutrition</string>
+    <string name="select_mode_title">Choose a game mode</string>
+    <string name="select_mode_description">Each mode has different rules. Pick the one you like most.</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Result / score -->
+    <string name="points_label">Points</string>
+    <string name="record_label">Record</string>
+    <string name="score_value">Score: %1$d</string>
+    <string name="points_short">%1$d pts</string>
+    <string name="stage_value">Stage %1$d</string>
+    <string name="result_great">Great result!</string>
+    <string name="result_keep_trying">Keep trying!</string>
+
+    <!-- Game texts -->
+    <string name="question_guess_breed">Which breed is this dog?</string>
+    <string name="question_fci_group">Which FCI group does this breed belong to?</string>
+    <string name="question_weight_more">Which one weighs more?</string>
+    <string name="question_height_taller">Which one is taller?</string>
+    <string name="care_food_title">Care and food</string>
+
+    <!-- Settings -->
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_follow_system">Follow system</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_privacy_options">Privacy settings</string>
+    <string name="settings_privacy_options_summary">Manage your ad consent preferences</string>
+
+    <!-- Accessibility / content descriptions -->
+    <string name="loading">Loading...</string>
+    <string name="content_desc_splash_dog">Splash dog</string>
+    <string name="content_desc_happy_dog">Happy dog</string>
+    <string name="content_desc_dog">Dog</string>
+    <string name="content_desc_cooper_mascot">Cooper mascot</string>
+    <string name="content_desc_happy_dogs_banner">Happy dogs banner</string>
+    <string name="content_desc_question_image">Question %1$d of %2$d</string>
+    <string name="content_desc_streak">Streak</string>
+    <string name="content_desc_correct">Correct answer</string>
+    <string name="content_desc_wrong">Wrong answer</string>
 </resources>

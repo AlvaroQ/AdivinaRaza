@@ -25,5 +25,15 @@ data class Dog(
     var barkingLevel: Int = 0,       // 1-5 scale
     var funFact: String = "",
     var images: String = "",         // Comma-separated URLs
-    var dataVersion: Int = 0
+    var dataVersion: Int = 0,
+
+    // breedES fields (optional; defaults keep backwards compat)
+    var nutrition: String = "",
+    var hygiene: String = "",
+    var lossHair: String = "",
+    var commonDiseases: String = "",  // Comma-separated
+    var otherNames: String = "",      // Comma-separated
+    var fciGroup: Int = 0,
+    var fciSection: Int = 0,
+    var fciSectionType: String = ""
 )

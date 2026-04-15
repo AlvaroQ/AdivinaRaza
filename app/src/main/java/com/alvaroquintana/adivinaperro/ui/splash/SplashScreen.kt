@@ -35,13 +35,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.Image
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.composables.BreedImage
-import com.alvaroquintana.adivinaperro.ui.theme.GameCream
-import com.alvaroquintana.adivinaperro.ui.theme.GameDark
-import com.alvaroquintana.adivinaperro.ui.theme.GameMuted
-import com.alvaroquintana.adivinaperro.ui.theme.GameOrange
-import com.alvaroquintana.adivinaperro.ui.theme.ComfortaaFamily
+import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.getHeroGradient
 import kotlinx.coroutines.delay
 
 @Composable
@@ -76,7 +74,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(GameCream),
+            .background(getHeroGradient()),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -84,30 +82,25 @@ fun SplashScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.alpha(alphaAnim)
         ) {
-            // Dog circular image
-            Box(
+            // Dog mascot image
+            Image(
+                painter = painterResource(R.drawable.mascot_splash),
+                contentDescription = "Splash dog",
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                BreedImage(
-                    imageData = "https://firebasestorage.googleapis.com/v0/b/adivinaperro.appspot.com/o/splash_dog.png?alt=media",
-                    contentDescription = "Splash dog",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
+                contentScale = ContentScale.Crop
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Title
             Text(
                 text = stringResource(R.string.app_name),
-                fontFamily = ComfortaaFamily,
+                fontFamily = DynaPuffFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
-                color = GameDark
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -116,7 +109,7 @@ fun SplashScreen(
             Icon(
                 painter = painterResource(R.drawable.ic_paw),
                 contentDescription = null,
-                tint = GameOrange,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(36.dp)
                     .rotate(rotation)
@@ -126,11 +119,11 @@ fun SplashScreen(
 
             // Loading text
             Text(
-                text = "Cargando...",
-                fontFamily = ComfortaaFamily,
+                text = stringResource(R.string.loading),
+                fontFamily = DynaPuffFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
-                color = GameMuted
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

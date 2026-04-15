@@ -40,4 +40,10 @@ interface DogDao {
 
     @Query("SELECT * FROM dogs WHERE temperament != '' ORDER BY RANDOM() LIMIT :count")
     suspend fun getRandomBreedsWithDescription(count: Int): List<DogEntity>
+
+    @Query("SELECT * FROM dogs WHERE fciGroup > 0 ORDER BY RANDOM() LIMIT :count")
+    suspend fun getRandomBreedsWithFciGroup(count: Int): List<DogEntity>
+
+    @Query("SELECT * FROM dogs WHERE nutrition != '' OR hygiene != '' OR lossHair != '' ORDER BY RANDOM() LIMIT :count")
+    suspend fun getRandomBreedsWithCare(count: Int): List<DogEntity>
 }

@@ -4,13 +4,12 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.R
@@ -40,7 +39,7 @@ fun shareApp(context: Context, points: Int) {
     }
 }
 fun rateApp(context: Context) {
-    val uri: Uri = Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
+    val uri: Uri = "market://details?id=${BuildConfig.APPLICATION_ID}".toUri()
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     goToMarket.addFlags(
         Intent.FLAG_ACTIVITY_NO_HISTORY or
@@ -48,11 +47,11 @@ fun rateApp(context: Context) {
             Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
     try {
         context.startActivity(goToMarket)
-    } catch (e: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         context.startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-            Uri.parse("http://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"))
+            "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}".toUri())
         )
     }
 }
@@ -70,7 +69,7 @@ fun getCircularProgressDrawable(context: Context) : CircularProgressDrawable {
     }
 }
 fun log(tag:String?, msg:String?, error:Throwable? = null){
-    if (BuildConfig.BUILD_TYPE != "release") {
+    if (BuildConfig.DEBUG) {
         if (error != null){
             Log.e(tag, msg, error)
         } else {
@@ -79,13 +78,7 @@ fun log(tag:String?, msg:String?, error:Throwable? = null){
     }
 }
 
-fun Activity.screenOrientationPortrait(){
-    requestedOrientation = if (Build.VERSION.SDK_INT == 26) {
-        ActivityInfo.SCREEN_ORIENTATION_BEHIND
-    } else {
-        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-}
+
 
 fun showBanner(show: Boolean, adView: AdView){
     if(show) {

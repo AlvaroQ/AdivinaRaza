@@ -18,10 +18,11 @@ data object BiggerSmaller
 data object Description
 
 @Serializable
-data class Result(val points: Int)
+data object FciTrivia
+
 
 @Serializable
-data object Ranking
+data class Result(val points: Int)
 
 @Serializable
 data object Info

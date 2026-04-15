@@ -29,5 +29,15 @@ data class DogEntity(
     val barkingLevel: Int = 0,
     val funFact: String = "",
     val images: String = "",
-    val dataVersion: Int = 0
+    val dataVersion: Int = 0,
+
+    // breedES fields
+    val nutrition: String = "",
+    val hygiene: String = "",
+    val lossHair: String = "",
+    val commonDiseases: String = "",
+    val otherNames: String = "",
+    val fciGroup: Int = 0,
+    val fciSection: Int = 0,
+    val fciSectionType: String = ""
 )

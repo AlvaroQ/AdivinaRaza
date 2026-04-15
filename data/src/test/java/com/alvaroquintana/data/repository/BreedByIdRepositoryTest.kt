@@ -75,4 +75,30 @@ class BreedByIdRepositoryTest {
         assertEquals(expected, result)
         coVerify { dataBaseSource.getRandomBreedsWithDescription(1) }
     }
+
+    @Test
+    fun `getRandomBreedsWithFciGroup delegates to data source`() = runTest {
+        val expected = listOf(
+            Dog(name = "Airedale", fciGroup = 3)
+        )
+        coEvery { dataBaseSource.getRandomBreedsWithFciGroup(1) } returns expected
+
+        val result = repository.getRandomBreedsWithFciGroup(1)
+
+        assertEquals(expected, result)
+        coVerify { dataBaseSource.getRandomBreedsWithFciGroup(1) }
+    }
+
+    @Test
+    fun `getRandomBreedsWithCare delegates to data source`() = runTest {
+        val expected = listOf(
+            Dog(name = "Poodle", nutrition = "Nut")
+        )
+        coEvery { dataBaseSource.getRandomBreedsWithCare(1) } returns expected
+
+        val result = repository.getRandomBreedsWithCare(1)
+
+        assertEquals(expected, result)
+        coVerify { dataBaseSource.getRandomBreedsWithCare(1) }
+    }
 }
