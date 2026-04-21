@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <linearGradient id="bApp" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4FC3F7"/><stop offset="100%" stop-color="#0288D1"/></linearGradient>
+    <linearGradient id="bDat" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FFB74D"/><stop offset="100%" stop-color="#F57C00"/></linearGradient>
+    <linearGradient id="bUC"  x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#81C784"/><stop offset="100%" stop-color="#388E3C"/></linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="360" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a2e">Unit Test Distribution — 52 tests, all passing</text>
+
+  <!-- app bar: 25/52 = 48% → width ~288 of 600 -->
+  <text x="50" y="72" font-size="13" font-weight="600" fill="#0288D1">app</text>
+  <rect x="100" y="58" width="288" height="24" rx="6" fill="url(#bApp)"/>
+  <text x="396" y="75" font-size="12" font-weight="600" fill="#37474F">25 tests</text>
+  <text x="470" y="75" font-size="10" fill="#78909C">ViewModels, ExampleUnitTest</text>
+
+  <!-- usecases bar: 14/52 = 27% → width ~162 of 600 -->
+  <text x="28" y="112" font-size="13" font-weight="600" fill="#388E3C">usecases</text>
+  <rect x="100" y="98" width="162" height="24" rx="6" fill="url(#bUC)"/>
+  <text x="270" y="115" font-size="12" font-weight="600" fill="#37474F">14 tests</text>
+  <text x="332" y="115" font-size="10" fill="#78909C">GetBreed*, GetRandomBreeds*, GetAppsRecommended</text>
+
+  <!-- data bar: 13/52 = 25% → width ~150 of 600 -->
+  <text x="42" y="152" font-size="13" font-weight="600" fill="#F57C00">data</text>
+  <rect x="100" y="138" width="150" height="24" rx="6" fill="url(#bDat)"/>
+  <text x="258" y="155" font-size="12" font-weight="600" fill="#37474F">13 tests</text>
+  <text x="314" y="155" font-size="10" fill="#78909C">Repositories, BreedEsMapper</text>
+
+  <!-- Total -->
+  <text x="360" y="186" text-anchor="middle" font-size="12" fill="#546E7A">0 failures · 0 flaky · 0 skipped</text>
+</svg>
