@@ -93,8 +93,21 @@ object BreedEsMapper {
         val (maleMin, maleMax) = minMaxFromList(male)
         val (femaleMin, femaleMax) = minMaxFromList(female)
 
-        val overallMin = min(maleMin, femaleMin)
-        val overallMax = max(maleMax, femaleMax)
+        val hasMale = male.isNotEmpty()
+        val hasFemale = female.isNotEmpty()
+
+        val overallMin = when {
+            hasMale && hasFemale -> min(maleMin, femaleMin)
+            hasMale -> maleMin
+            hasFemale -> femaleMin
+            else -> 0.0
+        }
+        val overallMax = when {
+            hasMale && hasFemale -> max(maleMax, femaleMax)
+            hasMale -> maleMax
+            hasFemale -> femaleMax
+            else -> 0.0
+        }
 
         if (overallMax <= 0.0) return 0.0 to 0.0
         return overallMin to overallMax
