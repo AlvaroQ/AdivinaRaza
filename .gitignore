@@ -24,7 +24,11 @@ CLAUDE.md
 scripts/
 capture/*.png
 .claude/settings.local.json
-docs/
+docs/*
+!docs/*.svg
+!docs/images/
+docs/images/*
+!docs/images/store/
 *.pen
 capture/
 *.aab
