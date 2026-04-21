@@ -29,7 +29,7 @@ class GameViewModel(private val getRandomBreedsWithDescription: GetRandomBreedsW
     private val _navigation = MutableSharedFlow<Navigation>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val navigation: SharedFlow<Navigation> = _navigation.asSharedFlow()
 
-    private val _showingAds = MutableSharedFlow<UiModel>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _showingAds = MutableSharedFlow<UiModel>(replay = 1, extraBufferCapacity = 0, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val showingAds: SharedFlow<UiModel> = _showingAds.asSharedFlow()
 
     init {

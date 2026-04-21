@@ -3,8 +3,14 @@ package com.alvaroquintana.adivinaperro.ui.game
 import app.cash.turbine.test
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetRandomBreedsWithDescription
+import com.alvaroquintana.adivinaperro.managers.Analytics
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.runs
+import io.mockk.unmockkObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -27,6 +33,9 @@ class GameViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        mockkObject(Analytics)
+        every { Analytics.analyticsScreenViewed(any()) } just runs
+        every { Analytics.analyticsGameFinished(any(), any()) } just runs
         coEvery { getRandomBreedsWithDescription.invoke(4) } returns listOf(
             Dog(name = "Poodle", icon = "poodle.png"),
             Dog(name = "Bulldog", icon = "bulldog.png"),
@@ -38,6 +47,7 @@ class GameViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        unmockkObject(Analytics)
     }
 
     private fun createViewModel() = GameViewModel(getRandomBreedsWithDescription)
