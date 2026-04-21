@@ -1,101 +1,82 @@
 package com.alvaroquintana.adivinaperro.ui.game
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.alvaroquintana.adivinaperro.common.ScopedViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.adivinaperro.managers.Analytics
-import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.domain.Dog
-import com.alvaroquintana.usecases.GetBreedById
+import com.alvaroquintana.usecases.GetRandomBreedsWithDescription
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GameViewModel(private val getBreedById: GetBreedById) : ScopedViewModel() {
-    private var randomBreeds = mutableListOf<Int>()
+class GameViewModel(private val getRandomBreedsWithDescription: GetRandomBreedsWithDescription) : ViewModel() {
     private lateinit var dog: Dog
 
-    private val _question = MutableLiveData<String>()
-    val question: LiveData<String> = _question
+    private val _question = MutableStateFlow("")
+    val question: StateFlow<String> = _question.asStateFlow()
 
-    private val _responseOptions = MutableLiveData<MutableList<String>>()
-    val responseOptions: LiveData<MutableList<String>> = _responseOptions
+    private val _responseOptions = MutableSharedFlow<MutableList<String>>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val responseOptions: SharedFlow<MutableList<String>> = _responseOptions.asSharedFlow()
 
-    private val _progress = MutableLiveData<UiModel>()
-    val progress: LiveData<UiModel> = _progress
+    private val _progress = MutableStateFlow<UiModel>(UiModel.Loading(false))
+    val progress: StateFlow<UiModel> = _progress.asStateFlow()
 
-    private val _navigation = MutableLiveData<Navigation>()
-    val navigation: LiveData<Navigation> = _navigation
+    private val _navigation = MutableSharedFlow<Navigation>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val navigation: SharedFlow<Navigation> = _navigation.asSharedFlow()
 
-    private val _showingAds = MutableLiveData<UiModel>()
-    val showingAds: LiveData<UiModel> = _showingAds
+    private val _showingAds = MutableSharedFlow<UiModel>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val showingAds: SharedFlow<UiModel> = _showingAds.asSharedFlow()
 
     init {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_GAME)
         generateNewStage()
-        _showingAds.value = UiModel.ShowBannerAd(true)
+        _showingAds.tryEmit(UiModel.ShowBannerAd(true))
     }
 
     fun generateNewStage() {
-        launch {
+        viewModelScope.launch {
             _progress.value = UiModel.Loading(true)
 
-            /** Generate question */
-            val numRandomMain = generateRandomWithExcusion(0, TOTAL_BREED, *randomBreeds.toIntArray())
-            randomBreeds.add(numRandomMain)
+            val dogs = getRandomBreedsWithDescription.invoke(4)
+            if (dogs.size < 4) {
+                _progress.value = UiModel.Loading(false)
+                _navigation.tryEmit(Navigation.Result)
+                return@launch
+            }
 
-            dog = getBreed(numRandomMain)
+            val correctIndex = (0 until 4).random()
+            dog = dogs[correctIndex]
 
-            /** Generate responses */
-            val numRandomMainPosition = generateRandomWithExcusion(0, 3)
+            val optionList = dogs.map { it.name }.toMutableList()
+            // Shuffle options but keep correct answer tracking via dog.name
+            optionList.shuffle()
 
-            val numRandomOption1 = generateRandomWithExcusion(1, TOTAL_BREED, numRandomMain)
-            val dogOption1: Dog = getBreed(numRandomOption1)
-            val numRandomPosition1 = generateRandomWithExcusion(0, 3, numRandomMainPosition)
-
-            val numRandomOption2 = generateRandomWithExcusion(1, TOTAL_BREED, numRandomMain, numRandomOption1)
-            val dogOption2: Dog = getBreed(numRandomOption2)
-            val numRandomPosition2 = generateRandomWithExcusion(0, 3, numRandomMainPosition, numRandomPosition1)
-
-            val numRandomOption3 = generateRandomWithExcusion(1, TOTAL_BREED, numRandomMain, numRandomOption1, numRandomOption2)
-            val dogOption3: Dog = getBreed(numRandomOption3)
-            val numRandomPosition3 = generateRandomWithExcusion(0, 3, numRandomMainPosition, numRandomPosition1, numRandomPosition2)
-
-            /** Save value */
-            val optionList = mutableListOf("", "", "", "")
-            optionList[numRandomMainPosition] = dog.name!!
-            optionList[numRandomPosition1] = dogOption1.name!!
-            optionList[numRandomPosition2] = dogOption2.name!!
-            optionList[numRandomPosition3] = dogOption3.name!!
-
-            _responseOptions.value = optionList
+            _responseOptions.tryEmit(optionList)
             _question.value = dog.icon
             _progress.value = UiModel.Loading(false)
+
         }
     }
 
     fun showRewardedAd() {
-        _showingAds.value = UiModel.ShowReewardAd(true)
-    }
-
-    private suspend fun getBreed(id: Int): Dog {
-        return getBreedById.invoke(id)
+        _showingAds.tryEmit(UiModel.ShowReewardAd(true))
     }
 
     fun navigateToResult(points: String) {
-        Analytics.analyticsGameFinished(points)
-        _navigation.value = Navigation.Result
+        Analytics.analyticsGameFinished(points, Analytics.MODE_CLASSIC)
+        _navigation.tryEmit(Navigation.Result)
     }
 
-    fun getNameBreedCorrect() : String? {
+    fun getNameBreedCorrect() : String {
         return dog.name
     }
 
-    private fun generateRandomWithExcusion(start: Int, end: Int, vararg exclude: Int): Int {
-        var numRandom = (start..end).random()
-        while(exclude.contains(numRandom)){
-            numRandom = (start..end).random()
-        }
-        return numRandom
-    }
+    // No numeric-id based random selection; we rely on repository random sampling.
 
     sealed class UiModel {
         data class Loading(val show: Boolean) : UiModel()

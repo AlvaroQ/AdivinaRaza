@@ -9,4 +9,12 @@ class BreedByIdRepository(private val dataBaseSource: DataBaseSource) {
 
     suspend fun getBreedList(currentPage: Int): MutableList<Dog> = dataBaseSource.getBreedList(currentPage)
 
+    suspend fun getRandomBreedsWithWeight(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithWeight(count)
+
+    suspend fun getRandomBreedsWithDescription(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithDescription(count)
+
+    suspend fun getRandomBreedsWithFciGroup(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithFciGroup(count)
+
+    suspend fun getRandomBreedsWithCare(count: Int): List<Dog> = dataBaseSource.getRandomBreedsWithCare(count)
+
 }

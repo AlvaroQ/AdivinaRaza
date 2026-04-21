@@ -2,41 +2,82 @@
     <string name="app_name">Adivina Perro</string>
     <string name="game_screen_title">Adivina raza</string>
     <string name="resultado_screen_title">Resultado final</string>
-    <string name="ranking_screen_title">Ranking</string>
     <string name="share_message">\nHice una puntuación de %d ¿eres capaz de superarlo?\n\n</string>
     <string name="share_message_general">\nMe ha gustado mucho esta aplicación.\n\n</string>
-    <string name="choose_one">Elige una:</string>
+    <string name="choose_one">Elige una opción</string>
     <string name="other_apps">Otras aplicaciones</string>
-    <string name="life">life</string>
+    <string name="life">Vida</string>
     <string name="play_again">Jugar de nuevo</string>
     <string name="share">Compartir</string>
-    <string name="rate_on_play_store">Puntuar en play store</string>
-    <string name="result">Resultado: %d</string>
+    <string name="rate_on_play_store">Valorar en Play Store</string>
+    <string name="result">Puntuación: %d</string>
+    <string name="result_points">Puntos</string>
+    <string name="result_record">Récord</string>
     <string name="personal_record">Récord personal: %s</string>
-    <string name="world_record">Récord mundial: %s</string>
-    <string name="best_points">Mejores puntuaciones</string>
-    <string name="dialog_ranking_congratulation">¡Enhorabuena!</string>
-    <string name="dialog_ranking_description">Entraste en el ranking de mejores puntuaciones</string>
-    <string name="dialog_name">Nombre</string>
-    <string name="dialog_save">Guardar</string>
     <string name="info_title">Información</string>
+    <string name="info_header_title">Aprende sobre cada raza</string>
+    <string name="info_header_subtitle">Toca una tarjeta para ver datos detallados, perfil de cuidados y clasificación oficial.</string>
+    <string name="info_search_label">Buscar razas</string>
+    <string name="info_search_placeholder">Escribe raza, grupo, origen o temperamento</string>
+    <string name="info_search_clear">Borrar búsqueda</string>
+    <string name="info_empty_search">No hay razas que coincidan con "%1$s".</string>
+    <string name="info_tab_all">Todas</string>
+    <string name="info_empty_filter">Todavía no hay razas para %1$s.</string>
+    <string name="info_back_to_list">Volver al listado</string>
+    <string name="info_empty_message">No hay razas disponibles en este momento.</string>
+    <string name="info_error_loading">No pudimos cargar la información de razas. Inténtalo de nuevo.</string>
+    <string name="info_unknown">Desconocido</string>
+    <string name="info_not_available">No disponible</string>
+    <string name="info_section_description">Descripción</string>
+    <string name="info_section_temperament">Temperamento</string>
+    <string name="info_section_metrics">Perfil físico</string>
+    <string name="info_section_care">Cuidados y compatibilidad</string>
+    <string name="info_section_extra">Datos extra</string>
+    <string name="info_section_fci">Clasificación FCI</string>
+    <string name="info_weight_format">Peso: %1$s</string>
+    <string name="info_height_format">Altura: %1$s</string>
+    <string name="info_life_span_format">Esperanza de vida: %1$s</string>
+    <string name="info_size_format">Tamaño: %1$s</string>
+    <string name="info_coat_type_format">Tipo de pelaje: %1$s</string>
+    <string name="info_exercise_needs_format">Necesidad de ejercicio: %1$s</string>
+    <string name="info_grooming_needs_format">Necesidad de aseo: %1$s</string>
+    <string name="info_trainability_format">Facilidad de adiestramiento: %1$s</string>
+    <string name="info_children_format">Convivencia con niños: %1$s</string>
+    <string name="info_dogs_format">Convivencia con otros perros: %1$s</string>
+    <string name="info_barking_level_format">Nivel de ladrido: %1$s</string>
+    <string name="info_nutrition_format">Nutrición: %1$s</string>
+    <string name="info_hygiene_format">Higiene: %1$s</string>
+    <string name="info_loss_hair_format">Caída de pelo: %1$s</string>
+    <string name="info_other_names_format">Otros nombres: %1$s</string>
+    <string name="info_colors_format">Colores comunes: %1$s</string>
+    <string name="info_common_diseases_format">Enfermedades comunes: %1$s</string>
+    <string name="info_fun_fact_format">Curiosidad: %1$s</string>
+    <string name="info_fci_group_format">Grupo %1$d</string>
+    <string name="info_fci_section_format">Sección %1$d</string>
+    <string name="info_years_short">años</string>
+    <string name="start_game">Jugar</string>
+    <string name="learn">Aprender</string>
     <string name="settings">Ajustes</string>
+
+    <string name="mode_bigger_smaller">Mayor / Menor</string>
+    <string name="mode_description">Descripción</string>
+    <string name="mode_fci_trivia">Grupo FCI</string>
+    <string name="mode_care_food">Cuidados y alimentación</string>
 
     <!-- content description image -->
     <string name="game_title">Título del juego</string>
     <string name="loading_image">imagen de cargando</string>
     <string name="back">Volver</string>
     <string name="dog_game_image">Imagen de la raza de perro</string>
-    <string name="best_score">Mejores puntuaciones</string>
     <string name="score_image_background">fondo de la clasificación</string>
 
     <!-- Settings screen -->
-    <string name="settings_version">Version</string>
+    <string name="settings_version">Versión</string>
     <string name="settings_delete_ads">Quitar anuncios</string>
     <string name="settings_delete_ads_summary">Quitar anuncios para siempre</string>
     <string name="settings_sounds">Sonidos</string>
     <string name="settings_rate_app">Valorar la aplicación</string>
-    <string name="settings_rate_app_summary">Ir al play store para puntuar la app</string>
+    <string name="settings_rate_app_summary">Ir a Play Store para valorar la aplicación</string>
     <string name="settings_more_apps">Más aplicaciones</string>
     <string name="settings_more_apps_summary">Aplicaciones gratuitas recomendadas</string>
     <string name="sounds_on">Sonido activo</string>
@@ -45,6 +86,59 @@
     <string name="know_more">Saber más</string>
     <string name="settings_share">Comparte con tus amigos</string>
     <string name="settings_share_summary">Comparte con tus amigos esta app</string>
+    <string name="settings_privacy_policy">Política de privacidad</string>
+    <string name="settings_privacy_policy_summary">Lee nuestra política de privacidad</string>
     <string name="not_exist">No existe</string>
     <string name="read_info">Información</string>
+
+    <!-- Pantalla de selección -->
+    <string name="select_subtitle">Descubre razas y juega con modos divertidos</string>
+    <string name="mode_classic_title">Clásico</string>
+    <string name="mode_classic_subtitle">Modo clásico para adivinar la raza</string>
+    <string name="mode_bigger_smaller_subtitle">Compara el peso o la altura</string>
+    <string name="mode_description_subtitle">Adivina la raza leyendo pistas</string>
+    <string name="mode_fci_trivia_subtitle">Trivia sobre grupos oficiales</string>
+    <string name="mode_care_food_subtitle">Consejos sobre higiene y alimentación</string>
+    <string name="select_mode_title">Elige un modo de juego</string>
+    <string name="select_mode_description">Cada modo tiene reglas distintas. Escoge el que más te guste.</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Resultado / puntuación -->
+    <string name="points_label">Puntos</string>
+    <string name="record_label">Récord</string>
+    <string name="score_value">Puntuación: %1$d</string>
+    <string name="points_short">%1$d pts</string>
+    <string name="stage_value">Etapa %1$d</string>
+    <string name="result_great">¡Gran resultado!</string>
+    <string name="result_keep_trying">¡Sigue intentándolo!</string>
+
+    <!-- Textos de juego -->
+    <string name="question_guess_breed">¿Qué raza es este perro?</string>
+    <string name="question_fci_group">¿A qué grupo FCI pertenece esta raza?</string>
+    <string name="question_weight_more">¿Cuál pesa más?</string>
+    <string name="question_height_taller">¿Cuál es más alto?</string>
+    <string name="care_food_title">Cuidados y alimentación</string>
+
+    <!-- Ajustes -->
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_about">Acerca de</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_follow_system">Seguir el sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_privacy_options">Privacidad de anuncios</string>
+    <string name="settings_privacy_options_summary">Gestiona tus preferencias de consentimiento</string>
+
+    <!-- Accesibilidad -->
+    <string name="loading">Cargando…</string>
+    <string name="content_desc_splash_dog">Perro de la pantalla de inicio</string>
+    <string name="content_desc_happy_dog">Perro feliz</string>
+    <string name="content_desc_dog">Perro</string>
+    <string name="content_desc_cooper_mascot">Mascota Cooper</string>
+    <string name="content_desc_happy_dogs_banner">Banner de perros felices</string>
+    <string name="content_desc_question_image">Pregunta %1$d de %2$d</string>
+    <string name="content_desc_streak">Racha</string>
+    <string name="content_desc_correct">Respuesta correcta</string>
+    <string name="content_desc_wrong">Respuesta incorrecta</string>
 </resources>

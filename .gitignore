@@ -13,7 +13,24 @@
 .externalNativeBuild
 .cxx
 app/google-services.json
+firebase-admin-key.json
+*-adminsdk-*.json
 firma/
-app/src/main/res/values/secrets.xml
+app/secrets/
 .idea/
 assets/socialfacedog-export.json
+CLAUDE.md
+.atl/
+scripts/
+capture/*.png
+.claude/settings.local.json
+docs/
+*.pen
+capture/
+*.aab
+
+# Firestore export tooling (keep code, ignore outputs/keys)
+tools/
+app/src/androidTest/res/drawable/
+capture_screenshots.sh
+sdd/
