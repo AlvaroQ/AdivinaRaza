@@ -96,7 +96,7 @@ jobs:
           EOF
 
       - name: Unit tests
-        run: ./gradlew test --no-daemon --stacktrace
+        run: ./gradlew test :data:testAndroidHostTest :usecases:testAndroidHostTest --no-daemon --stacktrace
 
       - name: Upload test reports
         if: always()
