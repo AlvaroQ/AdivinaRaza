@@ -1,15 +1,12 @@
 package com.alvaroquintana.adivinaperro.datasource
 
 import android.util.Log
-import com.alvaroquintana.adivinaperro.datasource.db.DogDao
-import com.alvaroquintana.adivinaperro.datasource.db.SyncMetadata
-import com.alvaroquintana.adivinaperro.datasource.db.SyncMetadataDao
-import com.alvaroquintana.adivinaperro.datasource.db.toDomain
-import com.alvaroquintana.adivinaperro.datasource.db.toEntity
 import com.alvaroquintana.adivinaperro.utils.Constants
 import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.data.breedes.BreedEsMapper
 import com.alvaroquintana.data.datasource.DataBaseSource
+import com.alvaroquintana.data.db.AdivinaRazaDatabase
+import com.alvaroquintana.data.db.toDomain
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.domain.Dog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -25,23 +22,26 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class BreedEsDataBaseSourceImpl(
-    private val dogDao: DogDao,
-    private val syncMetadataDao: SyncMetadataDao,
+    private val database: AdivinaRazaDatabase,
     private val firestore: FirebaseFirestore
 ) : DataBaseSource {
 
-    private suspend fun isCacheFresh(): Boolean {
-        val metadata = syncMetadataDao.getByCollection(Constants.SYNC_COLLECTION_BREEDS_ES) ?: return false
+    private val dogsQueries get() = database.dogsQueries
+    private val syncQueries get() = database.syncMetadataQueries
+
+    private fun isCacheFresh(): Boolean {
+        val metadata = syncQueries.getByCollection(Constants.SYNC_COLLECTION_BREEDS_ES)
+            .executeAsOneOrNull() ?: return false
         val elapsed = System.currentTimeMillis() - metadata.lastSyncTimestamp
         return elapsed < Constants.STALE_THRESHOLD_MS
     }
 
     private suspend fun ensureSyncedIfNeeded() {
-        val cachedCount = dogDao.count()
-        val hasBreedEsMetadata = syncMetadataDao.getByCollection(Constants.SYNC_COLLECTION_BREEDS_ES) != null
+        val cachedCount = dogsQueries.count().executeAsOne()
+        val hasMetadata = syncQueries.getByCollection(Constants.SYNC_COLLECTION_BREEDS_ES)
+            .executeAsOneOrNull() != null
 
-        // Firestore breedES is now the single source for breeds.
-        if (!hasBreedEsMetadata || cachedCount == 0 || !isCacheFresh()) {
+        if (!hasMetadata || cachedCount == 0L || !isCacheFresh()) {
             syncAllBreedsFromFirestore()
         }
     }
@@ -104,7 +104,8 @@ class BreedEsDataBaseSourceImpl(
             val pageSize = 500L
             var last: DocumentSnapshot? = null
             var fetchedDocs = 0
-            val entities = mutableListOf<com.alvaroquintana.adivinaperro.datasource.db.DogEntity>()
+            data class MappedBreed(val id: Int, val dog: Dog)
+            val mapped = mutableListOf<MappedBreed>()
 
             while (true) {
                 var query: Query = firestore
@@ -130,22 +131,46 @@ class BreedEsDataBaseSourceImpl(
                     val id = resolveBreedId(doc) ?: continue
                     val data = doc.data ?: continue
                     val dog = BreedEsMapper.mapToDog(doc.id, data)
-                    entities.add(dog.toEntity(id))
+                    mapped.add(MappedBreed(id, dog))
                 }
 
                 last = snapshot.documents.last()
             }
 
-            if (entities.isNotEmpty()) {
-                // Replace cache only when we have a valid mapped dataset.
-                dogDao.deleteAll()
-                dogDao.insertAll(entities)
-                syncMetadataDao.upsert(
-                    SyncMetadata(
+            if (mapped.isNotEmpty()) {
+                database.transaction {
+                    dogsQueries.deleteAll()
+                    for (breed in mapped) {
+                        val d = breed.dog
+                        dogsQueries.insertDog(
+                            id = breed.id.toLong(), name = d.name, icon = d.icon,
+                            origin = d.origin, breedGroup = d.breedGroup,
+                            temperament = d.temperament, description = d.description,
+                            sizeCategory = d.sizeCategory,
+                            minWeightKg = d.minWeightKg, maxWeightKg = d.maxWeightKg,
+                            minHeightCm = d.minHeightCm, maxHeightCm = d.maxHeightCm,
+                            lifeSpanMin = d.lifeSpanMin.toLong(), lifeSpanMax = d.lifeSpanMax.toLong(),
+                            coatType = d.coatType, colors = d.colors,
+                            exerciseNeeds = d.exerciseNeeds.toLong(),
+                            groomingNeeds = d.groomingNeeds.toLong(),
+                            goodWithChildren = d.goodWithChildren.toLong(),
+                            goodWithOtherDogs = d.goodWithOtherDogs.toLong(),
+                            trainability = d.trainability.toLong(),
+                            barkingLevel = d.barkingLevel.toLong(),
+                            funFact = d.funFact, images = d.images,
+                            dataVersion = d.dataVersion.toLong(),
+                            nutrition = d.nutrition, hygiene = d.hygiene,
+                            lossHair = d.lossHair, commonDiseases = d.commonDiseases,
+                            otherNames = d.otherNames,
+                            fciGroup = d.fciGroup.toLong(), fciSection = d.fciSection.toLong(),
+                            fciSectionType = d.fciSectionType
+                        )
+                    }
+                    syncQueries.upsert(
                         collection = Constants.SYNC_COLLECTION_BREEDS_ES,
                         lastSyncTimestamp = System.currentTimeMillis()
                     )
-                )
+                }
             } else {
                 Log.e(
                     "BreedEsDataBaseSourceImpl",
@@ -155,9 +180,9 @@ class BreedEsDataBaseSourceImpl(
 
             log(
                 "BreedEsDataBaseSourceImpl",
-                "breedES sync done fetched=$fetchedDocs mapped=${entities.size}"
+                "breedES sync done fetched=$fetchedDocs mapped=${mapped.size}"
             )
-            entities.size
+            mapped.size
         } catch (e: Exception) {
             log("BreedEsDataBaseSourceImpl", "Failed to sync breedES", e)
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -166,10 +191,36 @@ class BreedEsDataBaseSourceImpl(
         }
     }
 
+    private fun insertDog(id: Int, dog: Dog) {
+        dogsQueries.insertDog(
+            id = id.toLong(), name = dog.name, icon = dog.icon,
+            origin = dog.origin, breedGroup = dog.breedGroup,
+            temperament = dog.temperament, description = dog.description,
+            sizeCategory = dog.sizeCategory,
+            minWeightKg = dog.minWeightKg, maxWeightKg = dog.maxWeightKg,
+            minHeightCm = dog.minHeightCm, maxHeightCm = dog.maxHeightCm,
+            lifeSpanMin = dog.lifeSpanMin.toLong(), lifeSpanMax = dog.lifeSpanMax.toLong(),
+            coatType = dog.coatType, colors = dog.colors,
+            exerciseNeeds = dog.exerciseNeeds.toLong(),
+            groomingNeeds = dog.groomingNeeds.toLong(),
+            goodWithChildren = dog.goodWithChildren.toLong(),
+            goodWithOtherDogs = dog.goodWithOtherDogs.toLong(),
+            trainability = dog.trainability.toLong(),
+            barkingLevel = dog.barkingLevel.toLong(),
+            funFact = dog.funFact, images = dog.images,
+            dataVersion = dog.dataVersion.toLong(),
+            nutrition = dog.nutrition, hygiene = dog.hygiene,
+            lossHair = dog.lossHair, commonDiseases = dog.commonDiseases,
+            otherNames = dog.otherNames,
+            fciGroup = dog.fciGroup.toLong(), fciSection = dog.fciSection.toLong(),
+            fciSectionType = dog.fciSectionType
+        )
+    }
+
     override suspend fun getBreedById(id: Int): Dog {
         ensureSyncedIfNeeded()
 
-        val cached = dogDao.getById(id)
+        val cached = dogsQueries.getById(id.toLong()).executeAsOneOrNull()
         if (cached != null) return cached.toDomain()
 
         val remoteDoc = fetchBreedDocumentById(id)
@@ -177,7 +228,7 @@ class BreedEsDataBaseSourceImpl(
         val remoteDog = BreedEsMapper.mapToDog(remoteDoc.id, remoteData)
 
         try {
-            dogDao.insertAll(listOf(remoteDog.toEntity(resolveBreedId(remoteDoc) ?: id)))
+            insertDog(resolveBreedId(remoteDoc) ?: id, remoteDog)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
@@ -188,12 +239,13 @@ class BreedEsDataBaseSourceImpl(
     override suspend fun getBreedList(currentPage: Int): MutableList<Dog> {
         ensureSyncedIfNeeded()
 
-        val offset = currentPage * Constants.TOTAL_ITEM_EACH_LOAD
-        var cached = dogDao.getPaginated(Constants.TOTAL_ITEM_EACH_LOAD, offset)
+        val limit = Constants.TOTAL_ITEM_EACH_LOAD.toLong()
+        val offset = (currentPage * Constants.TOTAL_ITEM_EACH_LOAD).toLong()
+        var cached = dogsQueries.getPaginated(limit, offset).executeAsList()
         if (cached.isEmpty()) {
             val synced = syncAllBreedsFromFirestore()
             if (synced > 0) {
-                cached = dogDao.getPaginated(Constants.TOTAL_ITEM_EACH_LOAD, offset)
+                cached = dogsQueries.getPaginated(limit, offset).executeAsList()
             }
         }
         val result = cached.map { it.toDomain() }.toMutableList()
@@ -205,10 +257,10 @@ class BreedEsDataBaseSourceImpl(
 
     override suspend fun getRandomBreedsWithWeight(count: Int): List<Dog> {
         ensureSyncedIfNeeded()
-        var result = dogDao.getRandomBreedsWithWeight(count).map { it.toDomain() }
+        var result = dogsQueries.getRandomBreedsWithWeight(count.toLong()).executeAsList().map { it.toDomain() }
         if (result.size < count) {
             val synced = syncAllBreedsFromFirestore()
-            if (synced > 0) result = dogDao.getRandomBreedsWithWeight(count).map { it.toDomain() }
+            if (synced > 0) result = dogsQueries.getRandomBreedsWithWeight(count.toLong()).executeAsList().map { it.toDomain() }
         }
         val trimmed = result.take(count)
         if (trimmed.isEmpty()) {
@@ -219,10 +271,10 @@ class BreedEsDataBaseSourceImpl(
 
     override suspend fun getRandomBreedsWithDescription(count: Int): List<Dog> {
         ensureSyncedIfNeeded()
-        var result = dogDao.getRandomBreedsWithDescription(count).map { it.toDomain() }
+        var result = dogsQueries.getRandomBreedsWithDescription(count.toLong()).executeAsList().map { it.toDomain() }
         if (result.size < count) {
             val synced = syncAllBreedsFromFirestore()
-            if (synced > 0) result = dogDao.getRandomBreedsWithDescription(count).map { it.toDomain() }
+            if (synced > 0) result = dogsQueries.getRandomBreedsWithDescription(count.toLong()).executeAsList().map { it.toDomain() }
         }
         val trimmed = result.take(count)
         if (trimmed.isEmpty()) {
@@ -233,10 +285,10 @@ class BreedEsDataBaseSourceImpl(
 
     override suspend fun getRandomBreedsWithFciGroup(count: Int): List<Dog> {
         ensureSyncedIfNeeded()
-        var result = dogDao.getRandomBreedsWithFciGroup(count).map { it.toDomain() }
+        var result = dogsQueries.getRandomBreedsWithFciGroup(count.toLong()).executeAsList().map { it.toDomain() }
         if (result.size < count) {
             val synced = syncAllBreedsFromFirestore()
-            if (synced > 0) result = dogDao.getRandomBreedsWithFciGroup(count).map { it.toDomain() }
+            if (synced > 0) result = dogsQueries.getRandomBreedsWithFciGroup(count.toLong()).executeAsList().map { it.toDomain() }
         }
         val trimmed = result.take(count)
         if (trimmed.isEmpty()) {
@@ -247,10 +299,10 @@ class BreedEsDataBaseSourceImpl(
 
     override suspend fun getRandomBreedsWithCare(count: Int): List<Dog> {
         ensureSyncedIfNeeded()
-        var result = dogDao.getRandomBreedsWithCare(count).map { it.toDomain() }
+        var result = dogsQueries.getRandomBreedsWithCare(count.toLong()).executeAsList().map { it.toDomain() }
         if (result.size < count) {
             val synced = syncAllBreedsFromFirestore()
-            if (synced > 0) result = dogDao.getRandomBreedsWithCare(count).map { it.toDomain() }
+            if (synced > 0) result = dogsQueries.getRandomBreedsWithCare(count.toLong()).executeAsList().map { it.toDomain() }
         }
         val trimmed = result.take(count)
         if (trimmed.isEmpty()) {
@@ -260,7 +312,6 @@ class BreedEsDataBaseSourceImpl(
     }
 
     override suspend fun getAppsRecommended(): MutableList<App> {
-        // Not part of breedES source policy; keep legacy RTDB for apps.
         return suspendCancellableCoroutine { continuation ->
             val reference = FirebaseDatabase.getInstance().getReference(Constants.PATH_REFERENCE_APPS)
             val listener = object : ValueEventListener {

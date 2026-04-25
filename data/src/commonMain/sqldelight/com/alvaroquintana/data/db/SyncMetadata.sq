@@ -1,0 +1,10 @@
+CREATE TABLE sync_metadata (
+    collection TEXT NOT NULL PRIMARY KEY,
+    lastSyncTimestamp INTEGER NOT NULL
+);
+
+getByCollection:
+SELECT * FROM sync_metadata WHERE collection = ?;
+
+upsert:
+INSERT OR REPLACE INTO sync_metadata(collection, lastSyncTimestamp) VALUES (?, ?);

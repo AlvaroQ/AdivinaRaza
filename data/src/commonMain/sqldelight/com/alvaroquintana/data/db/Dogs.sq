@@ -1,0 +1,79 @@
+CREATE TABLE dogs (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT '',
+    icon TEXT NOT NULL DEFAULT '',
+    origin TEXT NOT NULL DEFAULT '',
+    breedGroup TEXT NOT NULL DEFAULT '',
+    temperament TEXT NOT NULL DEFAULT '',
+    description TEXT NOT NULL DEFAULT '',
+    sizeCategory TEXT NOT NULL DEFAULT '',
+    minWeightKg REAL NOT NULL DEFAULT 0.0,
+    maxWeightKg REAL NOT NULL DEFAULT 0.0,
+    minHeightCm REAL NOT NULL DEFAULT 0.0,
+    maxHeightCm REAL NOT NULL DEFAULT 0.0,
+    lifeSpanMin INTEGER NOT NULL DEFAULT 0,
+    lifeSpanMax INTEGER NOT NULL DEFAULT 0,
+    coatType TEXT NOT NULL DEFAULT '',
+    colors TEXT NOT NULL DEFAULT '',
+    exerciseNeeds INTEGER NOT NULL DEFAULT 0,
+    groomingNeeds INTEGER NOT NULL DEFAULT 0,
+    goodWithChildren INTEGER NOT NULL DEFAULT 0,
+    goodWithOtherDogs INTEGER NOT NULL DEFAULT 0,
+    trainability INTEGER NOT NULL DEFAULT 0,
+    barkingLevel INTEGER NOT NULL DEFAULT 0,
+    funFact TEXT NOT NULL DEFAULT '',
+    images TEXT NOT NULL DEFAULT '',
+    dataVersion INTEGER NOT NULL DEFAULT 0,
+    nutrition TEXT NOT NULL DEFAULT '',
+    hygiene TEXT NOT NULL DEFAULT '',
+    lossHair TEXT NOT NULL DEFAULT '',
+    commonDiseases TEXT NOT NULL DEFAULT '',
+    otherNames TEXT NOT NULL DEFAULT '',
+    fciGroup INTEGER NOT NULL DEFAULT 0,
+    fciSection INTEGER NOT NULL DEFAULT 0,
+    fciSectionType TEXT NOT NULL DEFAULT ''
+);
+
+getAll:
+SELECT * FROM dogs ORDER BY id ASC;
+
+getById:
+SELECT * FROM dogs WHERE id = ?;
+
+getPaginated:
+SELECT * FROM dogs ORDER BY id ASC LIMIT ? OFFSET ?;
+
+count:
+SELECT COUNT(*) FROM dogs;
+
+insertDog:
+INSERT OR REPLACE INTO dogs(id, name, icon, origin, breedGroup, temperament, description,
+    sizeCategory, minWeightKg, maxWeightKg, minHeightCm, maxHeightCm, lifeSpanMin, lifeSpanMax,
+    coatType, colors, exerciseNeeds, groomingNeeds, goodWithChildren, goodWithOtherDogs,
+    trainability, barkingLevel, funFact, images, dataVersion, nutrition, hygiene, lossHair,
+    commonDiseases, otherNames, fciGroup, fciSection, fciSectionType)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM dogs;
+
+getByBreedGroup:
+SELECT * FROM dogs WHERE breedGroup = ? ORDER BY name ASC;
+
+getBySize:
+SELECT * FROM dogs WHERE sizeCategory = ? ORDER BY name ASC;
+
+getAllBreedGroups:
+SELECT DISTINCT breedGroup FROM dogs WHERE breedGroup != '' ORDER BY breedGroup ASC;
+
+getRandomBreedsWithWeight:
+SELECT * FROM dogs WHERE maxWeightKg > 0 ORDER BY RANDOM() LIMIT ?;
+
+getRandomBreedsWithDescription:
+SELECT * FROM dogs WHERE temperament != '' ORDER BY RANDOM() LIMIT ?;
+
+getRandomBreedsWithFciGroup:
+SELECT * FROM dogs WHERE fciGroup > 0 ORDER BY RANDOM() LIMIT ?;
+
+getRandomBreedsWithCare:
+SELECT * FROM dogs WHERE nutrition != '' OR hygiene != '' OR lossHair != '' ORDER BY RANDOM() LIMIT ?;
