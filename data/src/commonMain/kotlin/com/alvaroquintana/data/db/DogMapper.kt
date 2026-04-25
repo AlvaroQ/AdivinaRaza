@@ -1,0 +1,38 @@
+package com.alvaroquintana.data.db
+
+import com.alvaroquintana.domain.Dog
+
+fun Dogs.toDomain(): Dog = Dog(
+    icon = icon,
+    name = name,
+    origin = origin,
+    breedGroup = breedGroup,
+    temperament = temperament,
+    description = description,
+    sizeCategory = sizeCategory,
+    minWeightKg = minWeightKg,
+    maxWeightKg = maxWeightKg,
+    minHeightCm = minHeightCm,
+    maxHeightCm = maxHeightCm,
+    lifeSpanMin = lifeSpanMin.toInt(),
+    lifeSpanMax = lifeSpanMax.toInt(),
+    coatType = coatType,
+    colors = colors,
+    exerciseNeeds = exerciseNeeds.toInt(),
+    groomingNeeds = groomingNeeds.toInt(),
+    goodWithChildren = goodWithChildren.toInt(),
+    goodWithOtherDogs = goodWithOtherDogs.toInt(),
+    trainability = trainability.toInt(),
+    barkingLevel = barkingLevel.toInt(),
+    funFact = funFact,
+    images = images,
+    dataVersion = dataVersion.toInt(),
+    nutrition = nutrition,
+    hygiene = hygiene,
+    lossHair = lossHair,
+    commonDiseases = commonDiseases,
+    otherNames = otherNames,
+    fciGroup = fciGroup.toInt(),
+    fciSection = fciSection.toInt(),
+    fciSectionType = fciSectionType,
+)

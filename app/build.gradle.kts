@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -138,11 +137,7 @@ dependencies {
     implementation(libs.play.services.ads)
     implementation(libs.ump)
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.material3.window.size.class1)
-    ksp(libs.androidx.room.compiler)
 
     // Jetpack Compose
     implementation(platform(libs.compose.bom))

@@ -1,10 +1,10 @@
 package com.alvaroquintana.adivinaperro.application
 
 import android.app.Application
-import androidx.room.Room
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.datasource.BreedEsDataBaseSourceImpl
-import com.alvaroquintana.adivinaperro.datasource.db.AppDatabase
+import com.alvaroquintana.data.db.DriverFactory
+import com.alvaroquintana.data.db.createDatabase
 import com.alvaroquintana.adivinaperro.ui.game.BiggerSmallerViewModel
 import com.alvaroquintana.adivinaperro.ui.game.DescriptionViewModel
 import com.alvaroquintana.adivinaperro.ui.game.FciTriviaViewModel
@@ -38,18 +38,11 @@ fun Application.initDI() {
 }
 
 private val appModule = module {
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            "adivinaperro-db"
-        ).fallbackToDestructiveMigration(true).build()
-    }
-    single { get<AppDatabase>().dogDao() }
-    single { get<AppDatabase>().syncMetadataDao() }
+    single { DriverFactory(androidContext()) }
+    single { createDatabase(get()) }
 
     factory { Firebase.firestore }
-    factory<DataBaseSource> { BreedEsDataBaseSourceImpl(get(), get(), get()) }
+    factory<DataBaseSource> { BreedEsDataBaseSourceImpl(get(), get()) }
 }
 
 val dataModule = module {
