@@ -5,7 +5,6 @@ import adivinaraza.app.generated.resources.choose_one
 import adivinaraza.app.generated.resources.mode_description
 import adivinaraza.app.generated.resources.stage_value
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,14 +40,12 @@ import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
-import com.alvaroquintana.adivinaperro.utils.playFailSound
-import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import kotlinx.coroutines.delay
 
 @Composable
 fun DescriptionScreenContent(
     viewModel: DescriptionViewModel,
-    context: Context
+    soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -67,8 +64,8 @@ fun DescriptionScreenContent(
     LaunchedEffect(state.lastResult) {
         state.lastResult?.let { result ->
             when (result) {
-                DescriptionViewModel.AnswerResult.CORRECT -> playSuccessSound(context)
-                DescriptionViewModel.AnswerResult.INCORRECT -> playFailSound(context)
+                DescriptionViewModel.AnswerResult.CORRECT -> soundPlayer.playSuccess()
+                DescriptionViewModel.AnswerResult.INCORRECT -> soundPlayer.playFail()
             }
             delay(AnimationSpecs.ANSWER_HOLD_DURATION.toLong())
             viewModel.proceedAfterResult()

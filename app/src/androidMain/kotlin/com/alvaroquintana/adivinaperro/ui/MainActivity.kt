@@ -91,7 +91,6 @@ import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
 import com.alvaroquintana.adivinaperro.ui.theme.rememberAppWindowSizeClass
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.log
-import com.alvaroquintana.adivinaperro.utils.playBarkSound
 import com.alvaroquintana.adivinaperro.utils.playFailSound
 import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import com.alvaroquintana.adivinaperro.utils.rateApp
@@ -317,6 +316,7 @@ private fun AppNavHost(
 @Composable
 private fun FciTriviaRoute(navController: NavHostController) {
     val viewModel: FciTriviaViewModel = koinViewModel()
+    val soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer = org.koin.compose.koinInject()
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -350,7 +350,7 @@ private fun FciTriviaRoute(navController: NavHostController) {
         bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
-        FciTriviaScreenContent(viewModel = viewModel, context = context)
+        FciTriviaScreenContent(viewModel = viewModel, soundPlayer = soundPlayer)
     }
 }
 
@@ -455,6 +455,7 @@ private fun GameRoute(navController: NavHostController) {
 @Composable
 private fun BiggerSmallerRoute(navController: NavHostController) {
     val viewModel: BiggerSmallerViewModel = koinViewModel()
+    val soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer = org.koin.compose.koinInject()
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -488,7 +489,7 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
         bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
-        BiggerSmallerScreenContent(viewModel = viewModel, context = context)
+        BiggerSmallerScreenContent(viewModel = viewModel, soundPlayer = soundPlayer)
     }
 }
 
@@ -499,6 +500,7 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
 @Composable
 private fun DescriptionRoute(navController: NavHostController) {
     val viewModel: DescriptionViewModel = koinViewModel()
+    val soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer = org.koin.compose.koinInject()
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -532,7 +534,7 @@ private fun DescriptionRoute(navController: NavHostController) {
         bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
-        DescriptionScreenContent(viewModel = viewModel, context = context)
+        DescriptionScreenContent(viewModel = viewModel, soundPlayer = soundPlayer)
     }
 }
 
@@ -544,13 +546,14 @@ private fun DescriptionRoute(navController: NavHostController) {
 private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
     val viewModel: ResultViewModel = koinViewModel()
     val context = LocalContext.current
+    val soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer = org.koin.compose.koinInject()
     val appName = stringResource(Res.string.app_name)
     val shareMessageWithPoints = stringResource(Res.string.share_message, gamePoints)
     val shareMessageGeneral = stringResource(Res.string.share_message_general)
     val chooseLabel = stringResource(Res.string.choose_one)
 
     LaunchedEffect(Unit) {
-        playBarkSound(context)
+        soundPlayer.playBark()
         viewModel.getPersonalRecord(gamePoints)
     }
 

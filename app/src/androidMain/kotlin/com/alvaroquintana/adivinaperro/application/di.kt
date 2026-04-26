@@ -4,7 +4,9 @@ import android.app.Application
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.datasource.BreedEsDataBaseSourceImpl
 import com.alvaroquintana.adivinaperro.managers.AndroidSettings
+import com.alvaroquintana.adivinaperro.managers.AndroidSoundPlayer
 import com.alvaroquintana.adivinaperro.managers.Settings
+import com.alvaroquintana.adivinaperro.managers.SoundPlayer
 import com.alvaroquintana.data.db.DriverFactory
 import com.alvaroquintana.data.db.createDatabase
 import com.alvaroquintana.adivinaperro.ui.game.BiggerSmallerViewModel
@@ -46,6 +48,7 @@ private val appModule = module {
     factory { Firebase.firestore }
     factory<DataBaseSource> { BreedEsDataBaseSourceImpl(get(), get()) }
     single<Settings> { AndroidSettings(androidContext()) }
+    single<SoundPlayer> { AndroidSoundPlayer(androidContext()) }
 }
 
 val dataModule = module {

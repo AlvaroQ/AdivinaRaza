@@ -6,7 +6,6 @@ import adivinaraza.app.generated.resources.question_height_taller
 import adivinaraza.app.generated.resources.question_weight_more
 import adivinaraza.app.generated.resources.stage_value
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,15 +36,13 @@ import com.alvaroquintana.adivinaperro.ui.components.BreedCard
 import com.alvaroquintana.adivinaperro.ui.components.GameStatusRow
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
-import com.alvaroquintana.adivinaperro.utils.playFailSound
-import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BiggerSmallerScreenContent(
     viewModel: BiggerSmallerViewModel,
-    context: Context
+    soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -60,8 +57,8 @@ fun BiggerSmallerScreenContent(
     LaunchedEffect(state.lastResult) {
         if (state.lastResult != null) {
             when (state.lastResult) {
-                BiggerSmallerViewModel.AnswerResult.CORRECT -> playSuccessSound(context)
-                BiggerSmallerViewModel.AnswerResult.INCORRECT -> playFailSound(context)
+                BiggerSmallerViewModel.AnswerResult.CORRECT -> soundPlayer.playSuccess()
+                BiggerSmallerViewModel.AnswerResult.INCORRECT -> soundPlayer.playFail()
                 else -> Unit
             }
             delay(AnimationSpecs.ANSWER_HOLD_DURATION.toLong())

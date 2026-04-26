@@ -5,7 +5,6 @@ import adivinaraza.app.generated.resources.mode_fci_trivia
 import adivinaraza.app.generated.resources.question_fci_group
 import adivinaraza.app.generated.resources.stage_value
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,14 +40,12 @@ import com.alvaroquintana.adivinaperro.ui.components.QuestionCard
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
-import com.alvaroquintana.adivinaperro.utils.playFailSound
-import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import kotlinx.coroutines.delay
 
 @Composable
 fun FciTriviaScreenContent(
     viewModel: FciTriviaViewModel,
-    context: Context
+    soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -67,8 +64,8 @@ fun FciTriviaScreenContent(
     LaunchedEffect(state.lastResult) {
         state.lastResult?.let { result ->
             when (result) {
-                FciTriviaViewModel.AnswerResult.CORRECT -> playSuccessSound(context)
-                FciTriviaViewModel.AnswerResult.INCORRECT -> playFailSound(context)
+                FciTriviaViewModel.AnswerResult.CORRECT -> soundPlayer.playSuccess()
+                FciTriviaViewModel.AnswerResult.INCORRECT -> soundPlayer.playFail()
             }
             delay(AnimationSpecs.ANSWER_HOLD_DURATION.toLong())
             viewModel.proceedAfterResult()
