@@ -34,14 +34,21 @@ kotlin {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+        target.binaries.framework {
+            baseName = "AdivinaRazaShared"
+            isStatic = true
+            export(project(":core"))
+            export(project(":data"))
+            export(project(":usecases"))
+        }
+    }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":core"))
-            implementation(project(":data"))
-            implementation(project(":usecases"))
+            api(project(":core"))
+            api(project(":data"))
+            api(project(":usecases"))
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
