@@ -67,6 +67,12 @@ targets:
         ENABLE_PREVIEWS: "YES"
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_OBJC_BRIDGING_HEADER: ""
+        # Granting keychain-access-groups so Firebase Auth can persist
+        # the anonymous-sign-in user on iOS Simulator without hitting
+        # SecItemCopyMatching (-34018) "A required entitlement isn't
+        # present" — the simulator entitlement check is strict even
+        # when code signing is disabled.
+        CODE_SIGN_ENTITLEMENTS: iosApp/iosApp.entitlements
     preBuildScripts:
       - name: Build Kotlin Multiplatform Framework
         # Builds the AdivinaRazaShared.framework and copies it into
