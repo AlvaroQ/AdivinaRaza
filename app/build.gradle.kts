@@ -1,7 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import javax.xml.parsers.DocumentBuilderFactory
 
 plugins {
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
@@ -21,6 +24,89 @@ fun getSecretValue(name: String): String =
     } catch (_: Exception) {
         ""
     }
+
+kotlin {
+    applyDefaultHierarchyTemplate()
+
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
+    }
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core"))
+            implementation(project(":data"))
+            implementation(project(":usecases"))
+            implementation(libs.kotlin.stdlib)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+        }
+        getByName("androidMain").dependencies {
+            implementation(libs.kotlinx.coroutines.android)
+
+            // AndroidX
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.lifecycle.viewmodel.ktx)
+            implementation(libs.androidx.preference.ktx)
+            implementation(libs.androidx.swiperefreshlayout)
+
+            // Firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.database)
+            implementation(libs.firebase.firestore)
+            implementation(libs.firebase.analytics)
+            implementation(libs.firebase.auth)
+            implementation(libs.firebase.crashlytics)
+            implementation(libs.guava.listenablefuture)
+
+            // DI
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            // Images
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.okhttp)
+
+            // Ads
+            implementation(libs.play.services.ads)
+            implementation(libs.ump)
+
+            implementation(libs.androidx.material3.window.size.class1)
+
+            // Jetpack Compose
+            implementation(project.dependencies.platform(libs.compose.bom))
+            implementation(libs.compose.material3)
+            implementation(libs.compose.material3.window.size)
+            implementation(libs.compose.material.icons.extended)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.navigation.compose)
+        }
+        getByName("androidUnitTest").dependencies {
+            implementation(libs.junit)
+            implementation(libs.mockk)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+        }
+        getByName("androidInstrumentedTest").dependencies {
+            implementation(project.dependencies.platform(libs.compose.bom))
+            implementation(libs.compose.ui.test.junit4)
+            implementation(libs.test.ext.junit)
+            implementation(libs.espresso.core)
+            implementation(libs.test.runner)
+            implementation(libs.test.rules)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+    }
+}
 
 android {
     compileSdk = 36
@@ -91,82 +177,8 @@ android {
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-    }
-}
-
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":data"))
-    implementation(project(":usecases"))
-
-    // Kotlin
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-
-    // AndroidX
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.swiperefreshlayout)
-
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.guava.listenablefuture)
-
-    // DI
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.compose.viewmodel)
-
-    // Images
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
-
-    // Ads
-    implementation(libs.play.services.ads)
-    implementation(libs.ump)
-
-    implementation(libs.androidx.material3.window.size.class1)
-
-    // Jetpack Compose
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.material3)
-    implementation(libs.compose.material3.window.size)
-    implementation(libs.compose.material.icons.extended)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.compose.ui.tooling)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
-
-    // Android Instrumented Testing
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    androidTestImplementation(libs.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.test.runner)
-    androidTestImplementation(libs.test.rules)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
     debugImplementation(libs.compose.ui.test.manifest)
 }
 
