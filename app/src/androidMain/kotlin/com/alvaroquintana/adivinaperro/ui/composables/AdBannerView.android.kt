@@ -16,10 +16,10 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 @Composable
-fun AdBannerView(
+actual fun AdBannerView(
     adUnitId: String,
-    modifier: Modifier = Modifier,
-    adLocation: String = Analytics.AD_LOC_GAME
+    modifier: Modifier,
+    adLocation: String
 ) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
