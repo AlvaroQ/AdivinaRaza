@@ -1,5 +1,11 @@
 package com.alvaroquintana.adivinaperro.ui.splash
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_paw
+import adivinaraza.app.generated.resources.mascot_splash
+import adivinaraza.app.generated.resources.app_name
+import adivinaraza.app.generated.resources.loading
+
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -30,14 +36,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.Image
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.getHeroGradient
 import kotlinx.coroutines.delay
@@ -84,7 +89,7 @@ fun SplashScreen(
         ) {
             // Dog mascot image
             Image(
-                painter = painterResource(R.drawable.mascot_splash),
+                painter = painterResource(Res.drawable.mascot_splash),
                 contentDescription = "Splash dog",
                 modifier = Modifier
                     .size(200.dp)
@@ -96,7 +101,7 @@ fun SplashScreen(
 
             // Title
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(Res.string.app_name),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
@@ -107,7 +112,7 @@ fun SplashScreen(
 
             // Paw icon spinning
             Icon(
-                painter = painterResource(R.drawable.ic_paw),
+                painter = painterResource(Res.drawable.ic_paw),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -119,7 +124,7 @@ fun SplashScreen(
 
             // Loading text
             Text(
-                text = stringResource(R.string.loading),
+                text = stringResource(Res.string.loading),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,

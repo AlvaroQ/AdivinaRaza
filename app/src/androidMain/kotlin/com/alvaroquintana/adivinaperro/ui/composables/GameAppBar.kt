@@ -1,5 +1,10 @@
 package com.alvaroquintana.adivinaperro.ui.composables
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_life_off
+import adivinaraza.app.generated.resources.ic_life_on
+import adivinaraza.app.generated.resources.life
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -22,14 +27,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 
 @Composable
@@ -94,9 +98,9 @@ private fun LifeIcon(isAlive: Boolean) {
 
     Image(
         painter = painterResource(
-            id = if (isAlive) R.drawable.ic_life_on else R.drawable.ic_life_off
+            if (isAlive) Res.drawable.ic_life_on else Res.drawable.ic_life_off
         ),
-        contentDescription = stringResource(R.string.life),
+        contentDescription = stringResource(Res.string.life),
         modifier = Modifier
             .size(24.dp)
             .scale(scale)

@@ -1,5 +1,9 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_fire
+import adivinaraza.app.generated.resources.content_desc_streak
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -25,11 +29,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 import com.alvaroquintana.adivinaperro.ui.theme.LocalGameColors
 
@@ -75,8 +78,8 @@ fun StreakBadge(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_fire),
-                    contentDescription = stringResource(R.string.content_desc_streak),
+                    painter = painterResource(Res.drawable.ic_fire),
+                    contentDescription = stringResource(Res.string.content_desc_streak),
                     tint = gameColors.streakGold,
                     modifier = Modifier.size(24.dp)
                 )

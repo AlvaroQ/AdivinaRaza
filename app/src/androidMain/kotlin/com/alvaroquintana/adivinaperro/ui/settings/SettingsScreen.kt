@@ -1,5 +1,31 @@
 package com.alvaroquintana.adivinaperro.ui.settings
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_privacy
+import adivinaraza.app.generated.resources.ic_share
+import adivinaraza.app.generated.resources.ic_star
+import adivinaraza.app.generated.resources.ic_version
+import adivinaraza.app.generated.resources.ic_volume
+import adivinaraza.app.generated.resources.settings_privacy_options
+import adivinaraza.app.generated.resources.settings_privacy_options_summary
+import adivinaraza.app.generated.resources.settings_privacy_policy
+import adivinaraza.app.generated.resources.settings_privacy_policy_summary
+import adivinaraza.app.generated.resources.settings_rate_app
+import adivinaraza.app.generated.resources.settings_rate_app_summary
+import adivinaraza.app.generated.resources.settings_section_about
+import adivinaraza.app.generated.resources.settings_section_general
+import adivinaraza.app.generated.resources.settings_share
+import adivinaraza.app.generated.resources.settings_share_summary
+import adivinaraza.app.generated.resources.settings_sounds
+import adivinaraza.app.generated.resources.settings_theme
+import adivinaraza.app.generated.resources.settings_theme_dark
+import adivinaraza.app.generated.resources.settings_theme_follow_system
+import adivinaraza.app.generated.resources.settings_theme_light
+import adivinaraza.app.generated.resources.settings_theme_system
+import adivinaraza.app.generated.resources.settings_version
+import adivinaraza.app.generated.resources.sounds_off
+import adivinaraza.app.generated.resources.sounds_on
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,12 +50,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 
@@ -55,7 +80,7 @@ fun SettingsScreen(
         // General section
         item {
             Text(
-                text = stringResource(R.string.settings_section_general),
+                text = stringResource(Res.string.settings_section_general),
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
@@ -92,7 +117,7 @@ fun SettingsScreen(
         // About section
         item {
             Text(
-                text = stringResource(R.string.settings_section_about),
+                text = stringResource(Res.string.settings_section_about),
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
@@ -110,39 +135,39 @@ fun SettingsScreen(
             ) {
                 Column {
                     SettingsClickableItem(
-                        iconRes = R.drawable.ic_star,
-                        title = stringResource(R.string.settings_rate_app),
-                        summary = stringResource(R.string.settings_rate_app_summary),
+                        iconRes = Res.drawable.ic_star,
+                        title = stringResource(Res.string.settings_rate_app),
+                        summary = stringResource(Res.string.settings_rate_app_summary),
                         onClick = onRateApp
                     )
 
 
                     SettingsClickableItem(
-                        iconRes = R.drawable.ic_share,
-                        title = stringResource(R.string.settings_share),
-                        summary = stringResource(R.string.settings_share_summary),
+                        iconRes = Res.drawable.ic_share,
+                        title = stringResource(Res.string.settings_share),
+                        summary = stringResource(Res.string.settings_share_summary),
                         onClick = onShare
                     )
 
                     if (showPrivacyOptions) {
                         SettingsClickableItem(
-                            iconRes = R.drawable.ic_version,
-                            title = stringResource(R.string.settings_privacy_options),
-                            summary = stringResource(R.string.settings_privacy_options_summary),
+                            iconRes = Res.drawable.ic_version,
+                            title = stringResource(Res.string.settings_privacy_options),
+                            summary = stringResource(Res.string.settings_privacy_options_summary),
                             onClick = onPrivacyOptions
                         )
                     }
 
                     SettingsClickableItem(
-                        iconRes = R.drawable.ic_privacy,
-                        title = stringResource(R.string.settings_privacy_policy),
-                        summary = stringResource(R.string.settings_privacy_policy_summary),
+                        iconRes = Res.drawable.ic_privacy,
+                        title = stringResource(Res.string.settings_privacy_policy),
+                        summary = stringResource(Res.string.settings_privacy_policy_summary),
                         onClick = onPrivacyPolicy
                     )
 
                     SettingsInfoItem(
-                        iconRes = R.drawable.ic_version,
-                        title = stringResource(R.string.settings_version),
+                        iconRes = Res.drawable.ic_version,
+                        title = stringResource(Res.string.settings_version),
                         summary = versionText
                     )
                 }
@@ -165,7 +190,7 @@ private fun ThemeSelectorItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_star),
+                painter = painterResource(Res.drawable.ic_star),
                 contentDescription = null,
                 modifier = Modifier.size(28.dp),
                 tint = MaterialTheme.colorScheme.primary
@@ -177,15 +202,15 @@ private fun ThemeSelectorItem(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_theme),
+                    text = stringResource(Res.string.settings_theme),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = when (currentMode) {
-                        ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_follow_system)
-                        ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
-                        ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
+                        ThemeMode.SYSTEM -> stringResource(Res.string.settings_theme_follow_system)
+                        ThemeMode.LIGHT -> stringResource(Res.string.settings_theme_light)
+                        ThemeMode.DARK -> stringResource(Res.string.settings_theme_dark)
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -214,9 +239,9 @@ private fun ThemeSelectorItem(
                 ) {
                     Text(
                         text = when (mode) {
-                            ThemeMode.SYSTEM -> stringResource(R.string.settings_theme_system)
-                            ThemeMode.LIGHT -> stringResource(R.string.settings_theme_light)
-                            ThemeMode.DARK -> stringResource(R.string.settings_theme_dark)
+                            ThemeMode.SYSTEM -> stringResource(Res.string.settings_theme_system)
+                            ThemeMode.LIGHT -> stringResource(Res.string.settings_theme_light)
+                            ThemeMode.DARK -> stringResource(Res.string.settings_theme_dark)
                         },
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
@@ -248,7 +273,7 @@ private fun SoundToggleItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_volume),
+            painter = painterResource(Res.drawable.ic_volume),
             contentDescription = null,
             modifier = Modifier.size(28.dp),
             tint = MaterialTheme.colorScheme.primary
@@ -260,12 +285,12 @@ private fun SoundToggleItem(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
-                text = stringResource(R.string.settings_sounds),
+                text = stringResource(Res.string.settings_sounds),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = if (isEnabled) stringResource(R.string.sounds_on) else stringResource(R.string.sounds_off),
+                text = if (isEnabled) stringResource(Res.string.sounds_on) else stringResource(Res.string.sounds_off),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -284,7 +309,7 @@ private fun SoundToggleItem(
 
 @Composable
 private fun SettingsClickableItem(
-    iconRes: Int,
+    iconRes: org.jetbrains.compose.resources.DrawableResource,
     title: String,
     summary: String,
     onClick: () -> Unit
@@ -297,7 +322,7 @@ private fun SettingsClickableItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = iconRes),
+            painter = painterResource(iconRes),
             contentDescription = null,
             modifier = Modifier.size(28.dp),
             tint = MaterialTheme.colorScheme.primary
@@ -324,7 +349,7 @@ private fun SettingsClickableItem(
 
 @Composable
 private fun SettingsInfoItem(
-    iconRes: Int,
+    iconRes: org.jetbrains.compose.resources.DrawableResource,
     title: String,
     summary: String
 ) {
@@ -335,7 +360,7 @@ private fun SettingsInfoItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = iconRes),
+            painter = painterResource(iconRes),
             contentDescription = null,
             modifier = Modifier.size(28.dp),
             tint = MaterialTheme.colorScheme.primary

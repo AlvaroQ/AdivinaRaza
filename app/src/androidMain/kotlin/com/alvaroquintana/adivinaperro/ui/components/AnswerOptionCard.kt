@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.content_desc_wrong
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
@@ -39,8 +42,7 @@ import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalGameColors
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 
 enum class AnswerState { NEUTRAL, SELECTED, CORRECT, WRONG }
 
@@ -181,7 +183,7 @@ fun AnswerOptionCard(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = stringResource(R.string.content_desc_wrong),
+                    contentDescription = stringResource(Res.string.content_desc_wrong),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(24.dp),

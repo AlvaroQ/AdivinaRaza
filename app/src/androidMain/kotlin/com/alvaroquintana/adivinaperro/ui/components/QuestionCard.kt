@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.content_desc_question_image
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,8 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.ui.composables.BreedImage
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun QuestionCard(
@@ -35,7 +37,7 @@ fun QuestionCard(
         ) {
             BreedImage(
                 imageData = imageUrl,
-                contentDescription = stringResource(R.string.content_desc_question_image, questionNumber, totalQuestions),
+                contentDescription = stringResource(Res.string.content_desc_question_image, questionNumber, totalQuestions),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = imageContentScale
             )

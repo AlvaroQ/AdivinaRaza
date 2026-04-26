@@ -1,5 +1,19 @@
 package com.alvaroquintana.adivinaperro.ui
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.app_name
+import adivinaraza.app.generated.resources.choose_one
+import adivinaraza.app.generated.resources.info_title
+import adivinaraza.app.generated.resources.mode_bigger_smaller
+import adivinaraza.app.generated.resources.mode_classic_title
+import adivinaraza.app.generated.resources.mode_description
+import adivinaraza.app.generated.resources.mode_fci_trivia
+import adivinaraza.app.generated.resources.resultado_screen_title
+import adivinaraza.app.generated.resources.settings
+import adivinaraza.app.generated.resources.settings_version
+import adivinaraza.app.generated.resources.share_message
+import adivinaraza.app.generated.resources.share_message_general
+
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -32,7 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -309,7 +323,7 @@ private fun FciTriviaRoute(navController: NavHostController) {
     var showBanner by remember { mutableStateOf(false) }
 
     val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adUnitId = androidx.compose.ui.res.stringResource(R.string.BONIFICADO_GAME),
         adLocation = Analytics.AD_LOC_GAME
     )
 
@@ -328,12 +342,12 @@ private fun FciTriviaRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.mode_fci_trivia),
+        title = stringResource(Res.string.mode_fci_trivia),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         lives = state.lives,
         showBanner = showBanner,
-        bannerAdUnitId = stringResource(R.string.BANNER_GAME),
+        bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
         FciTriviaScreenContent(viewModel = viewModel, context = context)
@@ -356,7 +370,7 @@ private fun GameRoute(navController: NavHostController) {
     var showBanner by remember { mutableStateOf(false) }
 
     val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adUnitId = androidx.compose.ui.res.stringResource(R.string.BONIFICADO_GAME),
         adLocation = Analytics.AD_LOC_GAME
     )
 
@@ -383,12 +397,12 @@ private fun GameRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.mode_classic_title),
+        title = stringResource(Res.string.mode_classic_title),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         lives = life,
         showBanner = showBanner,
-        bannerAdUnitId = stringResource(R.string.BANNER_GAME),
+        bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
         GameScreen(
@@ -447,7 +461,7 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
     var showBanner by remember { mutableStateOf(false) }
 
     val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adUnitId = androidx.compose.ui.res.stringResource(R.string.BONIFICADO_GAME),
         adLocation = Analytics.AD_LOC_GAME
     )
 
@@ -466,12 +480,12 @@ private fun BiggerSmallerRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.mode_bigger_smaller),
+        title = stringResource(Res.string.mode_bigger_smaller),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         lives = state.lives,
         showBanner = showBanner,
-        bannerAdUnitId = stringResource(R.string.BANNER_GAME),
+        bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
         BiggerSmallerScreenContent(viewModel = viewModel, context = context)
@@ -491,7 +505,7 @@ private fun DescriptionRoute(navController: NavHostController) {
     var showBanner by remember { mutableStateOf(false) }
 
     val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adUnitId = androidx.compose.ui.res.stringResource(R.string.BONIFICADO_GAME),
         adLocation = Analytics.AD_LOC_GAME
     )
 
@@ -510,12 +524,12 @@ private fun DescriptionRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.mode_description),
+        title = stringResource(Res.string.mode_description),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         lives = state.lives,
         showBanner = showBanner,
-        bannerAdUnitId = stringResource(R.string.BANNER_GAME),
+        bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_GAME),
         bannerAdLocation = Analytics.AD_LOC_GAME
     ) {
         DescriptionScreenContent(viewModel = viewModel, context = context)
@@ -530,6 +544,10 @@ private fun DescriptionRoute(navController: NavHostController) {
 private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
     val viewModel: ResultViewModel = koinViewModel()
     val context = LocalContext.current
+    val appName = stringResource(Res.string.app_name)
+    val shareMessageWithPoints = stringResource(Res.string.share_message, gamePoints)
+    val shareMessageGeneral = stringResource(Res.string.share_message_general)
+    val chooseLabel = stringResource(Res.string.choose_one)
 
     LaunchedEffect(Unit) {
         playBarkSound(context)
@@ -545,13 +563,18 @@ private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
                     }
                 }
                 ResultViewModel.Navigation.Rate -> rateApp(context)
-                is ResultViewModel.Navigation.Share -> shareApp(context, navigation.points)
+                is ResultViewModel.Navigation.Share -> shareApp(
+                    context = context,
+                    appName = appName,
+                    shareMessageBody = shareMessageWithPoints,
+                    chooseLabel = chooseLabel
+                )
             }
         }
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.resultado_screen_title),
+        title = stringResource(Res.string.resultado_screen_title),
         onBackClick = {
             navController.navigate(Select) {
                 popUpTo<Select> { inclusive = true }
@@ -582,7 +605,7 @@ private fun InfoRoute(navController: NavHostController) {
     var currentPage by rememberSaveable { mutableIntStateOf(0) }
 
     val rewardedAdState = rememberRewardedAdState(
-        adUnitId = stringResource(R.string.BONIFICADO_GAME),
+        adUnitId = androidx.compose.ui.res.stringResource(R.string.BONIFICADO_GAME),
         adLocation = Analytics.AD_LOC_INFO
     )
 
@@ -600,7 +623,7 @@ private fun InfoRoute(navController: NavHostController) {
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.info_title),
+        title = stringResource(Res.string.info_title),
         onBackClick = {
             if (selectedDog != null) {
                 viewModel.closeDogDetail()
@@ -610,7 +633,7 @@ private fun InfoRoute(navController: NavHostController) {
         },
         showLives = false,
         showBanner = selectedDog != null,
-        bannerAdUnitId = stringResource(R.string.BANNER_INFO),
+        bannerAdUnitId = androidx.compose.ui.res.stringResource(R.string.BANNER_INFO),
         bannerAdLocation = Analytics.AD_LOC_INFO
     ) {
         InfoScreen(
@@ -650,14 +673,17 @@ private fun SettingsRoute(
             }
         )
     }
-    val versionText = "${stringResource(R.string.settings_version)} ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
+    val versionText = "${stringResource(Res.string.settings_version)} ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
+    val settingsAppName = stringResource(Res.string.app_name)
+    val settingsShareMessage = stringResource(Res.string.share_message_general)
+    val settingsChooseLabel = stringResource(Res.string.choose_one)
 
     LaunchedEffect(Unit) {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_SETTINGS)
     }
 
     GameScreenLayout(
-        title = stringResource(R.string.settings),
+        title = stringResource(Res.string.settings),
         onBackClick = { navController.popBackStack() },
         showLives = false,
         showBanner = false
@@ -679,7 +705,14 @@ private fun SettingsRoute(
                 onThemeModeChanged(mode)
             },
             onRateApp = { rateApp(context) },
-            onShare = { shareApp(context, -1) },
+            onShare = {
+                shareApp(
+                    context = context,
+                    appName = settingsAppName,
+                    shareMessageBody = settingsShareMessage,
+                    chooseLabel = settingsChooseLabel
+                )
+            },
             onPrivacyOptions = {
                 consentManager.showPrivacyOptionsForm(context as android.app.Activity) { _ -> }
             },

@@ -1,5 +1,10 @@
 package com.alvaroquintana.adivinaperro.ui.game
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.mode_fci_trivia
+import adivinaraza.app.generated.resources.question_fci_group
+import adivinaraza.app.generated.resources.stage_value
+
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,12 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 import com.alvaroquintana.adivinaperro.ui.components.AnswerOptionCard
 import com.alvaroquintana.adivinaperro.ui.components.AnswerState
@@ -81,7 +85,7 @@ fun FciTriviaScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         GameStatusRow(
-            stageLabel = stringResource(R.string.stage_value, state.stage),
+            stageLabel = stringResource(Res.string.stage_value, state.stage),
             lives = state.lives,
             score = state.score
         )
@@ -89,7 +93,7 @@ fun FciTriviaScreenContent(
         Spacer(modifier = Modifier.height(14.dp))
 
         Text(
-            text = stringResource(R.string.mode_fci_trivia),
+            text = stringResource(Res.string.mode_fci_trivia),
             fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
@@ -113,7 +117,7 @@ fun FciTriviaScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = stringResource(R.string.question_fci_group),
+            text = stringResource(Res.string.question_fci_group),
             fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
