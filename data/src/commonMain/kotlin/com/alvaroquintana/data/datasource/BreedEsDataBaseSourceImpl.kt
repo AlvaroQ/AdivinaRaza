@@ -28,14 +28,18 @@ private const val TOTAL_ITEM_EACH_LOAD = 15
 
 class BreedEsDataBaseSourceImpl(
     private val database: AdivinaRazaDatabase,
-    private val firestore: FirebaseFirestore,
-    private val crashlytics: FirebaseCrashlytics
+    private val firestore: FirebaseFirestore?,
+    private val crashlytics: FirebaseCrashlytics?
 ) : DataBaseSource {
 
     private val dogsQueries get() = database.dogsQueries
     private val syncQueries get() = database.syncMetadataQueries
 
     private fun nowMs(): Long = Clock.System.now().toEpochMilliseconds()
+
+    private fun recordException(t: Throwable) {
+        crashlytics?.let { runCatching { it.recordException(t) } }
+    }
 
     private fun isCacheFresh(): Boolean {
         val metadata = syncQueries.getByCollection(SYNC_COLLECTION_BREEDS_ES)
@@ -44,6 +48,7 @@ class BreedEsDataBaseSourceImpl(
     }
 
     private suspend fun ensureSyncedIfNeeded() {
+        if (firestore == null) return // Firebase not configured (e.g. iOS without GoogleService-Info.plist)
         val cachedCount = dogsQueries.count().executeAsOne()
         val hasMetadata = syncQueries.getByCollection(SYNC_COLLECTION_BREEDS_ES)
             .executeAsOneOrNull() != null
@@ -62,18 +67,20 @@ class BreedEsDataBaseSourceImpl(
         parseBreedId(id) ?: parseBreedId(data["breedId"]) ?: parseBreedId(data["id"])
 
     private suspend fun fetchBreedDocumentById(id: Int): Pair<String, Map<String, Any?>>? {
+        val fs = firestore ?: return null
         return runCatching {
-            val doc = firestore.collection(COLLECTION_BREEDS_ES).document(id.toString()).get()
+            val doc = fs.collection(COLLECTION_BREEDS_ES).document(id.toString()).get()
             val data = doc.dataAsMap()
             if (data.isNotEmpty()) doc.id to data else null
-        }.onFailure { crashlytics.recordException(it) }.getOrNull()
+        }.onFailure { recordException(it) }.getOrNull()
     }
 
     private suspend fun syncAllBreedsFromFirestore(): Int {
+        val fs = firestore ?: return 0
         return try {
             data class MappedBreed(val id: Int, val dog: Dog)
             val mapped = mutableListOf<MappedBreed>()
-            val snapshot = firestore.collection(COLLECTION_BREEDS_ES)
+            val snapshot = fs.collection(COLLECTION_BREEDS_ES)
                 .limit(PAGE_SIZE)
                 .get()
             for (doc in snapshot.documents) {
@@ -94,7 +101,7 @@ class BreedEsDataBaseSourceImpl(
             }
             mapped.size
         } catch (e: Throwable) {
-            crashlytics.recordException(e)
+            recordException(e)
             0
         }
     }
@@ -133,7 +140,7 @@ class BreedEsDataBaseSourceImpl(
         val (docId, data) = fetchBreedDocumentById(id) ?: return Dog()
         val remoteDog = BreedEsMapper.mapToDog(docId, data)
         runCatching { insertDog(resolveBreedId(docId, data) ?: id, remoteDog) }
-            .onFailure { crashlytics.recordException(it) }
+            .onFailure { recordException(it) }
         return remoteDog
     }
 
