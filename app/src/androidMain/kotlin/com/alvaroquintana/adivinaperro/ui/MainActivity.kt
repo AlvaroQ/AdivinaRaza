@@ -91,8 +91,6 @@ import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
 import com.alvaroquintana.adivinaperro.ui.theme.rememberAppWindowSizeClass
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.log
-import com.alvaroquintana.adivinaperro.utils.playFailSound
-import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import com.alvaroquintana.adivinaperro.utils.rateApp
 import com.alvaroquintana.adivinaperro.utils.shareApp
 import com.google.android.gms.ads.MobileAds
@@ -362,6 +360,7 @@ private fun FciTriviaRoute(navController: NavHostController) {
 @Composable
 private fun GameRoute(navController: NavHostController) {
     val viewModel: GameViewModel = koinViewModel()
+    val soundPlayer: com.alvaroquintana.adivinaperro.managers.SoundPlayer = org.koin.compose.koinInject()
     val context = LocalContext.current
 
     var life by rememberSaveable { mutableIntStateOf(3) }
@@ -423,10 +422,10 @@ private fun GameRoute(navController: NavHostController) {
                 }
 
                 if (isCorrect) {
-                    playSuccessSound(context)
+                    soundPlayer.playSuccess()
                     points += 1
                 } else {
-                    playFailSound(context)
+                    soundPlayer.playFail()
                     life--
                 }
 
