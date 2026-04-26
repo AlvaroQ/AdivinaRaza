@@ -54,6 +54,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            // Coil 3 (multiplatform)
+            implementation(libs.coil.compose)
+
             // Lifecycle ViewModel (multiplatform)
             implementation(libs.androidx.lifecycle.viewmodel)
         }

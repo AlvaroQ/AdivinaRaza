@@ -4,7 +4,7 @@ import adivinaraza.app.generated.resources.Res
 import adivinaraza.app.generated.resources.ic_paw
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalConfiguration
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
@@ -50,12 +49,11 @@ fun FloatingPawPrints(
         }
     }
 
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp
-    val screenHeight = configuration.screenHeightDp
     val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
 
-    Box(modifier = modifier.fillMaxSize()) {
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val screenWidth = maxWidth
+        val screenHeight = maxHeight
         pawPrints.forEach { paw ->
             val infiniteTransition = rememberInfiniteTransition(label = "paw_float")
 
@@ -108,8 +106,8 @@ fun FloatingPawPrints(
                 modifier = Modifier
                     .size(paw.size.dp)
                     .offset(
-                        x = (screenWidth * paw.xFraction).dp,
-                        y = (screenHeight * paw.yFraction).dp + offsetY.dp
+                        x = screenWidth * paw.xFraction,
+                        y = screenHeight * paw.yFraction + offsetY.dp
                     )
                     .rotate(rotation)
                     .alpha(alpha)
