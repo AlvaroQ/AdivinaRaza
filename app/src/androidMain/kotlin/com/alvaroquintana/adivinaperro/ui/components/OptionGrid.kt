@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alvaroquintana.adivinaperro.ui.theme.LocalWindowSizeClass
+import com.alvaroquintana.adivinaperro.ui.theme.isCompact
+import com.alvaroquintana.adivinaperro.ui.theme.isExpanded
 
 @Composable
 fun OptionGrid(
@@ -17,7 +18,7 @@ fun OptionGrid(
     optionContent: @Composable (index: Int, text: String, modifier: Modifier) -> Unit
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
-    val useGrid = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact
+    val useGrid = !windowSizeClass.isCompact
 
     if (useGrid && options.size >= 4) {
         val indexed = options.mapIndexed { i, text -> i to text }

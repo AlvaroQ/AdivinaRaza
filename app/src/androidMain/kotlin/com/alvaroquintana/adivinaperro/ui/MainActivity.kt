@@ -74,7 +74,7 @@ import com.alvaroquintana.adivinaperro.ui.select.SelectScreen
 import com.alvaroquintana.adivinaperro.ui.settings.SettingsScreen
 import com.alvaroquintana.adivinaperro.ui.theme.AdivinaPerroTheme
 import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
-import com.alvaroquintana.adivinaperro.ui.theme.rememberWindowSizeClass
+import com.alvaroquintana.adivinaperro.ui.theme.rememberAppWindowSizeClass
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.log
 import com.alvaroquintana.adivinaperro.utils.playBarkSound
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            val windowSizeClass = rememberWindowSizeClass()
+            val windowSizeClass = rememberAppWindowSizeClass()
 
             AdivinaPerroTheme(themeMode = themeMode, windowSizeClass = windowSizeClass) {
                 val navController = rememberNavController()

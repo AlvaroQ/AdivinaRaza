@@ -55,9 +55,10 @@ import com.alvaroquintana.adivinaperro.ui.components.EmptyState
 import com.alvaroquintana.adivinaperro.ui.components.ErrorState
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.composables.BreedImage
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalWindowSizeClass
+import com.alvaroquintana.adivinaperro.ui.theme.isCompact
+import com.alvaroquintana.adivinaperro.ui.theme.isExpanded
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.domain.Dog
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -291,7 +292,7 @@ private fun InfoTag(text: String, modifier: Modifier = Modifier) {
 @Composable
 private fun DogDetailContent(dog: Dog) {
     val windowSizeClass = LocalWindowSizeClass.current
-    val isWide = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact
+    val isWide = !windowSizeClass.isCompact
 
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
