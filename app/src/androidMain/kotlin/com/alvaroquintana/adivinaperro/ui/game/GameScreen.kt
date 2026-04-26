@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.game
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.question_guess_breed
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -37,8 +40,7 @@ import androidx.compose.material3.MaterialTheme
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import kotlinx.coroutines.delay
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 
 @Composable
@@ -130,7 +132,7 @@ fun GameScreen(
 
         // Question text
         Text(
-            text = stringResource(R.string.question_guess_breed),
+            text = stringResource(Res.string.question_guess_breed),
             fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,

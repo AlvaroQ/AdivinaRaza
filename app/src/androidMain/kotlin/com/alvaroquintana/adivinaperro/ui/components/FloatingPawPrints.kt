@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_paw
+
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
-import com.alvaroquintana.adivinaperro.R
 import kotlin.random.Random
 
 private data class PawPrint(
@@ -100,7 +102,7 @@ fun FloatingPawPrints(
             )
 
             Icon(
-                painter = painterResource(R.drawable.ic_paw),
+                painter = painterResource(Res.drawable.ic_paw),
                 contentDescription = null,
                 tint = color,
                 modifier = Modifier

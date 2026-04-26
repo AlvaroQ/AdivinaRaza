@@ -12,30 +12,28 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.alvaroquintana.adivinaperro.BuildConfig
-import com.alvaroquintana.adivinaperro.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.rewarded.RewardedAd
 
 
-fun shareApp(context: Context, points: Int) {
+fun shareApp(
+    context: Context,
+    appName: String,
+    shareMessageBody: String,
+    chooseLabel: String
+) {
     try {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
-        var shareMessage = if(points != -1) {
-            context.resources.getString(R.string.share_message, points)
-        } else  {
-            context.resources.getString(R.string.share_message_general)
-        }
-        shareMessage =
-            """
-                ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, appName)
+        val shareMessage = """
+                ${shareMessageBody}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
                 """.trimIndent()
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-        context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.choose_one)))
+        context.startActivity(Intent.createChooser(shareIntent, chooseLabel))
     } catch (e: Exception) {
-        log(context.getString(R.string.share), e.toString())
+        log("Share", e.toString())
     }
 }
 fun rateApp(context: Context) {

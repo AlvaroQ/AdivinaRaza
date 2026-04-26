@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.points_short
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,8 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.GameRed
 
@@ -53,7 +55,7 @@ fun GameStatusRow(
         }
 
         Text(
-            text = stringResource(R.string.points_short, score),
+            text = stringResource(Res.string.points_short, score),
             fontFamily = dynaPuffCondensedFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,

@@ -1,5 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.components
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_paw
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.StartOffset
@@ -17,9 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
 
 @Composable
@@ -54,7 +56,7 @@ fun DogLoadingIndicator(
             )
 
             Icon(
-                painter = painterResource(R.drawable.ic_paw),
+                painter = painterResource(Res.drawable.ic_paw),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier

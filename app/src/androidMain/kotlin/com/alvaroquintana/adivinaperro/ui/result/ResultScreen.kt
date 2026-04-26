@@ -1,5 +1,13 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_share
+import adivinaraza.app.generated.resources.play_again
+import adivinaraza.app.generated.resources.rate_on_play_store
+import adivinaraza.app.generated.resources.result_points
+import adivinaraza.app.generated.resources.result_record
+import adivinaraza.app.generated.resources.share
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,13 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.components.ConfettiOverlay
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
@@ -139,7 +146,7 @@ private fun StatsRow(
             modifier = Modifier.weight(1f),
             icon = { Icon(Icons.Rounded.Star, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) },
             value = "+$gamePoints",
-            label = stringResource(R.string.result_points)
+            label = stringResource(Res.string.result_points)
         )
 
         if (personalRecord.isNotEmpty()) {
@@ -147,7 +154,7 @@ private fun StatsRow(
                 modifier = Modifier.weight(1f),
                 icon = { Icon(Icons.Rounded.Star, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) },
                 value = personalRecord,
-                label = stringResource(R.string.result_record)
+                label = stringResource(Res.string.result_record)
             )
         }
     }
@@ -176,7 +183,7 @@ private fun PlayAgainButton(onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(R.string.play_again),
+                text = stringResource(Res.string.play_again),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
@@ -203,14 +210,14 @@ private fun ShareButton(onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_share),
+                painter = painterResource(Res.drawable.ic_share),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(R.string.share),
+                text = stringResource(Res.string.share),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
@@ -244,7 +251,7 @@ private fun RateButton(onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(R.string.rate_on_play_store),
+                text = stringResource(Res.string.rate_on_play_store),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,

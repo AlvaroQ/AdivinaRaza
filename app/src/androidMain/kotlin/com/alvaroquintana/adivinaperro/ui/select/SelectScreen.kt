@@ -1,5 +1,26 @@
 package com.alvaroquintana.adivinaperro.ui.select
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.ic_paw
+import adivinaraza.app.generated.resources.landing_dogs_group
+import adivinaraza.app.generated.resources.app_name
+import adivinaraza.app.generated.resources.cancel
+import adivinaraza.app.generated.resources.content_desc_dog
+import adivinaraza.app.generated.resources.learn
+import adivinaraza.app.generated.resources.mode_bigger_smaller
+import adivinaraza.app.generated.resources.mode_bigger_smaller_subtitle
+import adivinaraza.app.generated.resources.mode_classic_subtitle
+import adivinaraza.app.generated.resources.mode_classic_title
+import adivinaraza.app.generated.resources.mode_description
+import adivinaraza.app.generated.resources.mode_description_subtitle
+import adivinaraza.app.generated.resources.mode_fci_trivia
+import adivinaraza.app.generated.resources.mode_fci_trivia_subtitle
+import adivinaraza.app.generated.resources.select_mode_description
+import adivinaraza.app.generated.resources.select_mode_title
+import adivinaraza.app.generated.resources.select_subtitle
+import adivinaraza.app.generated.resources.settings
+import adivinaraza.app.generated.resources.start_game
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -36,14 +57,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.adivinaperro.ui.theme.getHeroGradient
@@ -67,23 +87,23 @@ fun SelectScreen(
 
     val modeItems = listOf(
         ModeItem(
-            stringResource(R.string.mode_classic_title),
-            stringResource(R.string.mode_classic_subtitle),
+            stringResource(Res.string.mode_classic_title),
+            stringResource(Res.string.mode_classic_subtitle),
             onNavigateToGame
         ),
         ModeItem(
-            stringResource(R.string.mode_bigger_smaller),
-            stringResource(R.string.mode_bigger_smaller_subtitle),
+            stringResource(Res.string.mode_bigger_smaller),
+            stringResource(Res.string.mode_bigger_smaller_subtitle),
             onNavigateToBiggerSmaller
         ),
         ModeItem(
-            stringResource(R.string.mode_description),
-            stringResource(R.string.mode_description_subtitle),
+            stringResource(Res.string.mode_description),
+            stringResource(Res.string.mode_description_subtitle),
             onNavigateToDescription
         ),
         ModeItem(
-            stringResource(R.string.mode_fci_trivia),
-            stringResource(R.string.mode_fci_trivia_subtitle),
+            stringResource(Res.string.mode_fci_trivia),
+            stringResource(Res.string.mode_fci_trivia_subtitle),
             onNavigateToFciTrivia
         )
     )
@@ -106,13 +126,13 @@ fun SelectScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_paw),
+                painter = painterResource(Res.drawable.ic_paw),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(Res.string.app_name),
                 fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -124,8 +144,8 @@ fun SelectScreen(
 
         // Dog image
         Image(
-            painter = painterResource(R.drawable.landing_dogs_group),
-            contentDescription = stringResource(R.string.content_desc_dog),
+            painter = painterResource(Res.drawable.landing_dogs_group),
+            contentDescription = stringResource(Res.string.content_desc_dog),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp)
@@ -137,7 +157,7 @@ fun SelectScreen(
 
         // Subtitle
         Text(
-            text = stringResource(R.string.select_subtitle),
+            text = stringResource(Res.string.select_subtitle),
             fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
@@ -170,7 +190,7 @@ fun SelectScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.start_game),
+                        text = stringResource(Res.string.start_game),
                         fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -195,7 +215,7 @@ fun SelectScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.learn),
+                        text = stringResource(Res.string.learn),
                         fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -220,7 +240,7 @@ fun SelectScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.settings),
+                        text = stringResource(Res.string.settings),
                         fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -284,13 +304,13 @@ private fun GameModeDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_paw),
+                        painter = painterResource(Res.drawable.ic_paw),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = stringResource(R.string.select_mode_title),
+                        text = stringResource(Res.string.select_mode_title),
                         fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -299,7 +319,7 @@ private fun GameModeDialog(
                 }
 
                 Text(
-                    text = stringResource(R.string.select_mode_description),
+                    text = stringResource(Res.string.select_mode_description),
                     fontFamily = dynaPuffFamily(),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -337,7 +357,7 @@ private fun GameModeDialog(
                 }
 
                 Text(
-                    text = stringResource(R.string.cancel),
+                    text = stringResource(Res.string.cancel),
                     modifier = Modifier
                         .align(Alignment.End)
                         .clickable(onClick = onDismiss)

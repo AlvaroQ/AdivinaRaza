@@ -1,5 +1,13 @@
 package com.alvaroquintana.adivinaperro.screenshot
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.banner_happy_dogs
+import adivinaraza.app.generated.resources.landing_dogs_group
+import adivinaraza.app.generated.resources.mascot_cooper
+import adivinaraza.app.generated.resources.mascot_happy
+import adivinaraza.app.generated.resources.play_again
+import adivinaraza.app.generated.resources.result
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,8 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onFirst
@@ -53,7 +61,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.components.AnswerOptionCard
 import com.alvaroquintana.adivinaperro.ui.components.AnswerState
 import com.alvaroquintana.adivinaperro.ui.components.ConfettiOverlay
@@ -194,7 +201,7 @@ class ScreenshotCaptureTest {
                     Spacer(modifier = Modifier.height(16.dp))
                     // Question image
                     Image(
-                        painter = painterResource(R.drawable.landing_dogs_group),
+                        painter = painterResource(Res.drawable.landing_dogs_group),
                         contentDescription = "Question dog",
                         modifier = Modifier
                             .fillMaxWidth()
@@ -229,7 +236,7 @@ class ScreenshotCaptureTest {
                         .padding(12.dp).verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(painter = painterResource(R.drawable.mascot_cooper),
+                    Image(painter = painterResource(Res.drawable.mascot_cooper),
                         contentDescription = "Cooper mascot",
                         modifier = Modifier.size(100.dp).clip(MaterialTheme.shapes.large),
                         contentScale = ContentScale.Crop)
@@ -280,12 +287,12 @@ class ScreenshotCaptureTest {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Spacer(modifier = Modifier.height(24.dp))
-                        Image(painter = painterResource(R.drawable.mascot_happy),
+                        Image(painter = painterResource(Res.drawable.mascot_happy),
                             contentDescription = "Happy dog",
                             modifier = Modifier.size(160.dp).clip(CircleShape),
                             contentScale = ContentScale.Crop)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = stringResource(R.string.result, 18), fontFamily = dynaPuffFamily(),
+                        Text(text = stringResource(Res.string.result, 18), fontFamily = dynaPuffFamily(),
                             fontWeight = FontWeight.Bold, fontSize = 28.sp,
                             color = MaterialTheme.colorScheme.onBackground, textAlign = TextAlign.Center)
                         Spacer(modifier = Modifier.height(8.dp))
@@ -309,7 +316,7 @@ class ScreenshotCaptureTest {
                                 Icon(Icons.Rounded.PlayArrow, null, tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(20.dp))
                                 Spacer(modifier = Modifier.width(8.dp))
-                                        Text(stringResource(R.string.play_again), fontFamily = dynaPuffFamily(),
+                                        Text(stringResource(Res.string.play_again), fontFamily = dynaPuffFamily(),
                                     fontWeight = FontWeight.Bold, fontSize = 16.sp,
                                     color = MaterialTheme.colorScheme.onPrimary)
                             }
@@ -323,7 +330,7 @@ class ScreenshotCaptureTest {
                                     shape = RoundedCornerShape(16.dp),
                                     color = MaterialTheme.colorScheme.surface, onClick = {}) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                        Image(painter = painterResource(R.drawable.landing_dogs_group),
+                                        Image(painter = painterResource(Res.drawable.landing_dogs_group),
                                             contentDescription = null,
                                             modifier = Modifier.fillMaxWidth().height(70.dp),
                                             contentScale = ContentScale.Crop)
@@ -358,7 +365,7 @@ class ScreenshotCaptureTest {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         item(span = { GridItemSpan(2) }) {
-                            Image(painter = painterResource(R.drawable.banner_happy_dogs),
+                            Image(painter = painterResource(Res.drawable.banner_happy_dogs),
                                 contentDescription = "Happy Dogs",
                                 modifier = Modifier.fillMaxWidth().height(140.dp)
                                     .clip(RoundedCornerShape(16.dp)),
@@ -368,7 +375,7 @@ class ScreenshotCaptureTest {
                             Surface(shape = RoundedCornerShape(16.dp),
                                 color = MaterialTheme.colorScheme.surface, shadowElevation = 2.dp) {
                                 Box(modifier = Modifier.fillMaxWidth()) {
-                                    Image(painter = painterResource(R.drawable.landing_dogs_group),
+                                    Image(painter = painterResource(Res.drawable.landing_dogs_group),
                                         contentDescription = breedNames[index],
                                         modifier = Modifier.fillMaxWidth().aspectRatio(0.85f)
                                             .clip(RoundedCornerShape(16.dp)),

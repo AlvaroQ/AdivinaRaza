@@ -1,5 +1,11 @@
 package com.alvaroquintana.adivinaperro.ui.game
 
+import adivinaraza.app.generated.resources.Res
+import adivinaraza.app.generated.resources.choose_one
+import adivinaraza.app.generated.resources.question_height_taller
+import adivinaraza.app.generated.resources.question_weight_more
+import adivinaraza.app.generated.resources.stage_value
+
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +40,7 @@ import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.adivinaperro.utils.playFailSound
 import com.alvaroquintana.adivinaperro.utils.playSuccessSound
 import kotlinx.coroutines.delay
-import androidx.compose.ui.res.stringResource
-import com.alvaroquintana.adivinaperro.R
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BiggerSmallerScreenContent(
@@ -74,7 +79,7 @@ fun BiggerSmallerScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         GameStatusRow(
-            stageLabel = stringResource(R.string.stage_value, state.stage),
+            stageLabel = stringResource(Res.string.stage_value, state.stage),
             lives = state.lives,
             score = state.score
         )
@@ -82,8 +87,8 @@ fun BiggerSmallerScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         val questionText = when (state.comparisonType) {
-            BiggerSmallerViewModel.ComparisonType.WEIGHT -> stringResource(R.string.question_weight_more)
-            BiggerSmallerViewModel.ComparisonType.HEIGHT -> stringResource(R.string.question_height_taller)
+            BiggerSmallerViewModel.ComparisonType.WEIGHT -> stringResource(Res.string.question_weight_more)
+            BiggerSmallerViewModel.ComparisonType.HEIGHT -> stringResource(Res.string.question_height_taller)
         }
 
         Text(
@@ -97,7 +102,7 @@ fun BiggerSmallerScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = stringResource(R.string.choose_one),
+            text = stringResource(Res.string.choose_one),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
