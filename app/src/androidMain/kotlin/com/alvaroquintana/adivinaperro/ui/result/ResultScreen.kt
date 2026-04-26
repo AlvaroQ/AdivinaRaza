@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alvaroquintana.adivinaperro.R
 import com.alvaroquintana.adivinaperro.ui.components.ConfettiOverlay
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffSemiCondensedFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalWindowSizeClass
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
@@ -176,7 +176,7 @@ private fun PlayAgainButton(onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.play_again),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onPrimary
@@ -210,7 +210,7 @@ private fun ShareButton(onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.share),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 color = MaterialTheme.colorScheme.primary
@@ -244,7 +244,7 @@ private fun RateButton(onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.rate_on_play_store),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 color = MaterialTheme.colorScheme.primary
@@ -268,14 +268,14 @@ private fun StatItem(
         icon()
         Text(
             text = value,
-            fontFamily = DynaPuffSemiCondensedFamily,
+            fontFamily = dynaPuffSemiCondensedFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = label,
-            fontFamily = DynaPuffSemiCondensedFamily,
+            fontFamily = dynaPuffSemiCondensedFamily(),
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant

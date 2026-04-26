@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alvaroquintana.adivinaperro.ui.animation.AnimationSpecs
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffSemiCondensedFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalGameColors
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import androidx.compose.ui.res.stringResource
@@ -142,7 +142,7 @@ fun AnswerOptionCard(
         ) {
             Text(
                 text = text,
-                fontFamily = DynaPuffSemiCondensedFamily,
+                fontFamily = dynaPuffSemiCondensedFamily(),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 color = animatedContentColor,

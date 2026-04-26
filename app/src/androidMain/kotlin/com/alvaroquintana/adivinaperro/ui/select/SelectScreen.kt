@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.adivinaperro.ui.theme.getHeroGradient
 
@@ -113,7 +113,7 @@ fun SelectScreen(
             )
             Text(
                 text = stringResource(R.string.app_name),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -138,7 +138,7 @@ fun SelectScreen(
         // Subtitle
         Text(
             text = stringResource(R.string.select_subtitle),
-            fontFamily = DynaPuffFamily,
+            fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground,
@@ -171,7 +171,7 @@ fun SelectScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.start_game),
-                        fontFamily = DynaPuffFamily,
+                        fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onPrimary
@@ -196,7 +196,7 @@ fun SelectScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.learn),
-                        fontFamily = DynaPuffFamily,
+                        fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.primary
@@ -221,7 +221,7 @@ fun SelectScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.settings),
-                        fontFamily = DynaPuffFamily,
+                        fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.primary
@@ -291,7 +291,7 @@ private fun GameModeDialog(
                     )
                     Text(
                         text = stringResource(R.string.select_mode_title),
-                        fontFamily = DynaPuffFamily,
+                        fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onSurface
@@ -300,7 +300,7 @@ private fun GameModeDialog(
 
                 Text(
                     text = stringResource(R.string.select_mode_description),
-                    fontFamily = DynaPuffFamily,
+                    fontFamily = dynaPuffFamily(),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -320,7 +320,7 @@ private fun GameModeDialog(
                         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
                             Text(
                                 text = item.title,
-                                fontFamily = DynaPuffFamily,
+                                fontFamily = dynaPuffFamily(),
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontSize = 16.sp
@@ -328,7 +328,7 @@ private fun GameModeDialog(
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = item.subtitle,
-                                fontFamily = DynaPuffFamily,
+                                fontFamily = dynaPuffFamily(),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 12.sp
                             )
@@ -342,7 +342,7 @@ private fun GameModeDialog(
                         .align(Alignment.End)
                         .clickable(onClick = onDismiss)
                         .padding(top = 4.dp, end = 4.dp),
-                    fontFamily = DynaPuffFamily,
+                    fontFamily = dynaPuffFamily(),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )

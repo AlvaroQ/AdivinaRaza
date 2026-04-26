@@ -34,7 +34,7 @@ import com.alvaroquintana.adivinaperro.ui.components.GameStatusRow
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
 import com.alvaroquintana.adivinaperro.ui.components.QuestionCard
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import com.alvaroquintana.adivinaperro.utils.playFailSound
@@ -90,7 +90,7 @@ fun FciTriviaScreenContent(
 
         Text(
             text = stringResource(R.string.mode_fci_trivia),
-            fontFamily = DynaPuffFamily,
+            fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = MaterialTheme.colorScheme.onBackground,
@@ -114,7 +114,7 @@ fun FciTriviaScreenContent(
 
         Text(
             text = stringResource(R.string.question_fci_group),
-            fontFamily = DynaPuffFamily,
+            fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,

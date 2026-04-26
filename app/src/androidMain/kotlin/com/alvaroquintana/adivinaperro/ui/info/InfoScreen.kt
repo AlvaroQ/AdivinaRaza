@@ -56,7 +56,7 @@ import com.alvaroquintana.adivinaperro.ui.components.ErrorState
 import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.composables.BreedImage
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalWindowSizeClass
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.domain.Dog
@@ -205,7 +205,7 @@ private fun InfoHeaderCard() {
         Column(modifier = Modifier.padding(14.dp)) {
             Text(
                 text = stringResource(R.string.info_header_title),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -247,7 +247,7 @@ private fun DogInfoItem(dog: Dog, onClick: () -> Unit) {
             Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)) {
                 Text(
                     text = dog.name,
-                    fontFamily = DynaPuffFamily,
+                    fontFamily = dynaPuffFamily(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -280,7 +280,7 @@ private fun InfoTag(text: String, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = text,
-            fontFamily = DynaPuffFamily,
+            fontFamily = dynaPuffFamily(),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
@@ -329,7 +329,7 @@ private fun DogDetailContent(dog: Dog) {
                         ) {
                             Text(
                                 text = dog.name,
-                                fontFamily = DynaPuffFamily,
+                                fontFamily = dynaPuffFamily(),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 24.sp,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -346,7 +346,7 @@ private fun DogDetailContent(dog: Dog) {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = dog.temperament,
-                                    fontFamily = DynaPuffFamily,
+                                    fontFamily = dynaPuffFamily(),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -372,7 +372,7 @@ private fun DogDetailContent(dog: Dog) {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Text(
                                 text = dog.name,
-                                fontFamily = DynaPuffFamily,
+                                fontFamily = dynaPuffFamily(),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 24.sp,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -389,7 +389,7 @@ private fun DogDetailContent(dog: Dog) {
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = dog.temperament,
-                                    fontFamily = DynaPuffFamily,
+                                    fontFamily = dynaPuffFamily(),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

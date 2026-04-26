@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.Image
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.getHeroGradient
 import kotlinx.coroutines.delay
 
@@ -97,7 +97,7 @@ fun SplashScreen(
             // Title
             Text(
                 text = stringResource(R.string.app_name),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -120,7 +120,7 @@ fun SplashScreen(
             // Loading text
             Text(
                 text = stringResource(R.string.loading),
-                fontFamily = DynaPuffFamily,
+                fontFamily = dynaPuffFamily(),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

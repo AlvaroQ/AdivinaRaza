@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffCondensedFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.GameRed
 
 @Composable
@@ -35,7 +35,7 @@ fun GameStatusRow(
     ) {
         Text(
             text = stageLabel,
-            fontFamily = DynaPuffCondensedFamily,
+            fontFamily = dynaPuffCondensedFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground
@@ -54,7 +54,7 @@ fun GameStatusRow(
 
         Text(
             text = stringResource(R.string.points_short, score),
-            fontFamily = DynaPuffCondensedFamily,
+            fontFamily = dynaPuffCondensedFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.primary

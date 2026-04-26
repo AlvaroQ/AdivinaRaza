@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.stringResource
 import com.alvaroquintana.adivinaperro.R
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffSemiCondensedFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 
 @Composable
 fun GameAppBar(
@@ -62,7 +62,7 @@ fun GameAppBar(
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontFamily = DynaPuffSemiCondensedFamily,
+                fontFamily = dynaPuffSemiCondensedFamily(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,

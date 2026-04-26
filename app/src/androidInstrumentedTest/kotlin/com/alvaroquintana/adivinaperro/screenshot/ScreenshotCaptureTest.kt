@@ -61,7 +61,7 @@ import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
 import com.alvaroquintana.adivinaperro.ui.select.SelectScreen
 import com.alvaroquintana.adivinaperro.ui.settings.SettingsScreen
 import com.alvaroquintana.adivinaperro.ui.splash.SplashScreen
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.GameRed
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.adivinaperro.ui.theme.ThemeMode
@@ -178,7 +178,7 @@ class ScreenshotCaptureTest {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("3/450", fontFamily = DynaPuffFamily, fontWeight = FontWeight.Bold,
+                        Text("3/450", fontFamily = dynaPuffFamily(), fontWeight = FontWeight.Bold,
                             fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             repeat(3) { i ->
@@ -188,7 +188,7 @@ class ScreenshotCaptureTest {
                                 )
                             }
                         }
-                        Text("15 pts", fontFamily = DynaPuffFamily, fontWeight = FontWeight.Bold,
+                        Text("15 pts", fontFamily = dynaPuffFamily(), fontWeight = FontWeight.Bold,
                             fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -203,7 +203,7 @@ class ScreenshotCaptureTest {
                         contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("¿Qué raza es este perro?", fontFamily = DynaPuffFamily,
+                    Text("¿Qué raza es este perro?", fontFamily = dynaPuffFamily(),
                         fontWeight = FontWeight.Bold, fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onBackground)
                     Spacer(modifier = Modifier.height(16.dp))
@@ -285,11 +285,11 @@ class ScreenshotCaptureTest {
                             modifier = Modifier.size(160.dp).clip(CircleShape),
                             contentScale = ContentScale.Crop)
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = stringResource(R.string.result, 18), fontFamily = DynaPuffFamily,
+                        Text(text = stringResource(R.string.result, 18), fontFamily = dynaPuffFamily(),
                             fontWeight = FontWeight.Bold, fontSize = 28.sp,
                             color = MaterialTheme.colorScheme.onBackground, textAlign = TextAlign.Center)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("¡Gran resultado!", fontFamily = DynaPuffFamily,
+                        Text("¡Gran resultado!", fontFamily = dynaPuffFamily(),
                             fontWeight = FontWeight.Normal, fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(24.dp))
@@ -309,7 +309,7 @@ class ScreenshotCaptureTest {
                                 Icon(Icons.Rounded.PlayArrow, null, tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(20.dp))
                                 Spacer(modifier = Modifier.width(8.dp))
-                                        Text(stringResource(R.string.play_again), fontFamily = DynaPuffFamily,
+                                        Text(stringResource(R.string.play_again), fontFamily = dynaPuffFamily(),
                                     fontWeight = FontWeight.Bold, fontSize = 16.sp,
                                     color = MaterialTheme.colorScheme.onPrimary)
                             }
@@ -328,7 +328,7 @@ class ScreenshotCaptureTest {
                                             modifier = Modifier.fillMaxWidth().height(70.dp),
                                             contentScale = ContentScale.Crop)
                                         Text(if (index == 0) "AdivinaGato" else "AdivinaBandera",
-                                                            fontFamily = DynaPuffFamily, fontSize = 12.sp,
+                                                            fontFamily = dynaPuffFamily(), fontSize = 12.sp,
                                             color = MaterialTheme.colorScheme.onBackground,
                                             textAlign = TextAlign.Center, maxLines = 2,
                                             modifier = Modifier.fillMaxWidth()
@@ -376,7 +376,7 @@ class ScreenshotCaptureTest {
                                     Surface(modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
                                         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
                                         shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)) {
-                                                            Text(breedNames[index], fontFamily = DynaPuffFamily,
+                                                            Text(breedNames[index], fontFamily = dynaPuffFamily(),
                                             fontWeight = FontWeight.Bold, fontSize = 13.sp,
                                             color = MaterialTheme.colorScheme.onSurface,
                                             textAlign = TextAlign.Center, maxLines = 2,
@@ -402,9 +402,9 @@ class ScreenshotCaptureTest {
             verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Icon(Icons.Rounded.Star, null, tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp))
-                Text(value, fontFamily = DynaPuffFamily, fontWeight = FontWeight.Bold,
+                Text(value, fontFamily = dynaPuffFamily(), fontWeight = FontWeight.Bold,
                 fontSize = 18.sp, color = MaterialTheme.colorScheme.onBackground)
-                Text(label, fontFamily = DynaPuffFamily, fontWeight = FontWeight.Normal,
+                Text(label, fontFamily = dynaPuffFamily(), fontWeight = FontWeight.Normal,
                 fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }

@@ -34,7 +34,7 @@ import com.alvaroquintana.adivinaperro.ui.components.LoadingState
 import com.alvaroquintana.adivinaperro.ui.components.OptionGrid
 import com.alvaroquintana.adivinaperro.ui.components.QuestionCard
 import androidx.compose.material3.MaterialTheme
-import com.alvaroquintana.adivinaperro.ui.theme.DynaPuffFamily
+import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.utils.Constants.TOTAL_BREED
 import kotlinx.coroutines.delay
 import androidx.compose.ui.res.stringResource
@@ -131,7 +131,7 @@ fun GameScreen(
         // Question text
         Text(
             text = stringResource(R.string.question_guess_breed),
-            fontFamily = DynaPuffFamily,
+            fontFamily = dynaPuffFamily(),
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = MaterialTheme.colorScheme.onBackground
