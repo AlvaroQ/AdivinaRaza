@@ -48,10 +48,14 @@ class BreedEsDataBaseSourceImpl(
     }
 
     private suspend fun ensureSyncedIfNeeded() {
-        if (firestore == null) return // Firebase not configured (e.g. iOS without GoogleService-Info.plist)
+        if (firestore == null) {
+            println("[BreedEsDataSource] firestore is null — skipping sync")
+            return
+        }
         val cachedCount = dogsQueries.count().executeAsOne()
         val hasMetadata = syncQueries.getByCollection(SYNC_COLLECTION_BREEDS_ES)
             .executeAsOneOrNull() != null
+        println("[BreedEsDataSource] ensureSyncedIfNeeded: cached=$cachedCount, hasMetadata=$hasMetadata, fresh=${isCacheFresh()}")
         if (!hasMetadata || cachedCount == 0L || !isCacheFresh()) {
             syncAllBreedsFromFirestore()
         }
@@ -78,17 +82,24 @@ class BreedEsDataBaseSourceImpl(
     private suspend fun syncAllBreedsFromFirestore(): Int {
         val fs = firestore ?: return 0
         return try {
+            println("[BreedEsDataSource] syncAllBreedsFromFirestore: fetching $COLLECTION_BREEDS_ES (limit $PAGE_SIZE)")
             data class MappedBreed(val id: Int, val dog: Dog)
             val mapped = mutableListOf<MappedBreed>()
             val snapshot = fs.collection(COLLECTION_BREEDS_ES)
                 .limit(PAGE_SIZE)
                 .get()
+            println("[BreedEsDataSource] firestore returned ${snapshot.documents.size} documents")
+            var emptyDataCount = 0
             for (doc in snapshot.documents) {
                 val data = doc.dataAsMap()
-                if (data.isEmpty()) continue
+                if (data.isEmpty()) {
+                    emptyDataCount++
+                    continue
+                }
                 val parsedId = resolveBreedId(doc.id, data) ?: continue
                 mapped.add(MappedBreed(parsedId, BreedEsMapper.mapToDog(doc.id, data)))
             }
+            println("[BreedEsDataSource] mapped=${mapped.size}, emptyData=$emptyDataCount")
             if (mapped.isNotEmpty()) {
                 database.transaction {
                     dogsQueries.deleteAll()
@@ -98,9 +109,14 @@ class BreedEsDataBaseSourceImpl(
                         lastSyncTimestamp = nowMs()
                     )
                 }
+                println("[BreedEsDataSource] persisted ${mapped.size} breeds to local DB")
+            } else {
+                println("[BreedEsDataSource] WARNING: nothing to persist — check Firestore rules / collection name")
             }
             mapped.size
         } catch (e: Throwable) {
+            println("[BreedEsDataSource] ERROR syncing: ${e::class.simpleName}: ${e.message}")
+            e.printStackTrace()
             recordException(e)
             0
         }
