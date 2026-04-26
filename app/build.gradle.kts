@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -44,6 +45,12 @@ kotlin {
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+
+            // Compose Multiplatform
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
         }
         getByName("androidMain").dependencies {
             implementation(libs.kotlinx.coroutines.android)

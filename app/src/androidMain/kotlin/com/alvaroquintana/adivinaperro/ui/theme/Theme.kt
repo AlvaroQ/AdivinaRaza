@@ -9,14 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-
-enum class ThemeMode { SYSTEM, LIGHT, DARK }
-
-val LocalThemeMode = staticCompositionLocalOf { ThemeMode.SYSTEM }
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
