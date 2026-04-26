@@ -5,27 +5,51 @@ import android.os.Bundle
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.google.firebase.analytics.FirebaseAnalytics
 
-object Analytics {
-    lateinit var mFirebase: FirebaseAnalytics
+actual object Analytics {
+    private lateinit var mFirebase: FirebaseAnalytics
 
     fun initialize(ctx: Context) {
         mFirebase = FirebaseAnalytics.getInstance(ctx.applicationContext)
     }
 
-    // region Screen Events
+    actual val SCREEN_GAME: String = "screen_game"
+    actual val SCREEN_RESULT: String = "screen_result"
+    actual val SCREEN_SELECT_GAME: String = "screen_select_game"
+    actual val SCREEN_DESCRIPTION_GAME: String = "screen_description_game"
+    actual val SCREEN_BIGGER_SMALLER: String = "screen_bigger_smaller"
+    actual val SCREEN_FCI_TRIVIA: String = "screen_fci_trivia"
+    actual val SCREEN_CARE_FOOD: String = "screen_care_food"
+    actual val SCREEN_INFO: String = "screen_info"
+    actual val SCREEN_SETTINGS: String = "screen_settings"
 
-    fun analyticsScreenViewed(screenTitle: String) {
+    actual val MODE_CLASSIC: String = "classic"
+    actual val MODE_BIGGER_SMALLER: String = "bigger_smaller"
+    actual val MODE_DESCRIPTION: String = "description"
+    actual val MODE_FCI_TRIVIA: String = "fci_trivia"
+    actual val MODE_CARE_FOOD: String = "care_food"
+
+    actual val AD_TYPE_BANNER: String = "banner"
+    actual val AD_TYPE_REWARDED: String = "rewarded"
+    actual val AD_TYPE_INTERSTITIAL: String = "interstitial"
+
+    actual val AD_LOC_GAME: String = "game"
+    actual val AD_LOC_GAME_OVER: String = "game_over"
+    actual val AD_LOC_INFO: String = "info"
+
+    actual val BTN_PLAY_AGAIN: String = "btn_play_again"
+    actual val BTN_RATE: String = "btn_rate"
+    actual val BTN_SHARE: String = "btn_share"
+    actual val BTN_LEARN: String = "btn_learn"
+    actual val BTN_SETTINGS: String = "btn_settings"
+
+    actual fun analyticsScreenViewed(screenTitle: String) {
         logEvent(Event("screen_viewed")
             .with("screen_title", screenTitle)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    // endregion
-
-    // region Game Events
-
-    fun analyticsGameFinished(points: String, gameMode: String) {
+    actual fun analyticsGameFinished(points: String, gameMode: String) {
         logEvent(Event("game_finished")
             .with("points", points)
             .with("game_mode", gameMode)
@@ -33,14 +57,14 @@ object Analytics {
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    fun analyticsGameModeSelected(gameMode: String) {
+    actual fun analyticsGameModeSelected(gameMode: String) {
         logEvent(Event("game_mode_selected")
             .with("game_mode", gameMode)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    fun analyticsGameAnswer(isCorrect: Boolean, stage: Int, gameMode: String) {
+    actual fun analyticsGameAnswer(isCorrect: Boolean, stage: Int, gameMode: String) {
         logEvent(Event("game_answer")
             .with("is_correct", isCorrect.toString())
             .with("stage", stage.toString())
@@ -49,11 +73,7 @@ object Analytics {
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    // endregion
-
-    // region Ad Events
-
-    fun analyticsAdImpression(adType: String, adLocation: String) {
+    actual fun analyticsAdImpression(adType: String, adLocation: String) {
         logEvent(Event("ad_impression")
             .with("ad_type", adType)
             .with("ad_location", adLocation)
@@ -61,14 +81,14 @@ object Analytics {
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    fun analyticsAdRewardEarned(adLocation: String) {
+    actual fun analyticsAdRewardEarned(adLocation: String) {
         logEvent(Event("ad_reward_earned")
             .with("ad_location", adLocation)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    fun analyticsAdFailedToLoad(adType: String, adLocation: String, errorMessage: String) {
+    actual fun analyticsAdFailedToLoad(adType: String, adLocation: String, errorMessage: String) {
         logEvent(Event("ad_failed_to_load")
             .with("ad_type", adType)
             .with("ad_location", adLocation)
@@ -77,37 +97,27 @@ object Analytics {
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    // endregion
-
-    // region Click Events
-
-    fun analyticsClicked(btnDescription: String) {
+    actual fun analyticsClicked(btnDescription: String) {
         logEvent(Event("clicked")
             .with("component", btnDescription)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    fun analyticsAppRecommendedOpen(appName: String) {
+    actual fun analyticsAppRecommendedOpen(appName: String) {
         logEvent(Event("app_recommended_open")
             .with("recommended_app", appName)
             .with("app_version", BuildConfig.VERSION_NAME)
             .with("app_name", BuildConfig.APPLICATION_ID))
     }
 
-    // endregion
-
-    // region User Properties
-
-    fun setUserPropertyGameMode(gameMode: String) {
+    actual fun setUserPropertyGameMode(gameMode: String) {
         mFirebase.setUserProperty("favorite_game_mode", gameMode)
     }
 
-    fun setUserPropertyTotalGames(totalGames: Int) {
+    actual fun setUserPropertyTotalGames(totalGames: Int) {
         mFirebase.setUserProperty("total_games_played", totalGames.toString())
     }
-
-    // endregion
 
     private fun logEvent(event: Event) {
         mFirebase.logEvent(event.eventName, event.bundle)
@@ -120,39 +130,4 @@ object Analytics {
             return this
         }
     }
-
-    // Screens
-    const val SCREEN_GAME = "screen_game"
-    const val SCREEN_RESULT = "screen_result"
-    const val SCREEN_SELECT_GAME = "screen_select_game"
-    const val SCREEN_DESCRIPTION_GAME = "screen_description_game"
-    const val SCREEN_BIGGER_SMALLER = "screen_bigger_smaller"
-    const val SCREEN_FCI_TRIVIA = "screen_fci_trivia"
-    const val SCREEN_CARE_FOOD = "screen_care_food"
-    const val SCREEN_INFO = "screen_info"
-    const val SCREEN_SETTINGS = "screen_settings"
-
-    // Game Modes
-    const val MODE_CLASSIC = "classic"
-    const val MODE_BIGGER_SMALLER = "bigger_smaller"
-    const val MODE_DESCRIPTION = "description"
-    const val MODE_FCI_TRIVIA = "fci_trivia"
-    const val MODE_CARE_FOOD = "care_food"
-
-    // Ad Types
-    const val AD_TYPE_BANNER = "banner"
-    const val AD_TYPE_REWARDED = "rewarded"
-    const val AD_TYPE_INTERSTITIAL = "interstitial"
-
-    // Ad Locations
-    const val AD_LOC_GAME = "game"
-    const val AD_LOC_GAME_OVER = "game_over"
-    const val AD_LOC_INFO = "info"
-
-    // Clicked
-    const val BTN_PLAY_AGAIN = "btn_play_again"
-    const val BTN_RATE = "btn_rate"
-    const val BTN_SHARE = "btn_share"
-    const val BTN_LEARN = "btn_learn"
-    const val BTN_SETTINGS = "btn_settings"
 }

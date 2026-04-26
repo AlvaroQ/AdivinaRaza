@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetRandomBreedsWithFciGroup
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.alvaroquintana.adivinaperro.managers.ErrorTracker
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -49,7 +49,7 @@ class FciTriviaViewModel(
     init {
         runCatching {
             Analytics.analyticsScreenViewed(Analytics.SCREEN_FCI_TRIVIA)
-            FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_FCI_TRIVIA)
+            ErrorTracker.setCustomKey("current_screen", Analytics.SCREEN_FCI_TRIVIA)
         }
         loadNewRound()
         _events.tryEmit(Event.ShowBannerAd(true))
@@ -125,12 +125,10 @@ class FciTriviaViewModel(
         }
 
         runCatching {
-            FirebaseCrashlytics.getInstance().apply {
-                setCustomKey("game_mode", Analytics.MODE_FCI_TRIVIA)
-                setCustomKey("current_stage", _state.value.stage)
-                setCustomKey("current_score", _state.value.score)
-                setCustomKey("lives_remaining", _state.value.lives)
-            }
+            ErrorTracker.setCustomKey("game_mode", Analytics.MODE_FCI_TRIVIA)
+            ErrorTracker.setCustomKey("current_stage", _state.value.stage)
+            ErrorTracker.setCustomKey("current_score", _state.value.score)
+            ErrorTracker.setCustomKey("lives_remaining", _state.value.lives)
         }
     }
 

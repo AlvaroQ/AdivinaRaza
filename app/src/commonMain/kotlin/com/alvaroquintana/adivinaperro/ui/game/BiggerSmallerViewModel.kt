@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.alvaroquintana.domain.Dog
 import com.alvaroquintana.usecases.GetRandomBreedsWithWeight
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.alvaroquintana.adivinaperro.managers.ErrorTracker
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -50,7 +50,7 @@ class BiggerSmallerViewModel(
     init {
         runCatching {
             Analytics.analyticsScreenViewed(Analytics.SCREEN_BIGGER_SMALLER)
-            FirebaseCrashlytics.getInstance().setCustomKey("current_screen", Analytics.SCREEN_BIGGER_SMALLER)
+            ErrorTracker.setCustomKey("current_screen", Analytics.SCREEN_BIGGER_SMALLER)
         }
         loadNewRound()
         _events.tryEmit(Event.ShowBannerAd(true))
@@ -128,12 +128,10 @@ class BiggerSmallerViewModel(
         }
 
         runCatching {
-            FirebaseCrashlytics.getInstance().apply {
-                setCustomKey("game_mode", Analytics.MODE_BIGGER_SMALLER)
-                setCustomKey("current_stage", _state.value.stage)
-                setCustomKey("current_score", _state.value.score)
-                setCustomKey("lives_remaining", _state.value.lives)
-            }
+            ErrorTracker.setCustomKey("game_mode", Analytics.MODE_BIGGER_SMALLER)
+            ErrorTracker.setCustomKey("current_stage", _state.value.stage)
+            ErrorTracker.setCustomKey("current_score", _state.value.score)
+            ErrorTracker.setCustomKey("lives_remaining", _state.value.lives)
         }
     }
 
