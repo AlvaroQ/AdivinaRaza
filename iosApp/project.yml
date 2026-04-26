@@ -44,6 +44,7 @@ targets:
           UIApplicationSupportsMultipleScenes: false
         UIRequiredDeviceCapabilities:
           - arm64
+        CADisableMinimumFrameDurationOnPhone: true
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UISupportedInterfaceOrientations~ipad:
