@@ -110,7 +110,7 @@ fun AdivinaPerroTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = AdivinaTypography,
+            typography = adivinaTypography(),
             shapes = AdivinaShapes,
             content = content
         )
