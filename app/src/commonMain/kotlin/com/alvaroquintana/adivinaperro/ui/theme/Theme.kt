@@ -1,17 +1,12 @@
 package com.alvaroquintana.adivinaperro.ui.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -78,9 +73,12 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
+expect fun ConfigureSystemBars(darkTheme: Boolean, backgroundColor: Color)
+
+@Composable
 fun AdivinaPerroTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
-    windowSizeClass: WindowSizeClass? = null,
+    windowSizeClass: AppWindowSizeClass? = null,
     content: @Composable () -> Unit
 ) {
     val darkTheme = when (themeMode) {
@@ -92,16 +90,9 @@ fun AdivinaPerroTheme(
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     val gameColors = if (darkTheme) DarkGameColors else LightGameColors
 
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-        }
-    }
+    ConfigureSystemBars(darkTheme = darkTheme, backgroundColor = colorScheme.background)
 
-    val resolvedWindowSizeClass = windowSizeClass ?: rememberWindowSizeClass()
+    val resolvedWindowSizeClass = windowSizeClass ?: rememberAppWindowSizeClass()
 
     CompositionLocalProvider(
         LocalGameColors provides gameColors,
@@ -117,10 +108,6 @@ fun AdivinaPerroTheme(
     }
 }
 
-/**
- * Convenience accessor for game-specific colors.
- * Usage: AdivinaPerroTheme.gameColors.correctAnswer
- */
 object AdivinaPerroTheme {
     val gameColors: GameColors
         @Composable

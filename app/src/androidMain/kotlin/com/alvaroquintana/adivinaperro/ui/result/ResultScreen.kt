@@ -20,7 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,6 +35,8 @@ import com.alvaroquintana.adivinaperro.ui.components.ConfettiOverlay
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffFamily
 import com.alvaroquintana.adivinaperro.ui.theme.dynaPuffSemiCondensedFamily
 import com.alvaroquintana.adivinaperro.ui.theme.LocalWindowSizeClass
+import com.alvaroquintana.adivinaperro.ui.theme.isCompact
+import com.alvaroquintana.adivinaperro.ui.theme.isExpanded
 import com.alvaroquintana.adivinaperro.ui.theme.PillShape
 import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 
@@ -50,7 +51,7 @@ fun ResultScreen(
     val personalRecord by viewModel.personalRecord.collectAsStateWithLifecycle()
 
     val windowSizeClass = LocalWindowSizeClass.current
-    val isWide = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact
+    val isWide = !windowSizeClass.isCompact
 
     Box(
         modifier = Modifier
