@@ -3,6 +3,8 @@ package com.alvaroquintana.adivinaperro.application
 import android.app.Application
 import com.alvaroquintana.adivinaperro.BuildConfig
 import com.alvaroquintana.adivinaperro.datasource.BreedEsDataBaseSourceImpl
+import com.alvaroquintana.adivinaperro.managers.AndroidSettings
+import com.alvaroquintana.adivinaperro.managers.Settings
 import com.alvaroquintana.data.db.DriverFactory
 import com.alvaroquintana.data.db.createDatabase
 import com.alvaroquintana.adivinaperro.ui.game.BiggerSmallerViewModel
@@ -43,6 +45,7 @@ private val appModule = module {
 
     factory { Firebase.firestore }
     factory<DataBaseSource> { BreedEsDataBaseSourceImpl(get(), get()) }
+    single<Settings> { AndroidSettings(androidContext()) }
 }
 
 val dataModule = module {
@@ -55,7 +58,7 @@ private val scopesModule = module {
     viewModel { BiggerSmallerViewModel(get()) }
     viewModel { DescriptionViewModel(get()) }
     viewModel { FciTriviaViewModel(get()) }
-    viewModel { ResultViewModel() }
+    viewModel { ResultViewModel(get()) }
     viewModel { InfoViewModel(get()) }
 
     factory { GetBreedById(get()) }

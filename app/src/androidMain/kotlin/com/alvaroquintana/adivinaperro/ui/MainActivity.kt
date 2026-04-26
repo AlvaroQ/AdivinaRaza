@@ -533,7 +533,7 @@ private fun ResultRoute(navController: NavHostController, gamePoints: Int) {
 
     LaunchedEffect(Unit) {
         playBarkSound(context)
-        viewModel.getPersonalRecord(gamePoints, context)
+        viewModel.getPersonalRecord(gamePoints)
     }
 
     LaunchedEffect(Unit) {

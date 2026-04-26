@@ -2,6 +2,7 @@ package com.alvaroquintana.adivinaperro.ui.result
 
 import app.cash.turbine.test
 import com.alvaroquintana.adivinaperro.managers.Analytics
+import com.alvaroquintana.adivinaperro.managers.Settings
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -37,7 +38,10 @@ class ResultViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel() = ResultViewModel()
+    private fun createViewModel(): ResultViewModel {
+        val settings = mockk<Settings>(relaxed = true)
+        return ResultViewModel(settings)
+    }
 
     @Test
     fun `navigateToSelect emits Navigation Select`() = runTest {
