@@ -100,7 +100,6 @@ import com.alvaroquintana.adivinaperro.ui.theme.getBackgroundGradient
 import com.alvaroquintana.domain.Dog
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import java.util.Locale
 
 @Composable
 fun InfoScreen(
@@ -609,10 +608,17 @@ private fun String.toSeparatedList(): List<String> {
         .filter { it.isNotBlank() }
 }
 
+private fun formatOneDecimal(value: Double): String {
+    val rounded = kotlin.math.round(value * 10.0) / 10.0
+    val whole = rounded.toLong()
+    val frac = kotlin.math.abs((rounded - whole) * 10.0).toLong()
+    return "$whole.$frac"
+}
+
 private fun formatRange(min: Double, max: Double, unit: String): String {
     return when {
-        min > 0.0 && max > 0.0 -> String.format(Locale.getDefault(), "%.1f - %.1f %s", min, max, unit)
-        max > 0.0 -> String.format(Locale.getDefault(), "%.1f %s", max, unit)
+        min > 0.0 && max > 0.0 -> "${formatOneDecimal(min)} - ${formatOneDecimal(max)} $unit"
+        max > 0.0 -> "${formatOneDecimal(max)} $unit"
         else -> "-"
     }
 }
