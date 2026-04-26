@@ -31,8 +31,11 @@ targets:
       - path: iosApp
         excludes:
           - "Info.plist"
+          - "GoogleService-Info.plist"
     resources:
       - path: iosApp/Assets.xcassets
+      - path: iosApp/GoogleService-Info.plist
+        optional: true
     info:
       path: iosApp/Info.plist
       properties:
