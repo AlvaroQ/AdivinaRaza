@@ -30,8 +30,15 @@ import org.koin.dsl.module
 val sharedModule = module {
     single { createDatabase(get()) }
 
-    single { Firebase.firestore }
-    single { Firebase.crashlytics }
+    // Wrap the gitlive accessors so a missing FirebaseApp.configure()
+    // does not crash the app at boot time on iOS — DataBaseSource handles
+    // null gracefully (returns empty data, no remote sync).
+    single<dev.gitlive.firebase.firestore.FirebaseFirestore?> {
+        runCatching { Firebase.firestore }.getOrNull()
+    }
+    single<dev.gitlive.firebase.crashlytics.FirebaseCrashlytics?> {
+        runCatching { Firebase.crashlytics }.getOrNull()
+    }
     factory<DataBaseSource> { BreedEsDataBaseSourceImpl(get(), get(), get()) }
 
     factory { BreedByIdRepository(get()) }
