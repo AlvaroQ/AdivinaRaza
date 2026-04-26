@@ -17,10 +17,13 @@ settings:
     ENABLE_USER_SCRIPT_SANDBOXING: "NO"
     "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "x86_64"
     ONLY_ACTIVE_ARCH: "YES"
+    # JetBrains' embedAndSignAppleFrameworkForXcode task copies the
+    # framework + compose-resources into BUILT_PRODUCTS_DIR.
     FRAMEWORK_SEARCH_PATHS:
-      - "$(SRCROOT)/../app/build/bin/$(KOTLIN_NATIVE_TARGET)/debugFramework"
-    KOTLIN_NATIVE_TARGET: "iosSimulatorArm64"
+      - "$(inherited)"
+      - "$(BUILT_PRODUCTS_DIR)"
     OTHER_LDFLAGS:
+      - "$(inherited)"
       - "-framework"
       - "AdivinaRazaShared"
 targets:
@@ -69,13 +72,31 @@ targets:
         SWIFT_OBJC_BRIDGING_HEADER: ""
     preBuildScripts:
       - name: Build Kotlin Multiplatform Framework
+        # Builds the AdivinaRazaShared.framework and copies it into
+        # $BUILT_PRODUCTS_DIR for the linker.
         script: |
           cd "$SRCROOT/.."
-          ./gradlew :app:linkDebugFrameworkIosSimulatorArm64
-        outputFiles:
-          - $(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework/AdivinaRazaShared.framework/AdivinaRazaShared
+          ./gradlew :app:embedAndSignAppleFrameworkForXcode
         basedOnDependencyAnalysis: false
-    dependencies:
-      - framework: ../app/build/bin/iosSimulatorArm64/debugFramework/AdivinaRazaShared.framework
-        embed: false
-        codeSign: false
+    postCompileScripts:
+      - name: Copy Compose Multiplatform Resources
+        # The static AdivinaRazaShared framework does not bundle the
+        # compose.resources artefacts. Copy them into the .app
+        # bundle's compose-resources/ folder where the iOS resource
+        # reader (DefaultIOsResourceReader) expects them.
+        script: |
+          set -e
+          case "$SDK_NAME" in
+            iphonesimulator*) KMP_TARGET="iosSimulatorArm64" ;;
+            iphoneos*)        KMP_TARGET="iosArm64" ;;
+            *) echo "Unknown SDK $SDK_NAME"; exit 1 ;;
+          esac
+          SRC="$SRCROOT/../app/build/kotlin-multiplatform-resources/aggregated-resources/${KMP_TARGET}/composeResources"
+          DST="$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/compose-resources/composeResources"
+          if [ ! -d "$SRC" ]; then
+            echo "warning: Compose resources not found at $SRC. Did the framework build succeed?"
+            exit 0
+          fi
+          mkdir -p "$DST"
+          rsync -a --delete "$SRC/" "$DST/"
+        basedOnDependencyAnalysis: false
