@@ -66,6 +66,15 @@ kotlin {
 
             // Lifecycle ViewModel (multiplatform)
             implementation(libs.androidx.lifecycle.viewmodel)
+
+            // Koin multiplatform
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            // Navigation Compose (multiplatform — JetBrains fork)
+            implementation(libs.jetbrains.navigation.compose)
         }
         getByName("androidMain").dependencies {
             implementation(libs.kotlinx.coroutines.android)

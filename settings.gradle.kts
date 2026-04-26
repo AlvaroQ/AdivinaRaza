@@ -13,6 +13,8 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        // JetBrains Compose Multiplatform packages (navigation, viewmodel, lifecycle)
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
