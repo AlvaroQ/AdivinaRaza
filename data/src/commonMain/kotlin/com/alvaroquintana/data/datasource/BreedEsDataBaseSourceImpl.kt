@@ -215,10 +215,27 @@ class BreedEsDataBaseSourceImpl(
     override suspend fun getAppsRecommended(): MutableList<App> = mutableListOf()
 }
 
+private var loggedDataDecodeFailure = false
+
 private fun DocumentSnapshot.dataAsMap(): Map<String, Any?> {
-    val element = runCatching { data(JsonElement.serializer()) }.getOrNull() as? JsonObject
-        ?: return emptyMap()
-    return element.toAnyMap()
+    val attempt = runCatching { data(JsonElement.serializer()) }
+    val raw = attempt.getOrElse { error ->
+        if (!loggedDataDecodeFailure) {
+            loggedDataDecodeFailure = true
+            println("[BreedEsDataSource] dataAsMap decode FAILED for doc id=$id: ${error::class.simpleName}: ${error.message}")
+            error.printStackTrace()
+        }
+        return emptyMap()
+    }
+    val obj = raw as? JsonObject
+    if (obj == null) {
+        if (!loggedDataDecodeFailure) {
+            loggedDataDecodeFailure = true
+            println("[BreedEsDataSource] dataAsMap got non-JsonObject for doc id=$id: ${raw::class.simpleName}")
+        }
+        return emptyMap()
+    }
+    return obj.toAnyMap()
 }
 
 private fun JsonObject.toAnyMap(): Map<String, Any?> = mapValues { (_, v) -> v.toAny() }
