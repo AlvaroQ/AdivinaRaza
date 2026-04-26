@@ -6,19 +6,8 @@ import com.alvaroquintana.data.db.toDomain
 import com.alvaroquintana.domain.App
 import com.alvaroquintana.domain.Dog
 import dev.gitlive.firebase.crashlytics.FirebaseCrashlytics
-import dev.gitlive.firebase.firestore.DocumentSnapshot
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.datetime.Clock
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.boolean
-import kotlinx.serialization.json.booleanOrNull
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.intOrNull
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.longOrNull
 
 private const val COLLECTION_BREEDS_ES = "breedES"
 private const val SYNC_COLLECTION_BREEDS_ES = "breeds_es"
@@ -74,7 +63,7 @@ class BreedEsDataBaseSourceImpl(
         val fs = firestore ?: return null
         return runCatching {
             val doc = fs.collection(COLLECTION_BREEDS_ES).document(id.toString()).get()
-            val data = doc.dataAsMap()
+            val data = doc.rawData()
             if (data.isNotEmpty()) doc.id to data else null
         }.onFailure { recordException(it) }.getOrNull()
     }
@@ -91,7 +80,7 @@ class BreedEsDataBaseSourceImpl(
             println("[BreedEsDataSource] firestore returned ${snapshot.documents.size} documents")
             var emptyDataCount = 0
             for (doc in snapshot.documents) {
-                val data = doc.dataAsMap()
+                val data = doc.rawData()
                 if (data.isEmpty()) {
                     emptyDataCount++
                     continue
@@ -215,39 +204,3 @@ class BreedEsDataBaseSourceImpl(
     override suspend fun getAppsRecommended(): MutableList<App> = mutableListOf()
 }
 
-private var loggedDataDecodeFailure = false
-
-private fun DocumentSnapshot.dataAsMap(): Map<String, Any?> {
-    val attempt = runCatching { data(JsonElement.serializer()) }
-    val raw = attempt.getOrElse { error ->
-        if (!loggedDataDecodeFailure) {
-            loggedDataDecodeFailure = true
-            println("[BreedEsDataSource] dataAsMap decode FAILED for doc id=$id: ${error::class.simpleName}: ${error.message}")
-            error.printStackTrace()
-        }
-        return emptyMap()
-    }
-    val obj = raw as? JsonObject
-    if (obj == null) {
-        if (!loggedDataDecodeFailure) {
-            loggedDataDecodeFailure = true
-            println("[BreedEsDataSource] dataAsMap got non-JsonObject for doc id=$id: ${raw::class.simpleName}")
-        }
-        return emptyMap()
-    }
-    return obj.toAnyMap()
-}
-
-private fun JsonObject.toAnyMap(): Map<String, Any?> = mapValues { (_, v) -> v.toAny() }
-
-private fun JsonElement.toAny(): Any? = when (this) {
-    is JsonPrimitive -> when {
-        isString -> contentOrNull
-        booleanOrNull != null -> boolean
-        longOrNull != null -> longOrNull
-        doubleOrNull != null -> doubleOrNull
-        else -> contentOrNull
-    }
-    is JsonObject -> toAnyMap()
-    else -> jsonArray.map { it.toAny() }
-}
