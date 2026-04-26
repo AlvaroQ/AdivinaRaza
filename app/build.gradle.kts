@@ -69,9 +69,10 @@ kotlin {
             implementation(libs.androidx.preference.ktx)
             implementation(libs.androidx.swiperefreshlayout)
 
-            // Firebase
+            // Firebase (Android SDK directly + gitlive bridge)
             implementation(project.dependencies.platform(libs.firebase.bom))
-            implementation(libs.firebase.database)
+            implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.crashlytics)
             implementation(libs.firebase.firestore)
             implementation(libs.firebase.analytics)
             implementation(libs.firebase.auth)

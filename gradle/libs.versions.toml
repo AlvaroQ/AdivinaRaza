@@ -16,6 +16,8 @@ playServicesAds = "25.2.0"
 ump = "4.0.0"
 composeBom = "2026.03.01"
 composeMultiplatform = "1.11.0-beta03"
+gitliveFirebase = "2.4.0"
+kotlinxDatetime = "0.6.2"
 activityCompose = "1.13.0"
 coil = "3.4.0"
 kotlinxSerialization = "1.11.0"
@@ -67,6 +69,13 @@ koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compos
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+
+# gitlive Firebase Kotlin SDK (multiplatform)
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+gitlive-firebase-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitliveFirebase" }
+gitlive-firebase-database = { group = "dev.gitlive", name = "firebase-database", version.ref = "gitliveFirebase" }
+gitlive-firebase-crashlytics = { group = "dev.gitlive", name = "firebase-crashlytics", version.ref = "gitliveFirebase" }
+gitlive-firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "gitliveFirebase" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kmp.library)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.sqldelight)
 }
 
@@ -22,10 +23,16 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core"))
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.sqldelight.coroutines)
+            implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.crashlytics)
         }
         getByName("androidMain").dependencies {
             implementation(libs.sqldelight.android.driver)
+            // gitlive Firebase delegates to Firebase Android SDK; pin via BoM
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         getByName("iosMain").dependencies {
             implementation(libs.sqldelight.native.driver)
