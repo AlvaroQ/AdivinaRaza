@@ -1,15 +1,14 @@
 package com.alvaroquintana.adivinaperro.ui.composables
 
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
+
+@Composable
+expect fun rememberBase64ImageBitmap(data: String): ImageBitmap?
 
 /**
  * Unified image component for the app.
@@ -32,18 +31,10 @@ fun BreedImage(
             contentScale = contentScale
         )
     } else {
-        val bitmap = remember(imageData) {
-            try {
-                val bytes = Base64.decode(imageData, Base64.DEFAULT)
-                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            } catch (e: Exception) {
-                Log.e("BreedImage", "Failed to decode base64 image", e)
-                null
-            }
-        }
+        val bitmap = rememberBase64ImageBitmap(imageData)
         bitmap?.let {
             Image(
-                bitmap = it.asImageBitmap(),
+                bitmap = it,
                 contentDescription = contentDescription,
                 modifier = modifier,
                 contentScale = contentScale
