@@ -1,10 +1,8 @@
 package com.alvaroquintana.adivinaperro.ui.result
 
-import android.content.Context
-import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import com.alvaroquintana.adivinaperro.managers.Analytics
+import com.alvaroquintana.adivinaperro.managers.Settings
 import com.alvaroquintana.adivinaperro.utils.Constants.RECORD_PERSONAL
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ResultViewModel : ViewModel() {
+class ResultViewModel(private val settings: Settings) : ViewModel() {
 
     private val _navigation = MutableSharedFlow<Navigation>(
         replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -28,11 +26,10 @@ class ResultViewModel : ViewModel() {
         Analytics.analyticsScreenViewed(Analytics.SCREEN_RESULT)
     }
 
-    fun getPersonalRecord(points: Int, context: Context) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val stored = prefs.getInt(RECORD_PERSONAL, 0)
+    fun getPersonalRecord(points: Int) {
+        val stored = settings.getInt(RECORD_PERSONAL, 0)
         if (points > stored) {
-            prefs.edit { putInt(RECORD_PERSONAL, points) }
+            settings.putInt(RECORD_PERSONAL, points)
             _personalRecord.value = points.toString()
         } else {
             _personalRecord.value = stored.toString()
