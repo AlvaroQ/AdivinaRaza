@@ -10,16 +10,16 @@ import com.alvaroquintana.adivinaperro.managers.Analytics
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class InterstitialAdState(
+class AndroidRewardedAdState(
     private val activity: Activity,
     private val adUnitId: String,
     private val adLocation: String
-) {
-    var interstitialAd: InterstitialAd? = null
+) : RewardedAdState {
+    var rewardedAd: RewardedAd? = null
         private set
 
     private var isLoading = false
@@ -27,25 +27,25 @@ class InterstitialAdState(
     private val maxRetries = 2
 
     fun load() {
-        if (isLoading || interstitialAd != null) return
+        if (isLoading || rewardedAd != null) return
         isLoading = true
 
-        InterstitialAd.load(
+        RewardedAd.load(
             activity,
             adUnitId,
             AdRequest.Builder().build(),
-            object : InterstitialAdLoadCallback() {
+            object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    if (BuildConfig.DEBUG) Log.d("InterstitialAdState", "Failed to load: $adError")
+                    if (BuildConfig.DEBUG) Log.d("RewardedAdState", "Failed to load: $adError")
                     FirebaseCrashlytics.getInstance().apply {
                         setCustomKey("ad_location", adLocation)
                         setCustomKey("ad_error_code", adError.code)
-                        recordException(Exception("InterstitialAd load failed: ${adError.message}"))
+                        recordException(Exception("RewardedAd load failed: ${adError.message}"))
                     }
                     Analytics.analyticsAdFailedToLoad(
-                        Analytics.AD_TYPE_INTERSTITIAL, adLocation, adError.message
+                        Analytics.AD_TYPE_REWARDED, adLocation, adError.message
                     )
-                    interstitialAd = null
+                    rewardedAd = null
                     isLoading = false
 
                     if (retryCount < maxRetries) {
@@ -54,9 +54,9 @@ class InterstitialAdState(
                     }
                 }
 
-                override fun onAdLoaded(ad: InterstitialAd) {
-                    if (BuildConfig.DEBUG) Log.d("InterstitialAdState", "Ad was loaded for $adLocation")
-                    interstitialAd = ad
+                override fun onAdLoaded(ad: RewardedAd) {
+                    if (BuildConfig.DEBUG) Log.d("RewardedAdState", "Ad was loaded for $adLocation")
+                    rewardedAd = ad
                     isLoading = false
                     retryCount = 0
                 }
@@ -64,41 +64,42 @@ class InterstitialAdState(
         )
     }
 
-    fun show(onAdDismissed: () -> Unit = {}) {
-        val ad = interstitialAd
+    override fun show() {
+        val ad = rewardedAd
         if (ad != null) {
             ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdShowedFullScreenContent() {
-                    Analytics.analyticsAdImpression(Analytics.AD_TYPE_INTERSTITIAL, adLocation)
+                    Analytics.analyticsAdImpression(Analytics.AD_TYPE_REWARDED, adLocation)
                 }
 
                 override fun onAdDismissedFullScreenContent() {
-                    interstitialAd = null
+                    rewardedAd = null
                     load()
-                    onAdDismissed()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: com.google.android.gms.ads.AdError) {
-                    if (BuildConfig.DEBUG) Log.d("InterstitialAdState", "Failed to show: $adError")
-                    interstitialAd = null
+                    if (BuildConfig.DEBUG) Log.d("RewardedAdState", "Failed to show: $adError")
+                    rewardedAd = null
                     load()
-                    onAdDismissed()
                 }
             }
-            ad.show(activity)
+
+            ad.show(activity) { rewardItem ->
+                if (BuildConfig.DEBUG) Log.d("RewardedAdState", "User earned reward: amount=${rewardItem.amount}, type=${rewardItem.type}")
+                Analytics.analyticsAdRewardEarned(adLocation)
+            }
         } else {
-            if (BuildConfig.DEBUG) Log.d("InterstitialAdState", "The interstitial ad wasn't ready yet.")
+            if (BuildConfig.DEBUG) Log.d("RewardedAdState", "The rewarded ad wasn't ready yet, reloading.")
             load()
-            onAdDismissed()
         }
     }
 }
 
 @Composable
-fun rememberInterstitialAdState(adUnitId: String, adLocation: String): InterstitialAdState {
+actual fun rememberRewardedAdState(adUnitId: String, adLocation: String): RewardedAdState {
     val context = LocalContext.current
     val activity = context as Activity
     return remember(adUnitId) {
-        InterstitialAdState(activity, adUnitId, adLocation).also { it.load() }
+        AndroidRewardedAdState(activity, adUnitId, adLocation).also { it.load() }
     }
 }
